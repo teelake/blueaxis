@@ -3,7 +3,7 @@ INSERT INTO roles (name, slug, description) VALUES
 ('Content Manager', 'content_manager', 'Manage content and leads');
 
 INSERT INTO admins (role_id, name, email, password, is_active) VALUES
-(1, 'System Administrator', 'admin@blueaxis.com', '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1);
+(1, 'System Administrator', 'admin@blueaxis.com', '$2y$12$8bIjaKR3L7KHLCVpnUg94eLwcf4KBaIiles0pMzfG/HXud9rGfpRe', 1);
 
 INSERT INTO blog_categories (name, slug, description) VALUES
 ('Supply Chain', 'supply-chain', 'Logistics and supply chain insights'),

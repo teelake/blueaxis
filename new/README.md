@@ -64,6 +64,14 @@ Production-ready B2B corporate website with CMS, blog, lead management, and admi
 
 **Change the admin password immediately after first login.**
 
+If login fails after editing `.env`, the app uses the hash stored in MySQL—not `.env` on each request. From `new/`, run:
+
+```bash
+php database/reset-admin-password.php
+```
+
+Ensure `.env` lives in `new/.env` (same folder as `bootstrap.php`), not the repo root.
+
 ## Email notifications (leads)
 
 When someone submits the **contact** or **quote** form, the team receives an HTML email (submission still saves if mail fails—check `storage/logs/mail.log`).
