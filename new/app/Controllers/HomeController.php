@@ -46,9 +46,9 @@ final class HomeController extends Controller
                 ],
                 [
                     'quote' => 'From import coordination to Manitoba fulfillment, their team operates with the discipline we expect from a long-term logistics partner.',
-                    'name' => 'James O.',
+                    'name' => 'James D.',
                     'role' => 'Operations Manager',
-                    'company' => 'African Foods Wholesale',
+                    'company' => 'Artisan Foods Wholesale',
                 ],
                 [
                     'quote' => 'Transparent communication at every stage. We scaled storage and distribution without disrupting our retail network.',
@@ -71,9 +71,9 @@ final class HomeController extends Controller
             'cta' => $cta,
             'trustItems' => $trustItems,
             'testimonials' => $testimonials,
-            'testimonialsTitle' => section($blocks['testimonials'] ?? [], 'eyebrow', 'Partner feedback'),
+            'testimonialsTitle' => section($blocks['testimonials'] ?? [], 'eyebrow', 'Testimonials'),
             'testimonialsHeading' => section($blocks['testimonials'] ?? [], 'title', 'Trusted by wholesale partners'),
-            'testimonialsLead' => section($blocks['testimonials'] ?? [], 'lead', ''),
+            'testimonialsLead' => section($blocks['testimonials'] ?? [], 'lead', 'BlueAxis ensures seamless Manitoba and Canada-wide simplified import, storage, and distribution.'),
             'newsletterEyebrow' => section($newsletter, 'eyebrow', 'Stay informed'),
             'newsletterTitle' => section($newsletter, 'title', 'Logistics insights for your inbox'),
             'newsletterLead' => section($newsletter, 'lead', 'Industry updates and supply chain perspectives for B2B partners.'),
