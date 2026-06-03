@@ -25,6 +25,9 @@ if (is_readable($envFile)) {
 }
 
 require APP_PATH . '/Core/helpers.php';
+require APP_PATH . '/Core/ErrorLogger.php';
+
+\App\Core\ErrorLogger::register();
 
 spl_autoload_register(static function (string $class): void {
     $prefix = 'App\\';

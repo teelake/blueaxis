@@ -105,6 +105,28 @@ Blog content, service descriptions, and About/Home HTML blocks use **[Quill](htt
 - Session-based admin auth with role-ready schema
 - MySQL migrations in `database/migrations/`
 
+## Error logging (live server debugging)
+
+All PHP errors, warnings, exceptions, and fatal crashes are written to:
+
+```
+new/storage/logs/php-error.log
+```
+
+Logging starts on every request via `bootstrap.php`. On production, set `APP_DEBUG=false` in `.env` so visitors see a generic error page while details stay in the log.
+
+**If the site fails on the server, check:**
+
+1. **`storage/logs/` is writable** by the web server user (e.g. `chmod 775 storage/logs` or `chmod 777` on shared hosting).
+2. **`new/storage/logs/php-error.log`** — open or download this file after reproducing the error.
+3. **`.env` exists** in `new/` with correct `DB_*` and `APP_URL` (must match your live URL, including `/new` if the app lives in a subfolder).
+4. **Document root** points to `new/public/` (not `new/`).
+5. **Apache** `mod_rewrite` enabled and `public/.htaccess` allowed (`AllowOverride All`).
+6. **Database** created and migrated: `php database/migrate.php --seed`
+7. **PHP extensions:** `pdo_mysql`, `mbstring`, `json`
+
+Optional: set `APP_DEBUG=true` temporarily to see errors in the browser (disable again after fixing).
+
 ## Going live
 
 When ready to replace the under-construction site:

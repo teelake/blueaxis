@@ -33,10 +33,15 @@ final class Database
                 PDO::ATTR_EMULATE_PREPARES => false,
             ]);
         } catch (PDOException $e) {
+            ErrorLogger::log(
+                'database',
+                'PDO connection failed: ' . $e->getMessage() . ' (host=' . ($config['host'] ?? '') . ', db=' . ($config['database'] ?? '') . ')',
+                $e
+            );
             if (config('app.debug')) {
                 throw $e;
             }
-            throw new PDOException('Database connection failed.');
+            throw new PDOException('Database connection failed. See storage/logs/php-error.log.');
         }
 
         return self::$connection;
