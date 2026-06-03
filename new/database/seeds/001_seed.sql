@@ -55,6 +55,7 @@ INSERT INTO content_blocks (page_slug, section_key, block_key, content, content_
 ('home', 'cta', 'body', 'Speak with our team about import programs, storage capacity, or distribution partnerships.', 'text', 2),
 ('home', 'cta', 'button_label', 'Get in Touch', 'text', 3),
 ('home', 'cta', 'button_url', '/contact', 'text', 4),
+('home', 'trust', 'items', '[{"stat":"B2B","label":"Wholesale focus"},{"stat":"MB + CA","label":"Regional & national reach"},{"stat":"3-in-1","label":"Import · Store · Distribute"},{"stat":"Food-grade","label":"Disciplined operations"}]', 'json', 1),
 ('about', 'overview', 'title', 'Company Overview', 'text', 1),
 ('about', 'overview', 'body', '<p>BlueAxis Logistics & Warehousing Ltd. is a Manitoba-based company specializing in the importation, storage, and distribution of African food products for B2B partners across Canada.</p>', 'html', 2),
 ('about', 'mission', 'title', 'Mission', 'text', 1),

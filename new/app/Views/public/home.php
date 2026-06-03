@@ -18,14 +18,7 @@
 <section class="border-b border-slate-100 bg-slate-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center" data-aos="fade-up">
-      <?php
-      $trust = [
-          ['stat' => 'B2B', 'label' => 'Wholesale focus'],
-          ['stat' => 'MB + CA', 'label' => 'Regional & national reach'],
-          ['stat' => '3-in-1', 'label' => 'Import · Store · Distribute'],
-          ['stat' => 'Food-grade', 'label' => 'Disciplined operations'],
-      ];
-      foreach ($trust as $t): ?>
+      <?php foreach ($trustItems as $t): ?>
         <div>
           <p class="text-2xl font-bold text-brand-navy"><?= e($t['stat']) ?></p>
           <p class="text-sm text-slate-600 mt-1"><?= e($t['label']) ?></p>

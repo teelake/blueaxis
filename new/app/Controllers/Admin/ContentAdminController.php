@@ -32,12 +32,12 @@ final class ContentAdminController extends Controller
                 continue;
             }
             foreach ($_POST[$section] as $key => $value) {
-                $type = str_contains($key, 'body') || $key === 'content' ? 'html' : 'text';
-                if ($key === 'content' && $section !== 'about') {
-                    $type = 'text';
-                }
+                $type = str_contains($key, 'body') ? 'html' : 'text';
                 ContentBlock::upsert('home', $section, $key, trim((string) $value), $type);
             }
+        }
+        if (isset($_POST['trust_items_json'])) {
+            ContentBlock::upsert('home', 'trust', 'items', $_POST['trust_items_json'], 'json');
         }
         Session::flash('success', 'Home page content saved.');
         redirect('admin/content/home');

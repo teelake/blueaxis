@@ -18,6 +18,11 @@ $c = $blocks['cta'] ?? [];
     <textarea name="about[body]" rows="6" class="input-field"><?= e($a['body']['content'] ?? '') ?></textarea>
   </fieldset>
   <fieldset class="card space-y-4">
+    <legend class="font-semibold text-brand-navy">Trust indicators (JSON)</legend>
+    <textarea name="trust_items_json" rows="6" class="input-field font-mono text-xs"><?= e(($blocks['trust']['items']['content'] ?? '[]')) ?></textarea>
+    <p class="text-xs text-slate-500">Format: [{"stat":"B2B","label":"Wholesale focus"},...]</p>
+  </fieldset>
+  <fieldset class="card space-y-4">
     <legend class="font-semibold text-brand-navy">CTA</legend>
     <?php foreach (['title','body','button_label','button_url'] as $f): ?>
       <input name="cta[<?= $f ?>]" value="<?= e($c[$f]['content'] ?? '') ?>" class="input-field" placeholder="<?= $f ?>" />

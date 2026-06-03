@@ -113,8 +113,6 @@ final class BlogPost extends Model
             $where = 'status = :status';
             $params['status'] = $status;
         }
-        $total = (int) self::db()->prepare("SELECT COUNT(*) FROM blog_posts WHERE {$where}")
-            ->execute($params) ?: 0;
         $countStmt = self::db()->prepare("SELECT COUNT(*) FROM blog_posts WHERE {$where}");
         $countStmt->execute($params);
         $total = (int) $countStmt->fetchColumn();
