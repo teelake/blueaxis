@@ -105,3 +105,15 @@ function truncate(string $text, int $length = 160): string
     }
     return rtrim(mb_substr($text, 0, $length - 3)) . '...';
 }
+
+/** @param array<string, array<string, array{content?: string, type?: string}>> $sections */
+function block(array $sections, string $section, string $key, string $default = ''): string
+{
+    return (string) ($sections[$section][$key]['content'] ?? $default);
+}
+
+/** @param array<string, array{content?: string}> $section */
+function section(array $section, string $key, string $default = ''): string
+{
+    return (string) ($section[$key]['content'] ?? $default);
+}

@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans text-slate-800 antialiased bg-white;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-brand-navy rounded-md shadow-card transition hover:bg-brand-navy-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-brand-navy bg-white border border-slate-200 rounded-md transition hover:border-brand-gold hover:text-brand-navy-dark;
+  }
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-brand-navy-dark bg-brand-gold rounded-md transition hover:bg-brand-gold-light;
+  }
+  .section-eyebrow {
+    @apply text-xs font-semibold tracking-[0.14em] uppercase text-brand-gold;
+  }
+  .section-title {
+    @apply text-3xl md:text-4xl font-semibold tracking-tight text-brand-navy;
+  }
+  .card {
+    @apply bg-white border border-slate-100 rounded-xl shadow-card p-6 md:p-8;
+  }
+  .input-field {
+    @apply w-full rounded-md border-slate-200 shadow-sm focus:border-brand-navy focus:ring-brand-navy;
+  }
+  .admin-sidebar-link {
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-300 rounded-lg transition hover:bg-white/10 hover:text-white;
+  }
+  .admin-sidebar-link.active {
+    @apply bg-white/15 text-white;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
