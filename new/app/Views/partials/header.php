@@ -17,7 +17,7 @@ $nav = [
       <nav class="hidden lg:flex items-center gap-8" aria-label="Main">
         <?php foreach ($nav as $path => $label): ?>
           <a href="<?= url(ltrim($path, '/')) ?>"
-             class="text-sm font-medium transition <?= ($current === $path || ($path !== '/' && str_starts_with($current, $path))) ? 'text-brand-navy' : 'text-slate-600 hover:text-brand-navy' ?>">
+             class="nav-link <?= ($current === $path || ($path !== '/' && str_starts_with($current, $path))) ? 'text-brand-navy' : 'text-slate-600 hover:text-brand-navy' ?>">
             <?= e($label) ?>
           </a>
         <?php endforeach; ?>
@@ -31,7 +31,7 @@ $nav = [
     </div>
     <div class="lg:hidden pb-4" x-show="open" x-cloak>
       <?php foreach ($nav as $path => $label): ?>
-        <a href="<?= url(ltrim($path, '/')) ?>" class="block py-2 text-sm font-medium text-slate-700"><?= e($label) ?></a>
+        <a href="<?= url(ltrim($path, '/')) ?>" class="block py-3 text-base font-medium text-slate-700"><?= e($label) ?></a>
       <?php endforeach; ?>
       <a href="<?= url('quote') ?>" class="btn-primary mt-3 w-full">Request a Quote</a>
     </div>
