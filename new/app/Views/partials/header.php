@@ -12,7 +12,7 @@ $nav = [
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
       <a href="<?= url('/') ?>" class="flex items-center gap-3 shrink-0">
-        <img src="<?= asset('images/BLUEAXIS_logo.png') ?>" alt="BlueAxis Logistics & Warehousing" class="h-12 w-auto" width="160" height="48" />
+        <img src="<?= asset('images/blueaxis-logistics.png') ?>" alt="BlueAxis Logistics & Warehousing" class="h-12 w-auto" width="160" height="48" />
       </a>
       <nav class="hidden lg:flex items-center gap-8" aria-label="Main">
         <?php foreach ($nav as $path => $label): ?>
