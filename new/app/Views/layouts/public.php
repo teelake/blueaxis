@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-CA">
+<html lang="en-CA" class="overflow-x-hidden">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,11 +17,11 @@
   <?php endif; ?>
   <style>[x-cloak]{display:none!important}</style>
 </head>
-<body>
+<body class="overflow-x-hidden">
   <?php \App\Core\View::partial('header'); ?>
-  <main><?= $content ?></main>
+  <main class="overflow-x-hidden"><?= $content ?></main>
   <?php \App\Core\View::partial('footer'); ?>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script>AOS.init({ duration: 700, once: true, offset: 40 });</script>
+  <script>AOS.init({ duration: 700, once: true, offset: 40, disable: 'phone' });</script>
 </body>
 </html>
