@@ -7,6 +7,13 @@
         By <?= e($post['author_name'] ?? 'BlueAxis Team') ?> ·
         <time datetime="<?= e($post['published_at']) ?>"><?= date('F j, Y', strtotime($post['published_at'])) ?></time>
       </p>
+      <?php if (!empty($tags)): ?>
+        <ul class="flex flex-wrap gap-2 mt-4">
+          <?php foreach ($tags as $tag): ?>
+            <li><span class="text-xs px-2 py-1 rounded-full bg-white/10 border border-white/20"><?= e($tag['name']) ?></span></li>
+          <?php endforeach; ?>
+        </ul>
+      <?php endif; ?>
     </div>
   </section>
   <?php if ($post['featured_image']): ?>
@@ -25,6 +32,53 @@
     <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?= $shareUrl ?>" target="_blank" rel="noopener" class="text-sm font-medium text-brand-navy">Share on LinkedIn</a>
     <a href="https://twitter.com/intent/tweet?url=<?= $shareUrl ?>&text=<?= $shareTitle ?>" target="_blank" rel="noopener" class="text-sm font-medium text-brand-navy">Share on X</a>
   </div>
+
+  <section id="comments" class="max-w-3xl mx-auto px-4 pb-16 scroll-mt-24">
+    <h2 class="text-xl font-semibold text-brand-navy mb-6">Comments</h2>
+    <?php if (!empty($commentSuccess)): ?>
+      <div class="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 text-sm"><?= e($commentSuccess) ?></div>
+    <?php endif; ?>
+    <?php if (!empty($commentError)): ?>
+      <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-800 px-4 py-3 text-sm"><?= e($commentError) ?></div>
+    <?php endif; ?>
+
+    <?php if (!empty($comments)): ?>
+      <ul class="space-y-6 mb-10">
+        <?php foreach ($comments as $c): ?>
+          <li class="border-b border-slate-100 pb-6">
+            <p class="font-semibold text-brand-navy text-sm"><?= e($c['author_name']) ?></p>
+            <p class="text-xs text-slate-400 mb-2"><?= date('F j, Y', strtotime($c['created_at'])) ?></p>
+            <p class="text-slate-700 leading-relaxed"><?= nl2br(e($c['body'])) ?></p>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php else: ?>
+      <p class="text-sm text-slate-500 mb-8">Be the first to leave a comment.</p>
+    <?php endif; ?>
+
+    <div class="card">
+      <h3 class="font-semibold text-brand-navy mb-4">Leave a comment</h3>
+      <form method="post" action="<?= url('blog/' . $post['slug'] . '/comments') ?>" class="space-y-4">
+        <?= \App\Core\Csrf::field() ?>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">Name *</label>
+            <input name="author_name" required class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Email *</label>
+            <input type="email" name="email" required class="input-field" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Comment *</label>
+          <textarea name="body" rows="4" required class="input-field" placeholder="Your comment (moderated before publishing)"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Submit comment</button>
+      </form>
+    </div>
+  </section>
+
   <?php if ($related): ?>
     <section class="bg-slate-50 py-16">
       <div class="max-w-7xl mx-auto px-4">

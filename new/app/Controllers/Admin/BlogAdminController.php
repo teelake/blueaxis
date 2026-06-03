@@ -63,7 +63,9 @@ final class BlogAdminController extends Controller
         Auth::requireLogin();
         $this->validateCsrf();
         $id = (int) ($params['id'] ?? 0);
-        BlogPost::update($id, $this->payload());
+        $data = $this->payload();
+        unset($data['author_id']);
+        BlogPost::update($id, $data);
         BlogTag::syncForPost($id, $this->tagNames());
         Session::flash('success', 'Post updated.');
         redirect('admin/blog/' . $id . '/edit');

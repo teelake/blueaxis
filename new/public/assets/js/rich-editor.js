@@ -1,5 +1,5 @@
 /**
- * Quill rich editor initializer (Quill.js — BSD-3-Clause, free)
+ * Quill rich editor (image upload to media library)
  */
 (function () {
   var loaded = false;
@@ -29,24 +29,77 @@
     queue.push(cb);
   }
 
+  function uploadImage(file, uploadUrl, csrf) {
+    var fd = new FormData();
+    fd.append('file', file);
+    fd.append('_csrf', csrf);
+    fd.append('_response', 'json');
+    return fetch(uploadUrl, {
+      method: 'POST',
+      body: fd,
+      headers: { Accept: 'application/json' },
+      credentials: 'same-origin',
+    }).then(function (r) {
+      return r.json();
+    });
+  }
+
+  function imageHandler(quill, uploadUrl, csrf) {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function () {
+      var file = input.files && input.files[0];
+      if (!file) return;
+      uploadImage(file, uploadUrl, csrf)
+        .then(function (data) {
+          if (data.error) {
+            alert(data.error);
+            return;
+          }
+          var url = data.url || '';
+          var range = quill.getSelection(true);
+          quill.insertEmbed(range.index, 'image', url, 'user');
+          quill.setSelection(range.index + 1);
+        })
+        .catch(function () {
+          alert('Image upload failed.');
+        });
+    };
+    input.click();
+  }
+
   function initWrap(wrap) {
     var id = wrap.getAttribute('data-editor-id');
     var mount = document.getElementById(id + '_mount');
     var source = document.getElementById(id);
     if (!mount || !source || mount.dataset.quillReady) return;
 
+    var uploadUrl = wrap.getAttribute('data-upload-url') || '';
+    var csrf = wrap.getAttribute('data-csrf') || '';
+    var toolbar = [
+      [{ header: [2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['blockquote', 'link'],
+      ['clean'],
+    ];
+    if (uploadUrl && csrf) {
+      toolbar.splice(5, 0, ['image']);
+    }
+
     var quill = new Quill(mount, {
       theme: 'snow',
       modules: {
-        toolbar: [
-          [{ header: [2, 3, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ list: 'ordered' }, { list: 'bullet' }],
-          ['blockquote', 'link'],
-          ['clean'],
-        ],
+        toolbar: toolbar,
       },
     });
+
+    if (uploadUrl && csrf) {
+      quill.getModule('toolbar').addHandler('image', function () {
+        imageHandler(quill, uploadUrl, csrf);
+      });
+    }
 
     if (source.value.trim()) {
       quill.root.innerHTML = source.value;
