@@ -159,8 +159,7 @@ function asset(string $path): string
     return app_url_origin() . app_public_web_path() . '/assets/' . ltrim($path, '/');
 }
 
-/** Public URL for uploaded media (paths stored as uploads/...). */
-/** Google Maps embed URL from settings or Winnipeg default. */
+/** Google Maps embed URL from settings or company address. */
 function map_embed_url(): string
 {
     $custom = \App\Models\Setting::get('map_embed_url');

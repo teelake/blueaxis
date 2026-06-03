@@ -36,6 +36,28 @@ final class HomeController extends Controller
         if (!empty($blocks['testimonials']['items']['content'])) {
             $testimonials = json_decode((string) $blocks['testimonials']['items']['content'], true) ?: [];
         }
+        if ($testimonials === []) {
+            $testimonials = [
+                [
+                    'quote' => 'BlueAxis gave us predictable inbound timing and clear inventory visibility—exactly what our wholesale program needed.',
+                    'name' => 'Sarah M.',
+                    'role' => 'Procurement Director',
+                    'company' => 'Regional Grocery Group',
+                ],
+                [
+                    'quote' => 'From import coordination to Manitoba fulfillment, their team operates with the discipline we expect from a long-term logistics partner.',
+                    'name' => 'James O.',
+                    'role' => 'Operations Manager',
+                    'company' => 'African Foods Wholesale',
+                ],
+                [
+                    'quote' => 'Transparent communication at every stage. We scaled storage and distribution without disrupting our retail network.',
+                    'name' => 'Priya K.',
+                    'role' => 'Supply Chain Lead',
+                    'company' => 'National Food Distributor',
+                ],
+            ];
+        }
         $newsletter = $blocks['newsletter'] ?? [];
 
         $services = Service::published();

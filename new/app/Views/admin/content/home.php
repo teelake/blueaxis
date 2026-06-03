@@ -2,6 +2,8 @@
 $h = $blocks['hero'] ?? [];
 $a = $blocks['about'] ?? [];
 $c = $blocks['cta'] ?? [];
+$t = $blocks['testimonials'] ?? [];
+$n = $blocks['newsletter'] ?? [];
 ?>
 <form method="post" action="<?= url('admin/content/home') ?>" class="space-y-8 max-w-3xl">
   <?= \App\Core\Csrf::field() ?>
@@ -27,6 +29,26 @@ $c = $blocks['cta'] ?? [];
     <legend class="font-semibold text-brand-navy">Trust indicators (JSON)</legend>
     <textarea name="trust_items_json" rows="6" class="input-field font-mono text-xs"><?= e(($blocks['trust']['items']['content'] ?? '[]')) ?></textarea>
     <p class="text-xs text-slate-500">Format: [{"stat":"B2B","label":"Wholesale focus"},...]</p>
+  </fieldset>
+  <fieldset class="card space-y-4">
+    <legend class="font-semibold text-brand-navy">Testimonials</legend>
+    <?php foreach (['eyebrow', 'title', 'lead'] as $f): ?>
+      <div>
+        <label class="text-sm font-medium"><?= e($f) ?></label>
+        <input name="testimonials[<?= $f ?>]" value="<?= e($t[$f]['content'] ?? '') ?>" class="input-field mt-1" />
+      </div>
+    <?php endforeach; ?>
+    <textarea name="testimonials_items_json" rows="10" class="input-field font-mono text-xs"><?= e($t['items']['content'] ?? '[]') ?></textarea>
+    <p class="text-xs text-slate-500">Format: [{"quote":"...","name":"...","role":"...","company":"..."},...]</p>
+  </fieldset>
+  <fieldset class="card space-y-4">
+    <legend class="font-semibold text-brand-navy">Newsletter section</legend>
+    <?php foreach (['eyebrow', 'title', 'lead'] as $f): ?>
+      <div>
+        <label class="text-sm font-medium"><?= e($f) ?></label>
+        <input name="newsletter[<?= $f ?>]" value="<?= e($n[$f]['content'] ?? '') ?>" class="input-field mt-1" />
+      </div>
+    <?php endforeach; ?>
   </fieldset>
   <fieldset class="card space-y-4">
     <legend class="font-semibold text-brand-navy">CTA</legend>
