@@ -55,6 +55,229 @@
   .nav-link {
     @apply text-base font-medium tracking-tight transition;
   }
+
+  /* Hero — logistics geometry & motion */
+  .hero-section {
+    @apply isolate;
+  }
+
+  .hero-bg {
+    @apply absolute inset-0 overflow-hidden pointer-events-none;
+  }
+
+  .hero-bg__gradient {
+    @apply absolute inset-0;
+    background: linear-gradient(135deg, #0b1d3f 0%, #102a56 45%, #0e2449 100%);
+  }
+
+  .hero-bg__grid {
+    @apply absolute inset-0 opacity-[0.14];
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, black 15%, transparent 72%);
+  }
+
+  .hero-bg__network {
+    @apply absolute inset-0 w-full h-full opacity-60;
+  }
+
+  .hero-bg__routes path {
+    stroke-dasharray: 8 14;
+    animation: hero-route-flow 28s linear infinite;
+  }
+
+  .hero-bg__nodes circle {
+    animation: hero-node-pulse 4s ease-in-out infinite;
+  }
+
+  .hero-bg__nodes circle:nth-child(2) {
+    animation-delay: 0.8s;
+  }
+  .hero-bg__nodes circle:nth-child(3) {
+    animation-delay: 1.6s;
+  }
+  .hero-bg__nodes circle:nth-child(4) {
+    animation-delay: 2.2s;
+  }
+
+  .hero-bg__shapes {
+    @apply absolute inset-0;
+  }
+
+  .hero-bg__shape {
+    @apply absolute rounded-full border border-white/10;
+    animation: hero-float 14s ease-in-out infinite;
+  }
+
+  .hero-bg__shape--1 {
+    width: 280px;
+    height: 280px;
+    top: -80px;
+    right: -60px;
+    @apply bg-brand-gold/5;
+  }
+
+  .hero-bg__shape--2 {
+    width: 160px;
+    height: 160px;
+    bottom: 10%;
+    left: -40px;
+    animation-delay: -5s;
+    @apply border-brand-gold/20;
+  }
+
+  .hero-bg__shape--3 {
+    width: 100px;
+    height: 100px;
+    top: 35%;
+    right: 18%;
+    border-radius: 1rem;
+    animation: hero-float-tilt 16s ease-in-out infinite;
+    animation-delay: -9s;
+  }
+
+  .hero-bg__icons {
+    @apply absolute inset-0 hidden md:block;
+  }
+
+  .hero-bg__icon {
+    @apply absolute text-white/[0.07];
+    animation: hero-icon-drift 18s ease-in-out infinite;
+  }
+
+  .hero-bg__icon svg {
+    @apply w-full h-full;
+  }
+
+  .hero-bg__icon--globe {
+    width: 120px;
+    height: 120px;
+    top: 12%;
+    right: 8%;
+  }
+
+  .hero-bg__icon--warehouse {
+    width: 100px;
+    height: 100px;
+    bottom: 18%;
+    left: 6%;
+    animation-delay: -6s;
+  }
+
+  .hero-bg__icon--truck {
+    width: 140px;
+    height: 84px;
+    bottom: 22%;
+    right: 22%;
+    animation-delay: -12s;
+  }
+
+  .hero-bg__icon--boxes {
+    width: 72px;
+    height: 72px;
+    top: 28%;
+    left: 12%;
+    animation-delay: -3s;
+  }
+
+  .hero-bg__glow {
+    @apply absolute -top-24 left-1/2 -translate-x-1/2 w-[min(100%,720px)] h-64 rounded-full opacity-30;
+    background: radial-gradient(ellipse, rgba(197, 158, 95, 0.35) 0%, transparent 70%);
+    animation: hero-glow-pulse 10s ease-in-out infinite;
+  }
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes hero-float-tilt {
+  0%,
+  100% {
+    transform: translateY(0) rotate(45deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(48deg);
+  }
+}
+
+@keyframes hero-route-flow {
+  to {
+    stroke-dashoffset: -220;
+  }
+}
+
+@keyframes hero-node-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes hero-icon-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.06;
+  }
+  50% {
+    transform: translateY(-8px);
+    opacity: 0.1;
+  }
+}
+
+@keyframes hero-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+  50% {
+    opacity: 0.38;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-bg__shape--1 {
+    width: 180px;
+    height: 180px;
+    right: -90px;
+  }
+  .hero-bg__shape--3 {
+    display: none;
+  }
+  .hero-bg__network {
+    opacity: 35%;
+  }
+  .hero-section .flex-wrap.gap-4 {
+    @apply flex-col sm:flex-row;
+  }
+  .hero-section .btn-accent,
+  .hero-section .btn-secondary-hero {
+    @apply w-full sm:w-auto justify-center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg__routes path,
+  .hero-bg__nodes circle,
+  .hero-bg__shape,
+  .hero-bg__icon,
+  .hero-bg__glow {
+    animation: none !important;
+  }
 }
 
 /* AOS must not create scrollable boxes on headings/sections */
@@ -69,5 +292,12 @@
   [data-aos] {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* Touch-friendly tap targets on small screens */
+@media (max-width: 639px) {
+  .nav-link {
+    @apply py-1;
   }
 }
