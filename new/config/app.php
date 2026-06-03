@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 return [
     'name' => 'BlueAxis Logistics & Warehousing Ltd.',
-    'url' => getenv('APP_URL') ?: 'http://localhost',
-    'env' => getenv('APP_ENV') ?: 'local',
+    'url' => getenv('APP_URL') ?: 'https://blueaxislog.com,
+    'env' => getenv('APP_ENV') ?: 'production',
     'debug' => filter_var(getenv('APP_DEBUG') ?: 'true', FILTER_VALIDATE_BOOLEAN),
     'timezone' => 'America/Winnipeg',
     'locale' => 'en_CA',
