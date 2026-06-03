@@ -55,19 +55,19 @@ $checks['session'] = [
     'cookie_path' => app_install_path() !== '' ? app_install_path() : '/',
 ];
 
-$adminEmail = (string) env('ADMIN_EMAIL', 'admin@blueaxis.com');
-$checks['admin_email_configured'] = $adminEmail;
+$adminEmail = 'admin@blueaxis.com';
 try {
     $admin = \App\Models\Admin::findByEmail($adminEmail);
-    $envPass = (string) env('ADMIN_PASSWORD', '');
-    $checks['admin'] = [
+    $checks['admin_login'] = [
+        'source' => 'database (admins.password bcrypt hash)',
+        'default_email' => $adminEmail,
         'exists' => $admin !== null,
         'active' => $admin !== null && (bool) ($admin['is_active'] ?? false),
         'password_hash_valid' => $admin !== null && str_starts_with((string) ($admin['password'] ?? ''), '$2y$'),
-        'password_matches_env' => $admin !== null && $envPass !== '' && password_verify($envPass, (string) $admin['password']),
+        'reset_password_cli' => 'php database/set-admin-password.php admin@blueaxis.com \'YourPassword\'',
     ];
 } catch (\Throwable $e) {
-    $checks['admin'] = ['error' => $e->getMessage()];
+    $checks['admin_login'] = ['error' => $e->getMessage()];
 }
 
 $checks['admin_login_url'] = site_url_base() . '/admin/login';

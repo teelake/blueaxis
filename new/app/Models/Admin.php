@@ -24,4 +24,14 @@ final class Admin extends Model
         $stmt = self::db()->prepare('UPDATE admins SET last_login_at = NOW() WHERE id = :id');
         $stmt->execute(['id' => $id]);
     }
+
+    public static function setPassword(int $id, string $plainPassword): void
+    {
+        $hash = password_hash($plainPassword, PASSWORD_BCRYPT);
+        if (!password_verify($plainPassword, $hash)) {
+            throw new \RuntimeException('Failed to generate a valid password hash.');
+        }
+        $stmt = self::db()->prepare('UPDATE admins SET password = :p WHERE id = :id');
+        $stmt->execute(['p' => $hash, 'id' => $id]);
+    }
 }

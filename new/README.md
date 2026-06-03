@@ -59,18 +59,20 @@ Production-ready B2B corporate website with CMS, blog, lead management, and admi
 ## Admin access
 
 - URL: `/admin/login`
-- Default email: `admin@blueaxis.com`
-- Password: value of `ADMIN_PASSWORD` in `.env` (default `ChangeMe123!`)
+- Credentials are stored in the **`admins` table** (bcrypt hash). Login does **not** read `ADMIN_PASSWORD` from `.env`.
+- Fresh install default: `admin@blueaxis.com` / `ChangeMe123!`
 
-**Change the admin password immediately after first login.**
+**Change the password immediately after first login.**
 
-If login fails after editing `.env`, the app uses the hash stored in MySQL—not `.env` on each request. From `new/`, run:
+If login fails, reset the hash in the database (from `new/` on the server):
 
 ```bash
-php database/reset-admin-password.php
+php database/set-admin-password.php admin@blueaxis.com 'YourNewSecurePassword'
 ```
 
-Ensure `.env` lives in `new/.env` (same folder as `bootstrap.php`), not the repo root.
+Or run `database/seeds/006_admin_password_fix.sql` to restore the default `ChangeMe123!`, then sign in and change it.
+
+Check `public/health.php` for `admin_login.exists` and `password_hash_valid`.
 
 ## Email notifications (leads)
 

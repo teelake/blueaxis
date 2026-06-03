@@ -5,7 +5,7 @@
     <?php if (!empty($error)): ?><p class="mb-4 text-sm text-red-600"><?= e($error) ?></p><?php endif; ?>
     <form method="post" action="<?= url('admin/login') ?>" class="space-y-4">
       <?= \App\Core\Csrf::field() ?>
-      <div><label class="block text-sm font-medium mb-1">Email</label><input type="email" name="email" required class="input-field" /></div>
+      <div><label class="block text-sm font-medium mb-1">Email</label><input type="email" name="email" required class="input-field" placeholder="admin@blueaxis.com" autocomplete="username" /></div>
       <div><label class="block text-sm font-medium mb-1">Password</label><input type="password" name="password" required class="input-field" /></div>
       <button type="submit" class="btn-primary w-full">Sign in</button>
     </form>

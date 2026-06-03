@@ -3,7 +3,8 @@ INSERT INTO roles (name, slug, description) VALUES
 ('Content Manager', 'content_manager', 'Manage content and leads');
 
 INSERT INTO admins (role_id, name, email, password, is_active) VALUES
-(1, 'System Administrator', 'admin@blueaxis.com', '$2y$12$8bIjaKR3L7KHLCVpnUg94eLwcf4KBaIiles0pMzfG/HXud9rGfpRe', 1);
+(1, 'System Administrator', 'admin@blueaxis.com', '$2y$12$hqKLVmhT9p9r1fXWI.N4henAJtPcApcD0eX97QwOm8dUfiGirRCly', 1);
+-- Default password after fresh seed: ChangeMe123! (change via Admin or database/set-admin-password.php)
 
 INSERT INTO blog_categories (name, slug, description) VALUES
 ('Supply Chain', 'supply-chain', 'Logistics and supply chain insights'),
