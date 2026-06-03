@@ -6,7 +6,9 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\BlogCategory;
+use App\Models\BlogComment;
 use App\Models\BlogPost;
+use App\Models\BlogTag;
 use App\Models\Page;
 use App\Services\SeoService;
 
@@ -55,9 +57,13 @@ final class BlogController extends Controller
             'seo' => SeoService::metaForPage(null, [
                 'title' => $post['meta_title'] ?: $post['title'],
                 'description' => $post['meta_description'] ?: $post['excerpt'],
-                'og_image' => $post['featured_image'] ? '/' . ltrim($post['featured_image'], '/') : null,
+                'og_image' => $post['featured_image'] ? media_url($post['featured_image']) : null,
             ]),
             'post' => $post,
+            'tags' => BlogTag::forPost((int) $post['id']),
+            'comments' => BlogComment::approvedForPost((int) $post['id']),
+            'commentSuccess' => flash('comment_success'),
+            'commentError' => flash('comment_error'),
             'related' => $related,
         ]);
     }

@@ -56,7 +56,7 @@ final class MediaService
 
         return [
             'id' => $id,
-            'url' => '/' . str_replace('\\', '/', $relative),
+            'url' => media_url($relative),
             'path' => $relative,
         ];
     }

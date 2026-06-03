@@ -29,6 +29,15 @@ final class Media extends Model
         return ['items' => $items, 'total' => $total];
     }
 
+    /** @return array<int, array> */
+    public static function recent(int $limit = 48): array
+    {
+        $limit = max(1, min(100, $limit));
+        return self::db()->query(
+            "SELECT * FROM media ORDER BY created_at DESC LIMIT {$limit}"
+        )->fetchAll();
+    }
+
     public static function find(int $id): ?array
     {
         $stmt = self::db()->prepare('SELECT * FROM media WHERE id = :id LIMIT 1');

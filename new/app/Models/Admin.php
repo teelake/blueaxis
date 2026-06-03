@@ -6,6 +6,26 @@ namespace App\Models;
 
 final class Admin extends Model
 {
+    public static function find(int $id): ?array
+    {
+        $stmt = self::db()->prepare(
+            'SELECT a.*, r.slug AS role_slug, r.name AS role_name
+             FROM admins a
+             JOIN roles r ON r.id = a.role_id
+             WHERE a.id = :id LIMIT 1'
+        );
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public static function updateProfile(int $id, string $name, string $email): void
+    {
+        $stmt = self::db()->prepare(
+            'UPDATE admins SET name = :name, email = :email WHERE id = :id'
+        );
+        $stmt->execute(['name' => $name, 'email' => $email, 'id' => $id]);
+    }
+
     public static function findByEmail(string $email): ?array
     {
         $stmt = self::db()->prepare(
