@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'name' => 'BlueAxis Logistics & Warehousing Ltd.',
-    'url' => getenv('APP_URL') ?: 'https://blueaxislog.com/new',
+    'url' => getenv('APP_URL') ?: 'http://localhost:8080',
     'env' => getenv('APP_ENV') ?: 'production',
     'debug' => filter_var(getenv('APP_DEBUG') ?: 'false', FILTER_VALIDATE_BOOLEAN),
     'log_file' => 'storage/logs/php-error.log',

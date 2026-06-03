@@ -14,7 +14,11 @@ header('Content-Type: application/json');
 $checks = [
     'php_version' => PHP_VERSION,
     'app_url' => config('app.url'),
+    'app_url_recommended' => site_url_base(),
+    'app_install_path' => app_install_path(),
+    'app_public_web_path' => app_public_web_path(),
     'app_base_path' => app_base_path(),
+    'site_url_base' => site_url_base(),
     'request_path' => request_path(),
     'script_name' => $_SERVER['SCRIPT_NAME'] ?? '',
     'request_uri' => $_SERVER['REQUEST_URI'] ?? '',

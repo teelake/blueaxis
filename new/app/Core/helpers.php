@@ -70,52 +70,93 @@ function app_base_path(): string
     return $cached;
 }
 
-/** Request path for routing (strips subdirectory base). */
-function request_path(): string
-{
-    $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-    $base = app_base_path();
-
-    if ($base !== '' && str_starts_with($uri, $base)) {
-        $uri = substr($uri, strlen($base)) ?: '/';
-    }
-
-    return rtrim($uri, '/') ?: '/';
-}
-
-/**
- * URL path segment before /assets/ (e.g. /public when app runs from /new/).
- */
-function asset_url_prefix(): string
+/** Site route prefix (e.g. /new), without /public. */
+function app_install_path(): string
 {
     static $cached = null;
     if ($cached !== null) {
         return $cached;
     }
 
-    $override = rtrim((string) env('APP_ASSET_PATH', ''), '/');
+    $override = rtrim((string) env('APP_BASE_PATH', ''), '/');
+    if ($override !== '') {
+        $cached = str_ends_with($override, '/public') ? substr($override, 0, -7) : $override;
+        return $cached;
+    }
+
+    $base = app_base_path();
+    if (str_ends_with($base, '/public')) {
+        $cached = substr($base, 0, -7) ?: '';
+    } else {
+        $cached = $base;
+    }
+    return $cached;
+}
+
+/** Web path to the public/ folder (e.g. /new/public). */
+function app_public_web_path(): string
+{
+    static $cached = null;
+    if ($cached !== null) {
+        return $cached;
+    }
+
+    $override = rtrim((string) env('APP_PUBLIC_PATH', ''), '/');
     if ($override !== '') {
         $cached = $override;
         return $cached;
     }
 
-    $base = app_base_path();
-    if ($base === '') {
-        $cached = '';
-        return $cached;
+    $install = app_install_path();
+    $cached = $install === '' ? '' : $install . '/public';
+    return $cached;
+}
+
+function app_url_origin(): string
+{
+    $configured = rtrim(config('app.url'), '/');
+    $parts = parse_url($configured);
+    if (!empty($parts['scheme']) && !empty($parts['host'])) {
+        $port = isset($parts['port']) ? ':' . $parts['port'] : '';
+        return $parts['scheme'] . '://' . $parts['host'] . $port;
     }
 
-    // Front controller at /new/index.php — files live in /new/public/assets/
-    $cached = str_ends_with($base, '/public') ? '' : '/public';
-    return $cached;
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $scheme = $https ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    return $scheme . '://' . $host;
+}
+
+/** Base URL for pages and routes. */
+function site_url_base(): string
+{
+    $configured = rtrim(config('app.url'), '/');
+    $parts = parse_url($configured);
+    if (!empty($parts['path']) && $parts['path'] !== '/') {
+        return $configured;
+    }
+
+    return app_url_origin() . app_install_path();
+}
+
+/** Request path for routing (strips install/public prefixes). */
+function request_path(): string
+{
+    $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+
+    foreach ([app_public_web_path(), app_install_path(), app_base_path()] as $base) {
+        if ($base !== '' && str_starts_with($uri, $base)) {
+            $uri = substr($uri, strlen($base)) ?: '/';
+            break;
+        }
+    }
+
+    return rtrim($uri, '/') ?: '/';
 }
 
 function asset(string $path): string
 {
-    $site = rtrim(config('app.url'), '/');
-    $prefix = asset_url_prefix();
-
-    return $site . $prefix . '/assets/' . ltrim($path, '/');
+    return app_url_origin() . app_public_web_path() . '/assets/' . ltrim($path, '/');
 }
 
 /** Public URL for uploaded media (paths stored as uploads/...). */
@@ -128,15 +169,12 @@ function media_url(?string $path): string
         return $path;
     }
 
-    $site = rtrim(config('app.url'), '/');
-    $prefix = asset_url_prefix();
-
-    return $site . $prefix . '/' . ltrim(str_replace('\\', '/', $path), '/');
+    return app_url_origin() . app_public_web_path() . '/' . ltrim(str_replace('\\', '/', $path), '/');
 }
 
 function url(string $path = ''): string
 {
-    $base = rtrim(config('app.url'), '/');
+    $base = site_url_base();
     return $path === '' ? $base : $base . '/' . ltrim($path, '/');
 }
 
