@@ -126,6 +126,7 @@ Logging starts on every request via `bootstrap.php`. On production, set `APP_DEB
    APP_BASE_PATH=/new
    ```
    Visit `https://yourdomain.com/new` (not only `/new/public/`).
+   Static files load from `/new/public/assets/` (CSS, images, JS). Upload `public/assets/css/app.css` after running `npm run build` locally.
 5. **Or** set document root to `new/public/` (recommended) with `APP_BASE_PATH=/new/public` or leave auto-detect.
 6. **Apache** `mod_rewrite` enabled and `.htaccess` allowed (`AllowOverride All`).
 6. **Database** created and migrated: `php database/migrate.php --seed`

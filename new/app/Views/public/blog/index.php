@@ -23,7 +23,7 @@
         <a href="<?= url('blog/' . $featured['slug']) ?>" class="contents">
           <div class="h-64 md:h-auto bg-brand-navy/10">
             <?php if ($featured['featured_image']): ?>
-              <img src="/<?= e(ltrim($featured['featured_image'], '/')) ?>" class="w-full h-full object-cover" alt="" />
+              <img src="<?= e(media_url($featured['featured_image'])) ?>" class="w-full h-full object-cover" alt="" />
             <?php endif; ?>
           </div>
           <div class="p-8 flex flex-col justify-center">
@@ -41,7 +41,7 @@
           <a href="<?= url('blog/' . $post['slug']) ?>">
             <div class="h-40 bg-slate-100">
               <?php if ($post['featured_image']): ?>
-                <img src="/<?= e(ltrim($post['featured_image'], '/')) ?>" class="w-full h-full object-cover" alt="" />
+                <img src="<?= e(media_url($post['featured_image'])) ?>" class="w-full h-full object-cover" alt="" />
               <?php endif; ?>
             </div>
             <div class="p-6">

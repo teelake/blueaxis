@@ -26,6 +26,8 @@ $checks = [
     'pdo_mysql' => extension_loaded('pdo_mysql'),
     'front_controller' => is_readable(BASE_PATH . '/index.php'),
     'htaccess_new' => is_readable(BASE_PATH . '/.htaccess'),
+    'asset_css_url' => asset('css/app.css'),
+    'asset_css_exists' => is_readable(PUBLIC_PATH . '/assets/css/app.css'),
 ];
 
 $logDir = dirname(\App\Core\ErrorLogger::logFile());

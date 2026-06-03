@@ -150,7 +150,7 @@
         <article class="card p-0 overflow-hidden" data-aos="fade-up">
           <a href="<?= url('blog/' . $post['slug']) ?>" class="block">
             <?php if ($post['featured_image']): ?>
-              <img src="/<?= e(ltrim($post['featured_image'], '/')) ?>" alt="" class="w-full h-44 object-cover" />
+              <img src="<?= e(media_url($post['featured_image'])) ?>" alt="" class="w-full h-44 object-cover" />
             <?php else: ?>
               <div class="h-44 bg-brand-navy/10"></div>
             <?php endif; ?>

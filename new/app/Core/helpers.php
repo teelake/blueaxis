@@ -83,9 +83,55 @@ function request_path(): string
     return rtrim($uri, '/') ?: '/';
 }
 
+/**
+ * URL path segment before /assets/ (e.g. /public when app runs from /new/).
+ */
+function asset_url_prefix(): string
+{
+    static $cached = null;
+    if ($cached !== null) {
+        return $cached;
+    }
+
+    $override = rtrim((string) env('APP_ASSET_PATH', ''), '/');
+    if ($override !== '') {
+        $cached = $override;
+        return $cached;
+    }
+
+    $base = app_base_path();
+    if ($base === '') {
+        $cached = '';
+        return $cached;
+    }
+
+    // Front controller at /new/index.php — files live in /new/public/assets/
+    $cached = str_ends_with($base, '/public') ? '' : '/public';
+    return $cached;
+}
+
 function asset(string $path): string
 {
-    return url('assets/' . ltrim($path, '/'));
+    $site = rtrim(config('app.url'), '/');
+    $prefix = asset_url_prefix();
+
+    return $site . $prefix . '/assets/' . ltrim($path, '/');
+}
+
+/** Public URL for uploaded media (paths stored as uploads/...). */
+function media_url(?string $path): string
+{
+    if ($path === null || $path === '') {
+        return '';
+    }
+    if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+        return $path;
+    }
+
+    $site = rtrim(config('app.url'), '/');
+    $prefix = asset_url_prefix();
+
+    return $site . $prefix . '/' . ltrim(str_replace('\\', '/', $path), '/');
 }
 
 function url(string $path = ''): string

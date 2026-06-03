@@ -11,7 +11,7 @@
   </section>
   <?php if ($post['featured_image']): ?>
     <div class="max-w-5xl mx-auto px-4 -mt-8">
-      <img src="/<?= e(ltrim($post['featured_image'], '/')) ?>" alt="" class="w-full rounded-xl shadow-elevated max-h-[420px] object-cover" />
+      <img src="<?= e(media_url($post['featured_image'])) ?>" alt="" class="w-full rounded-xl shadow-elevated max-h-[420px] object-cover" />
     </div>
   <?php endif; ?>
   <div class="max-w-3xl mx-auto px-4 py-16 prose prose-lg prose-slate">

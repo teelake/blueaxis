@@ -13,7 +13,7 @@
         <div class="<?= $i % 2 ? 'lg:order-2' : '' ?>">
           <div class="aspect-video rounded-xl bg-gradient-to-br from-brand-navy/10 to-brand-gold/20 flex items-center justify-center">
             <?php if ($svc['banner_image']): ?>
-              <img src="/<?= e(ltrim($svc['banner_image'], '/')) ?>" alt="" class="w-full h-full object-cover rounded-xl" />
+              <img src="<?= e(media_url($svc['banner_image'])) ?>" alt="" class="w-full h-full object-cover rounded-xl" />
             <?php else: ?>
               <span class="text-6xl font-bold text-brand-navy/20"><?= $i + 1 ?></span>
             <?php endif; ?>
