@@ -58,6 +58,27 @@
   .nav-link {
     @apply text-base font-medium tracking-tight transition;
   }
+  .site-logo-link {
+    @apply flex items-center shrink-0 py-1 pr-2;
+  }
+  .site-logo {
+    @apply w-auto object-contain object-left;
+    height: 3.75rem;
+    max-height: 4.75rem;
+    max-width: min(100%, 13.5rem);
+  }
+  @media (min-width: 640px) {
+    .site-logo {
+      height: 4.25rem;
+      max-width: 15.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .site-logo {
+      height: 4.75rem;
+      max-width: 17.5rem;
+    }
+  }
 
   /* Hero — logistics geometry & motion */
   .hero-section {
