@@ -80,3 +80,8 @@
     </div>
   </div>
 </section>
+
+<?php \App\Core\View::partial('contact-map', [
+    'contact' => $contact,
+    'mapEmbedUrl' => $mapEmbedUrl,
+]); ?>

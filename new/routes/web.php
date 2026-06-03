@@ -7,6 +7,7 @@ use App\Controllers\BlogController;
 use App\Controllers\ContactController;
 use App\Controllers\QuoteController;
 use App\Controllers\HomeController;
+use App\Controllers\NewsletterController;
 use App\Controllers\SeoController;
 use App\Controllers\ServiceController;
 use App\Controllers\Admin\AuthController;
@@ -25,6 +26,7 @@ $router = new Router();
 
 // Public routes
 $router->get('/', [new HomeController(), 'index']);
+$router->post('/newsletter/subscribe', [new NewsletterController(), 'subscribe']);
 $router->get('/about', [new AboutController(), 'index']);
 $router->get('/services', [new ServiceController(), 'index']);
 $router->get('/services/{slug}', [new ServiceController(), 'show']);

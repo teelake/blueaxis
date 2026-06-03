@@ -23,6 +23,7 @@ final class ContactController extends Controller
                 'description' => 'Contact BlueAxis for general inquiries. For pricing and service quotes, use our dedicated quote request page.',
             ]),
             'contact' => Setting::allByGroup('contact'),
+            'mapEmbedUrl' => map_embed_url(),
             'success' => flash('success'),
             'error' => flash('error'),
         ]);

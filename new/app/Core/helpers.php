@@ -160,6 +160,21 @@ function asset(string $path): string
 }
 
 /** Public URL for uploaded media (paths stored as uploads/...). */
+/** Google Maps embed URL from settings or Winnipeg default. */
+function map_embed_url(): string
+{
+    $custom = \App\Models\Setting::get('map_embed_url');
+    if ($custom !== null && trim($custom) !== '') {
+        return trim($custom);
+    }
+
+    $query = urlencode(
+        \App\Models\Setting::get('company_address', 'Winnipeg, Manitoba, Canada') ?? 'Winnipeg, Manitoba, Canada'
+    );
+
+    return 'https://www.google.com/maps?q=' . $query . '&z=12&output=embed';
+}
+
 function media_url(?string $path): string
 {
     if ($path === null || $path === '') {

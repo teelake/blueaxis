@@ -32,6 +32,12 @@ final class HomeController extends Controller
                 ['stat' => 'Food-grade', 'label' => 'Disciplined operations'],
             ];
         }
+        $testimonials = [];
+        if (!empty($blocks['testimonials']['items']['content'])) {
+            $testimonials = json_decode((string) $blocks['testimonials']['items']['content'], true) ?: [];
+        }
+        $newsletter = $blocks['newsletter'] ?? [];
+
         $services = Service::published();
         $posts = BlogPost::latest(3);
         $seo = SeoService::metaForPage($page);
@@ -42,6 +48,13 @@ final class HomeController extends Controller
             'about' => $about,
             'cta' => $cta,
             'trustItems' => $trustItems,
+            'testimonials' => $testimonials,
+            'testimonialsTitle' => section($blocks['testimonials'] ?? [], 'eyebrow', 'Partner feedback'),
+            'testimonialsHeading' => section($blocks['testimonials'] ?? [], 'title', 'Trusted by wholesale partners'),
+            'testimonialsLead' => section($blocks['testimonials'] ?? [], 'lead', ''),
+            'newsletterEyebrow' => section($newsletter, 'eyebrow', 'Stay informed'),
+            'newsletterTitle' => section($newsletter, 'title', 'Logistics insights for your inbox'),
+            'newsletterLead' => section($newsletter, 'lead', 'Industry updates and supply chain perspectives for B2B partners.'),
             'services' => $services,
             'posts' => $posts,
             'schema' => SeoService::organizationSchema(),

@@ -41,6 +41,19 @@ final class ContentAdminController extends Controller
         if (isset($_POST['trust_items_json'])) {
             ContentBlock::upsert('home', 'trust', 'items', $_POST['trust_items_json'], 'json');
         }
+        if (isset($_POST['testimonials_items_json'])) {
+            ContentBlock::upsert('home', 'testimonials', 'items', $_POST['testimonials_items_json'], 'json');
+        }
+        foreach (['eyebrow', 'title', 'lead'] as $key) {
+            if (isset($_POST['testimonials'][$key])) {
+                ContentBlock::upsert('home', 'testimonials', $key, trim((string) $_POST['testimonials'][$key]), 'text');
+            }
+        }
+        foreach (['eyebrow', 'title', 'lead'] as $key) {
+            if (isset($_POST['newsletter'][$key])) {
+                ContentBlock::upsert('home', 'newsletter', $key, trim((string) $_POST['newsletter'][$key]), 'text');
+            }
+        }
         Session::flash('success', 'Home page content saved.');
         redirect('admin/content/home');
     }

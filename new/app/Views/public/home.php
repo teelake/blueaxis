@@ -134,6 +134,8 @@
   </div>
 </section>
 
+<?php \App\Core\View::partial('home-testimonials', get_defined_vars()); ?>
+
 <!-- Blog preview -->
 <?php if (!empty($posts)): ?>
 <section class="py-20 bg-slate-50">
@@ -167,6 +169,8 @@
 </section>
 <?php endif; ?>
 
+<?php \App\Core\View::partial('home-newsletter', get_defined_vars()); ?>
+
 <!-- CTA -->
 <section class="py-20">
   <div class="max-w-4xl mx-auto px-4 text-center" data-aos="zoom-in">
@@ -174,19 +178,6 @@
       <h2 class="text-2xl md:text-3xl font-semibold mb-4"><?= e(section($cta, 'title')) ?></h2>
       <p class="text-slate-300 mb-8 max-w-xl mx-auto"><?= e(section($cta, 'body')) ?></p>
       <a href="<?= url(ltrim(section($cta, 'button_url', '/contact'), '/')) ?>" class="btn-accent"><?= e(section($cta, 'button_label', 'Get in Touch')) ?></a>
-    </div>
-  </div>
-</section>
-
-<!-- Contact strip -->
-<section class="pb-20">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="card flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-brand-gold/30">
-      <div>
-        <h2 class="text-xl font-semibold text-brand-navy">Contact our team</h2>
-        <p class="text-sm text-slate-600 mt-1">Partnerships, quotes, and general inquiries welcome.</p>
-      </div>
-      <a href="<?= url('contact') ?>" class="btn-primary shrink-0">Contact Us</a>
     </div>
   </div>
 </section>
