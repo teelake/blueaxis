@@ -48,6 +48,29 @@ try {
     \App\Core\ErrorLogger::logThrowable($e);
 }
 
+$sessionPath = session_save_path() !== '' ? session_save_path() : sys_get_temp_dir();
+$checks['session'] = [
+    'save_path' => $sessionPath,
+    'save_path_writable' => is_writable($sessionPath),
+    'cookie_path' => app_install_path() !== '' ? app_install_path() : '/',
+];
+
+$adminEmail = (string) env('ADMIN_EMAIL', 'admin@blueaxis.com');
+$checks['admin_email_configured'] = $adminEmail;
+try {
+    $admin = \App\Models\Admin::findByEmail($adminEmail);
+    $envPass = (string) env('ADMIN_PASSWORD', '');
+    $checks['admin'] = [
+        'exists' => $admin !== null,
+        'active' => $admin !== null && (bool) ($admin['is_active'] ?? false),
+        'password_hash_valid' => $admin !== null && str_starts_with((string) ($admin['password'] ?? ''), '$2y$'),
+        'password_matches_env' => $admin !== null && $envPass !== '' && password_verify($envPass, (string) $admin['password']),
+    ];
+} catch (\Throwable $e) {
+    $checks['admin'] = ['error' => $e->getMessage()];
+}
+
+$checks['admin_login_url'] = site_url_base() . '/admin/login';
 $checks['ok'] = $checks['storage_writable'] && $checks['env_file'] && $checks['pdo_mysql'] && $checks['database'] === 'ok';
 
 http_response_code($checks['ok'] ? 200 : 503);

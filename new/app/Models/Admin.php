@@ -12,9 +12,9 @@ final class Admin extends Model
             'SELECT a.*, r.slug AS role_slug, r.name AS role_name
              FROM admins a
              JOIN roles r ON r.id = a.role_id
-             WHERE a.email = :email LIMIT 1'
+             WHERE LOWER(a.email) = LOWER(:email) LIMIT 1'
         );
-        $stmt->execute(['email' => $email]);
+        $stmt->execute(['email' => trim($email)]);
         $row = $stmt->fetch();
         return $row ?: null;
     }

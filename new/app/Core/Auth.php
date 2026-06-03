@@ -10,11 +10,19 @@ final class Auth
 {
     public static function attempt(string $email, string $password): bool
     {
+        $email = trim($email);
         $admin = Admin::findByEmail($email);
-        if (!$admin || !$admin['is_active']) {
+        if (!$admin) {
+            ErrorLogger::log('auth', 'Login failed: no admin for email ' . $email);
             return false;
         }
-        if (!password_verify($password, $admin['password'])) {
+        if (!$admin['is_active']) {
+            ErrorLogger::log('auth', 'Login failed: admin inactive for ' . $email);
+            return false;
+        }
+        $storedHash = (string) ($admin['password'] ?? '');
+        if ($storedHash === '' || !password_verify($password, $storedHash)) {
+            ErrorLogger::log('auth', 'Login failed: invalid password for ' . $email);
             return false;
         }
         session_regenerate_id(true);
