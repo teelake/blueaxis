@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-CA" class="overflow-x-hidden">
+<html lang="en-CA">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,16 +12,16 @@
   <link rel="icon" href="<?= asset('images/BLUEAXIS_logo.png') ?>" />
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <style>[data-aos],.aos-animate{overflow:visible!important}[x-cloak]{display:none!important}</style>
   <?php if (!empty($schema)): ?>
   <script type="application/ld+json"><?= $schema ?></script>
   <?php endif; ?>
-  <style>[x-cloak]{display:none!important}</style>
 </head>
-<body class="overflow-x-hidden">
+<body>
   <?php \App\Core\View::partial('header'); ?>
-  <main class="overflow-x-hidden"><?= $content ?></main>
+  <main><?= $content ?></main>
   <?php \App\Core\View::partial('footer'); ?>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script>AOS.init({ duration: 700, once: true, offset: 40 });</script>
+  <script>AOS.init({ duration: 600, once: true, offset: 24, easing: 'ease-out-cubic', startEvent: 'DOMContentLoaded' });</script>
 </body>
 </html>
