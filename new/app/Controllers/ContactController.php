@@ -8,8 +8,6 @@ use App\Core\Controller;
 use App\Core\Session;
 use App\Models\Contact;
 use App\Models\Page;
-use App\Models\QuoteRequest;
-use App\Models\Service;
 use App\Models\Setting;
 use App\Services\LeadNotificationService;
 use App\Services\SeoService;
@@ -20,9 +18,11 @@ final class ContactController extends Controller
     public function index(): void
     {
         $this->view('public/contact', [
-            'seo' => SeoService::metaForPage(Page::findBySlug('contact')),
+            'seo' => SeoService::metaForPage(Page::findBySlug('contact'), [
+                'title' => 'Contact Us | BlueAxis Logistics & Warehousing',
+                'description' => 'Contact BlueAxis for general inquiries. For pricing and service quotes, use our dedicated quote request page.',
+            ]),
             'contact' => Setting::allByGroup('contact'),
-            'services' => Service::published(),
             'success' => flash('success'),
             'error' => flash('error'),
         ]);
@@ -56,32 +56,4 @@ final class ContactController extends Controller
         redirect('contact');
     }
 
-    public function submitQuote(): void
-    {
-        $this->validateCsrf();
-        $input = [
-            'name' => trim((string) ($_POST['name'] ?? '')),
-            'company' => trim((string) ($_POST['company'] ?? '')),
-            'email' => trim((string) ($_POST['email'] ?? '')),
-            'phone' => trim((string) ($_POST['phone'] ?? '')),
-            'service_needed' => trim((string) ($_POST['service_needed'] ?? '')),
-            'message' => trim((string) ($_POST['message'] ?? '')),
-        ];
-
-        $v = new Validator();
-        $v->required('name', $input['name'])->required('email', $input['email'])
-            ->email('email', $input['email'])->required('service_needed', $input['service_needed']);
-
-        if ($v->fails()) {
-            Session::setOld($input);
-            Session::flash('error', 'Please complete all required quote fields.');
-            redirect('contact#quote');
-        }
-
-        $id = QuoteRequest::create($input);
-        LeadNotificationService::quoteSubmitted($input, $id);
-        Session::clearOld();
-        Session::flash('success', 'Your quote request has been submitted. Our team will respond shortly.');
-        redirect('contact#quote');
-    }
 }

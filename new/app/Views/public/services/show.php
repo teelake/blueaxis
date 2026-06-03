@@ -18,7 +18,7 @@
       </ul>
     <?php endif; ?>
     <div class="mt-12 flex flex-wrap gap-4">
-      <a href="<?= url('contact#quote') ?>" class="btn-primary">Request a Quote</a>
+      <a href="<?= url('quote') ?>" class="btn-primary">Request a Quote</a>
       <a href="<?= url('contact') ?>" class="btn-secondary">Contact Us</a>
     </div>
   </div>

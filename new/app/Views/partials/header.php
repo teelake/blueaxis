@@ -23,7 +23,7 @@ $nav = [
         <?php endforeach; ?>
       </nav>
       <div class="hidden lg:flex items-center gap-4">
-        <a href="<?= url('contact#quote') ?>" class="btn-primary">Request a Quote</a>
+        <a href="<?= url('quote') ?>" class="btn-primary">Request a Quote</a>
       </div>
       <button type="button" class="lg:hidden p-2 text-brand-navy" @click="open = !open" aria-label="Toggle menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -33,7 +33,7 @@ $nav = [
       <?php foreach ($nav as $path => $label): ?>
         <a href="<?= url(ltrim($path, '/')) ?>" class="block py-2 text-sm font-medium text-slate-700"><?= e($label) ?></a>
       <?php endforeach; ?>
-      <a href="<?= url('contact#quote') ?>" class="btn-primary mt-3 w-full">Request a Quote</a>
+      <a href="<?= url('quote') ?>" class="btn-primary mt-3 w-full">Request a Quote</a>
     </div>
   </div>
 </header>

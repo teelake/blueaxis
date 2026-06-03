@@ -7,7 +7,7 @@
       <h1 class="font-sans font-semibold text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight mb-6"><?= e(section($hero, 'title')) ?></h1>
       <p class="text-lg text-slate-300 leading-relaxed mb-10 max-w-2xl"><?= e(section($hero, 'lead')) ?></p>
       <div class="flex flex-wrap gap-4">
-        <a href="<?= url(ltrim(section($hero, 'cta_primary_url', '/contact#quote'), '/')) ?>" class="btn-accent"><?= e(section($hero, 'cta_primary_label', 'Request a Quote')) ?></a>
+        <a href="<?= url(ltrim(section($hero, 'cta_primary_url', '/quote'), '/')) ?>" class="btn-accent"><?= e(section($hero, 'cta_primary_label', 'Request a Quote')) ?></a>
         <a href="<?= url(ltrim(section($hero, 'cta_secondary_url', '/services'), '/')) ?>" class="btn-secondary-hero"><?= e(section($hero, 'cta_secondary_label', 'Our Services')) ?></a>
       </div>
     </div>

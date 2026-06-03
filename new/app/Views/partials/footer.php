@@ -17,6 +17,7 @@ $contact = Setting::allByGroup('contact');
           <li><a href="<?= url('about') ?>" class="hover:text-brand-gold transition">About</a></li>
           <li><a href="<?= url('services') ?>" class="hover:text-brand-gold transition">Services</a></li>
           <li><a href="<?= url('blog') ?>" class="hover:text-brand-gold transition">Blog</a></li>
+          <li><a href="<?= url('quote') ?>" class="hover:text-brand-gold transition">Request a Quote</a></li>
           <li><a href="<?= url('contact') ?>" class="hover:text-brand-gold transition">Contact</a></li>
         </ul>
       </div>

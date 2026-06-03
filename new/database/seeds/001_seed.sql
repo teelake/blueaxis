@@ -15,7 +15,8 @@ INSERT INTO pages (slug, title, meta_title, meta_description) VALUES
 ('about', 'About Us', 'About BlueAxis | Logistics & Warehousing Canada', 'Learn about BlueAxis mission, vision, and values serving grocery, retail, and wholesale partners.'),
 ('services', 'Services', 'Logistics Services | Import, Warehousing & Distribution', 'Importation, warehousing, and fulfillment services for B2B food distribution.'),
 ('blog', 'Blog', 'Insights & News | BlueAxis Logistics', 'Expert articles on logistics, warehousing, and African food supply chains.'),
-('contact', 'Contact', 'Contact BlueAxis | Request a Quote', 'Contact BlueAxis for wholesale distribution, warehousing, and import partnership inquiries.');
+('contact', 'Contact', 'Contact Us | BlueAxis Logistics', 'Contact BlueAxis for general inquiries. For quotes, visit our request a quote page.'),
+('quote', 'Request a Quote', 'Request a Quote | BlueAxis Logistics', 'Request a B2B quote for importation, warehousing, and distribution services.');
 
 INSERT INTO services (title, slug, excerpt, description, benefits, sort_order, is_published) VALUES
 ('Importation & Sourcing', 'importation-sourcing',
@@ -58,7 +59,7 @@ INSERT INTO content_blocks (page_slug, section_key, block_key, content, content_
 ('home', 'hero', 'title', 'Connecting African Food Supply to Canadian Markets', 'text', 2),
 ('home', 'hero', 'lead', 'BlueAxis Logistics & Warehousing Ltd. delivers importation, warehousing, and distribution solutions for grocery retailers, wholesalers, and food service partners across Manitoba and Canada.', 'text', 3),
 ('home', 'hero', 'cta_primary_label', 'Request a Quote', 'text', 4),
-('home', 'hero', 'cta_primary_url', '/contact#quote', 'text', 5),
+('home', 'hero', 'cta_primary_url', '/quote', 'text', 5),
 ('home', 'hero', 'cta_secondary_label', 'Our Services', 'text', 6),
 ('home', 'hero', 'cta_secondary_url', '/services', 'text', 7),
 ('home', 'about', 'title', 'Your Partner in Food Logistics', 'text', 1),

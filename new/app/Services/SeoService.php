@@ -33,7 +33,8 @@ final class SeoService
             ['loc' => $base . '/about', 'priority' => '0.8'],
             ['loc' => $base . '/services', 'priority' => '0.9'],
             ['loc' => $base . '/blog', 'priority' => '0.8'],
-            ['loc' => $base . '/contact', 'priority' => '0.8'],
+            ['loc' => $base . '/quote', 'priority' => '0.9'],
+            ['loc' => $base . '/contact', 'priority' => '0.7'],
         ];
 
         foreach (Service::published() as $service) {
