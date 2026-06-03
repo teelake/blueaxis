@@ -17,7 +17,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['DM Sans', 'system-ui', 'sans-serif'],
-        display: ['Instrument Serif', 'Georgia', 'serif'],
+        display: ['DM Sans', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         card: '0 4px 24px rgba(16, 42, 86, 0.08)',

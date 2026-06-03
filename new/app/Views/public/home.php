@@ -4,7 +4,7 @@
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
     <div class="max-w-3xl" data-aos="fade-up">
       <p class="section-eyebrow text-brand-gold-light mb-4"><?= e(section($hero, 'eyebrow')) ?></p>
-      <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6"><?= e(section($hero, 'title')) ?></h1>
+      <h1 class="font-sans font-semibold text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight mb-6"><?= e(section($hero, 'title')) ?></h1>
       <p class="text-lg text-slate-300 leading-relaxed mb-10 max-w-2xl"><?= e(section($hero, 'lead')) ?></p>
       <div class="flex flex-wrap gap-4">
         <a href="<?= url(ltrim(section($hero, 'cta_primary_url', '/contact#quote'), '/')) ?>" class="btn-accent"><?= e(section($hero, 'cta_primary_label', 'Request a Quote')) ?></a>
