@@ -14,9 +14,7 @@ try {
     $router = require BASE_PATH . '/routes/web.php';
 
     $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-    $uri = $_SERVER['REQUEST_URI'] ?? '/';
-
-    $router->dispatch($method, $uri);
+    $router->dispatch($method, request_path());
 } catch (\Throwable $e) {
     ErrorLogger::logThrowable($e);
 

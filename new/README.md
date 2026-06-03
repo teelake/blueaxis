@@ -120,8 +120,14 @@ Logging starts on every request via `bootstrap.php`. On production, set `APP_DEB
 1. **`storage/logs/` is writable** by the web server user (e.g. `chmod 775 storage/logs` or `chmod 777` on shared hosting).
 2. **`new/storage/logs/php-error.log`** — open or download this file after reproducing the error.
 3. **`.env` exists** in `new/` with correct `DB_*` and `APP_URL` (must match your live URL, including `/new` if the app lives in a subfolder).
-4. **Document root** points to `new/public/` (not `new/`).
-5. **Apache** `mod_rewrite` enabled and `public/.htaccess` allowed (`AllowOverride All`).
+4. **Subfolder install (`/new`):** Use the included `new/.htaccess` and `new/index.php`. Set in `.env`:
+   ```
+   APP_URL=https://yourdomain.com/new
+   APP_BASE_PATH=/new
+   ```
+   Visit `https://yourdomain.com/new` (not only `/new/public/`).
+5. **Or** set document root to `new/public/` (recommended) with `APP_BASE_PATH=/new/public` or leave auto-detect.
+6. **Apache** `mod_rewrite` enabled and `.htaccess` allowed (`AllowOverride All`).
 6. **Database** created and migrated: `php database/migrate.php --seed`
 7. **PHP extensions:** `pdo_mysql`, `mbstring`, `json`
 

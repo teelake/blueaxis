@@ -30,9 +30,8 @@ final class Router
         return $this;
     }
 
-    public function dispatch(string $method, string $uri): void
+    public function dispatch(string $method, string $path): void
     {
-        $path = parse_url($uri, PHP_URL_PATH) ?: '/';
         $path = rtrim($path, '/') ?: '/';
 
         foreach ($this->routes as $route) {
@@ -51,6 +50,11 @@ final class Router
             ($route['handler'])($params);
             return;
         }
+
+        ErrorLogger::log(
+            'http',
+            sprintf('404 Not Found: %s %s', $method, $path)
+        );
 
         http_response_code(404);
         View::render('public/errors/404', ['title' => 'Page Not Found']);

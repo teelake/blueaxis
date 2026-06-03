@@ -31,6 +31,14 @@ final class ErrorLogger
         set_error_handler([self::class, 'handleError']);
         set_exception_handler([self::class, 'handleException']);
         register_shutdown_function([self::class, 'handleShutdown']);
+
+        self::touchLog('[SYSTEM] Error logging initialized (PHP ' . PHP_VERSION . ')');
+    }
+
+    private static function touchLog(string $line): void
+    {
+        self::ensureLogDirectory();
+        @file_put_contents(self::logFile(), '[' . date('Y-m-d H:i:s') . '] ' . $line . PHP_EOL, FILE_APPEND | LOCK_EX);
     }
 
     public static function logFile(): string

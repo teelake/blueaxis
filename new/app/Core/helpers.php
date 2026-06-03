@@ -48,10 +48,44 @@ function storage_path(string $path = ''): string
     return rtrim(STORAGE_PATH, '/\\') . ($path ? DIRECTORY_SEPARATOR . ltrim($path, '/\\') : '');
 }
 
+/**
+ * Web path prefix where index.php lives (e.g. /new or /new/public).
+ */
+function app_base_path(): string
+{
+    static $cached = null;
+    if ($cached !== null) {
+        return $cached;
+    }
+
+    $fromEnv = rtrim((string) env('APP_BASE_PATH', ''), '/');
+    if ($fromEnv !== '') {
+        $cached = $fromEnv;
+        return $cached;
+    }
+
+    $script = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? '/index.php'));
+    $dir = rtrim(dirname($script), '/');
+    $cached = $dir === '' || $dir === '.' ? '' : $dir;
+    return $cached;
+}
+
+/** Request path for routing (strips subdirectory base). */
+function request_path(): string
+{
+    $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    $base = app_base_path();
+
+    if ($base !== '' && str_starts_with($uri, $base)) {
+        $uri = substr($uri, strlen($base)) ?: '/';
+    }
+
+    return rtrim($uri, '/') ?: '/';
+}
+
 function asset(string $path): string
 {
-    $base = rtrim(config('app.url'), '/');
-    return $base . '/assets/' . ltrim($path, '/');
+    return url('assets/' . ltrim($path, '/'));
 }
 
 function url(string $path = ''): string

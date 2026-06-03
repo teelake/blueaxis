@@ -2,7 +2,7 @@
 $seo = $seo ?? ['title' => config('app.name'), 'description' => '', 'canonical' => null, 'og_image' => asset('images/BLUEAXIS_logo.png')];
 $title = e($seo['title'] ?? config('app.name'));
 $desc = e($seo['description'] ?? '');
-$canonical = $seo['canonical'] ?? url(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+$canonical = $seo['canonical'] ?? url(ltrim(request_path(), '/'));
 $og = $seo['og_image'] ?? asset('images/BLUEAXIS_logo.png');
 ?>
 <title><?= $title ?></title>

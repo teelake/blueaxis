@@ -1,7 +1,12 @@
+# Used when document root is set to public/ (recommended for production).
+# If the site runs from /new/ instead, the parent .htaccess in new/ handles routing.
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+
+    # Set RewriteBase to your public URL path if in a subfolder, e.g. /new/public/
+    # RewriteBase /new/public/
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ index.php [L]
+    RewriteRule ^ index.php [L,QSA]
 </IfModule>

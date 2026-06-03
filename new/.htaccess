@@ -1,0 +1,21 @@
+# BlueAxis — subdirectory install (e.g. https://yourdomain.com/new/)
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /new/
+
+    # Serve static files from public/
+    RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+    RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
+
+    # Allow existing files (e.g. public/health.php via /new/public/health.php)
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Route everything else to the application
+    RewriteRule ^ index.php [L,QSA]
+</IfModule>
