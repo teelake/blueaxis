@@ -43,6 +43,9 @@
   .testimonial-card {
     @apply flex flex-col h-full bg-white rounded-xl shadow-card border border-slate-100/80 px-6 py-10 md:px-8 md:py-12 transition-shadow hover:shadow-elevated;
   }
+  .prose img {
+    @apply rounded-lg max-w-full h-auto my-6;
+  }
   .input-field {
     @apply w-full rounded-md border-slate-200 shadow-sm focus:border-brand-navy focus:ring-brand-navy;
   }
