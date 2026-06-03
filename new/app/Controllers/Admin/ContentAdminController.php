@@ -8,6 +8,7 @@ use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Models\ContentBlock;
+use App\Services\HtmlSanitizer;
 
 final class ContentAdminController extends Controller
 {
@@ -33,7 +34,8 @@ final class ContentAdminController extends Controller
             }
             foreach ($_POST[$section] as $key => $value) {
                 $type = str_contains($key, 'body') ? 'html' : 'text';
-                ContentBlock::upsert('home', $section, $key, trim((string) $value), $type);
+                $val = $type === 'html' ? HtmlSanitizer::clean((string) $value) : trim((string) $value);
+                ContentBlock::upsert('home', $section, $key, $val, $type);
             }
         }
         if (isset($_POST['trust_items_json'])) {
@@ -63,7 +65,8 @@ final class ContentAdminController extends Controller
             }
             foreach ($_POST[$section] as $key => $value) {
                 $type = $key === 'body' ? 'html' : 'text';
-                ContentBlock::upsert('about', $section, $key, trim((string) $value), $type);
+                $val = $type === 'html' ? HtmlSanitizer::clean((string) $value) : trim((string) $value);
+                ContentBlock::upsert('about', $section, $key, $val, $type);
             }
         }
         if (isset($_POST['values_json'])) {

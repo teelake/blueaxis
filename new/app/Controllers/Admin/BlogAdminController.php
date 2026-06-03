@@ -9,6 +9,7 @@ use App\Core\Controller;
 use App\Core\Session;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Services\HtmlSanitizer;
 
 final class BlogAdminController extends Controller
 {
@@ -94,7 +95,7 @@ final class BlogAdminController extends Controller
             'title' => trim((string) ($_POST['title'] ?? '')),
             'slug' => $slug,
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')),
-            'content' => trim((string) ($_POST['content'] ?? '')),
+            'content' => HtmlSanitizer::clean((string) ($_POST['content'] ?? '')),
             'featured_image' => trim((string) ($_POST['featured_image'] ?? '')) ?: null,
             'meta_title' => trim((string) ($_POST['meta_title'] ?? '')) ?: null,
             'meta_description' => trim((string) ($_POST['meta_description'] ?? '')) ?: null,

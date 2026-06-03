@@ -11,6 +11,7 @@ use App\Models\Page;
 use App\Models\QuoteRequest;
 use App\Models\Service;
 use App\Models\Setting;
+use App\Services\LeadNotificationService;
 use App\Services\SeoService;
 use App\Services\Validator;
 
@@ -48,7 +49,8 @@ final class ContactController extends Controller
             redirect('contact');
         }
 
-        Contact::create($input);
+        $id = Contact::create($input);
+        LeadNotificationService::contactSubmitted($input, $id);
         Session::clearOld();
         Session::flash('success', 'Thank you. Your message has been received.');
         redirect('contact');
@@ -76,7 +78,8 @@ final class ContactController extends Controller
             redirect('contact#quote');
         }
 
-        QuoteRequest::create($input);
+        $id = QuoteRequest::create($input);
+        LeadNotificationService::quoteSubmitted($input, $id);
         Session::clearOld();
         Session::flash('success', 'Your quote request has been submitted. Our team will respond shortly.');
         redirect('contact#quote');

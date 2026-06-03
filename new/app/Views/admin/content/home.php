@@ -15,7 +15,13 @@ $c = $blocks['cta'] ?? [];
   <fieldset class="card space-y-4">
     <legend class="font-semibold text-brand-navy">About section</legend>
     <input name="about[title]" value="<?= e($a['title']['content'] ?? '') ?>" class="input-field" />
-    <textarea name="about[body]" rows="6" class="input-field"><?= e($a['body']['content'] ?? '') ?></textarea>
+    <label class="block text-sm font-medium text-slate-700 mb-1">About body</label>
+    <?php \App\Core\View::partial('rich-editor', [
+        'name' => 'about[body]',
+        'id' => 'home_about_body',
+        'value' => $a['body']['content'] ?? '',
+        'height' => 240,
+    ]); ?>
   </fieldset>
   <fieldset class="card space-y-4">
     <legend class="font-semibold text-brand-navy">Trust indicators (JSON)</legend>

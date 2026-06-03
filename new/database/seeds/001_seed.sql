@@ -39,7 +39,19 @@ INSERT INTO settings (`key`, value, type, group_name) VALUES
 ('company_email', 'info@blueaxis.com', 'text', 'contact'),
 ('company_address', 'Winnipeg, Manitoba, Canada', 'text', 'contact'),
 ('social_linkedin', '#', 'text', 'social'),
-('social_facebook', '#', 'text', 'social');
+('social_facebook', '#', 'text', 'social'),
+('mail_driver', 'mail', 'text', 'mail'),
+('mail_host', '', 'text', 'mail'),
+('mail_port', '587', 'text', 'mail'),
+('mail_username', '', 'text', 'mail'),
+('mail_password', '', 'text', 'mail'),
+('mail_encryption', 'tls', 'text', 'mail'),
+('mail_from_address', 'noreply@blueaxis.com', 'text', 'mail'),
+('mail_from_name', 'BlueAxis Website', 'text', 'mail'),
+('mail_notify_to', 'info@blueaxis.com', 'text', 'mail'),
+('mail_notify_contact', '1', 'boolean', 'mail'),
+('mail_notify_quote', '1', 'boolean', 'mail'),
+('mail_reply_to_lead', '1', 'boolean', 'mail');
 
 INSERT INTO content_blocks (page_slug, section_key, block_key, content, content_type, sort_order) VALUES
 ('home', 'hero', 'eyebrow', 'Canadian Logistics Partner', 'text', 1),

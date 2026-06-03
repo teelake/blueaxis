@@ -6,6 +6,7 @@
   <title><?= e($title ?? 'Admin') ?> | BlueAxis CMS</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="<?= asset('css/app.css') ?>" />
+  <link rel="stylesheet" href="<?= asset('css/rich-editor.css') ?>" />
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
@@ -25,5 +26,6 @@
       </main>
     </div>
   </div>
+  <script src="<?= asset('js/rich-editor.js') ?>"></script>
 </body>
 </html>

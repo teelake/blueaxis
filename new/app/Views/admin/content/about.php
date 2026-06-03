@@ -7,7 +7,13 @@ $vals = $blocks['values']['content']['content'] ?? '[]';
     <fieldset class="card space-y-3">
       <legend class="font-semibold capitalize"><?= e($sec) ?></legend>
       <input name="<?= $sec ?>[title]" value="<?= e($blocks[$sec]['title']['content'] ?? '') ?>" class="input-field" />
-      <textarea name="<?= $sec ?>[body]" rows="5" class="input-field"><?= e($blocks[$sec]['body']['content'] ?? '') ?></textarea>
+      <label class="block text-sm font-medium text-slate-700 mb-1">Body</label>
+      <?php \App\Core\View::partial('rich-editor', [
+          'name' => $sec . '[body]',
+          'id' => 'about_' . $sec . '_body',
+          'value' => $blocks[$sec]['body']['content'] ?? '',
+          'height' => 220,
+      ]); ?>
     </fieldset>
   <?php endforeach; ?>
   <fieldset class="card">

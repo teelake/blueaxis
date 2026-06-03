@@ -64,6 +64,25 @@ Production-ready B2B corporate website with CMS, blog, lead management, and admi
 
 **Change the admin password immediately after first login.**
 
+## Email notifications (leads)
+
+When someone submits the **contact** or **quote** form, the team receives an HTML email (submission still saves if mail fails—check `storage/logs/mail.log`).
+
+**Configure in the admin UI:** `/admin/settings/email` (Super Admin only). Settings are stored in the database and override `.env` defaults.
+
+| Setting | Purpose |
+|---------|---------|
+| Driver | PHP `mail()` or SMTP |
+| SMTP host / port / encryption / credentials | Gmail, SendGrid, hosting SMTP, etc. |
+| Notify to | Inbox for lead alerts |
+| Toggles | Contact emails, quote emails, Reply-To visitor |
+
+Use **Send test email** on that page to verify configuration. Optional `.env` values apply until you save settings in admin.
+
+## Rich text editor (admin)
+
+Blog content, service descriptions, and About/Home HTML blocks use **[Quill](https://quilljs.com/)** (BSD-3-Clause, free for commercial use). Content is sanitized on save.
+
 ## Features
 
 ### Public site

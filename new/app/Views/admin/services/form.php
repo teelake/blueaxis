@@ -10,7 +10,13 @@ if ($service && $service['benefits']) {
   <input name="title" value="<?= e($service['title'] ?? '') ?>" class="input-field" placeholder="Title" required />
   <input name="slug" value="<?= e($service['slug'] ?? '') ?>" class="input-field" placeholder="slug" />
   <textarea name="excerpt" class="input-field" rows="2"><?= e($service['excerpt'] ?? '') ?></textarea>
-  <textarea name="description" class="input-field" rows="6"><?= e($service['description'] ?? '') ?></textarea>
+  <label class="block text-sm font-medium text-slate-700">Description</label>
+  <?php \App\Core\View::partial('rich-editor', [
+      'name' => 'description',
+      'id' => 'service_description',
+      'value' => $service['description'] ?? '',
+      'height' => 280,
+  ]); ?>
   <textarea name="benefits_lines" class="input-field" rows="4" placeholder="One benefit per line"><?= e($benefits) ?></textarea>
   <input name="banner_image" value="<?= e($service['banner_image'] ?? '') ?>" class="input-field" placeholder="Banner image path" />
   <input name="meta_title" value="<?= e($service['meta_title'] ?? '') ?>" class="input-field" placeholder="SEO title" />

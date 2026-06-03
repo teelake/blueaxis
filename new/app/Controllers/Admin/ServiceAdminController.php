@@ -8,6 +8,7 @@ use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Models\Service;
+use App\Services\HtmlSanitizer;
 
 final class ServiceAdminController extends Controller
 {
@@ -74,7 +75,7 @@ final class ServiceAdminController extends Controller
             'title' => trim((string) ($_POST['title'] ?? '')),
             'slug' => slugify((string) ($_POST['slug'] ?? $_POST['title'] ?? '')),
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')),
-            'description' => trim((string) ($_POST['description'] ?? '')),
+            'description' => HtmlSanitizer::clean((string) ($_POST['description'] ?? '')),
             'benefits' => json_encode($benefits),
             'banner_image' => trim((string) ($_POST['banner_image'] ?? '')) ?: null,
             'icon' => trim((string) ($_POST['icon'] ?? '')) ?: null,

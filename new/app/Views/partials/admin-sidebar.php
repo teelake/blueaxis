@@ -11,6 +11,9 @@ $links = [
     ['url' => 'admin/contacts', 'label' => 'Contacts', 'match' => '/admin/contacts'],
     ['url' => 'admin/media', 'label' => 'Media', 'match' => '/admin/media'],
 ];
+if (Auth::hasRole('super_admin')) {
+    $links[] = ['url' => 'admin/settings/email', 'label' => 'Email Settings', 'match' => '/admin/settings/email'];
+}
 ?>
 <aside class="hidden lg:flex w-64 flex-col bg-brand-navy text-white shrink-0">
   <div class="p-6 border-b border-white/10">

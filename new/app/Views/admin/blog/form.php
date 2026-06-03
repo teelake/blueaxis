@@ -10,7 +10,13 @@
       <?php endforeach; ?>
     </select>
     <textarea name="excerpt" rows="2" class="input-field"><?= e($post['excerpt'] ?? '') ?></textarea>
-    <textarea name="content" rows="12" class="input-field font-mono text-sm"><?= e($post['content'] ?? '') ?></textarea>
+    <label class="block text-sm font-medium text-slate-700">Content</label>
+    <?php \App\Core\View::partial('rich-editor', [
+        'name' => 'content',
+        'id' => 'blog_content',
+        'value' => $post['content'] ?? '',
+        'height' => 360,
+    ]); ?>
     <input name="featured_image" value="<?= e($post['featured_image'] ?? '') ?>" class="input-field" placeholder="Featured image path" />
     <input name="meta_title" value="<?= e($post['meta_title'] ?? '') ?>" class="input-field" />
     <textarea name="meta_description" rows="2" class="input-field"><?= e($post['meta_description'] ?? '') ?></textarea>

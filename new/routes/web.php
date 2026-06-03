@@ -13,6 +13,7 @@ use App\Controllers\Admin\BlogAdminController;
 use App\Controllers\Admin\ContactAdminController;
 use App\Controllers\Admin\ContentAdminController;
 use App\Controllers\Admin\DashboardController;
+use App\Controllers\Admin\EmailSettingsController;
 use App\Controllers\Admin\MediaAdminController;
 use App\Controllers\Admin\QuoteAdminController;
 use App\Controllers\Admin\ServiceAdminController;
@@ -70,6 +71,10 @@ $router->get('/admin/quotes', [new QuoteAdminController(), 'index']);
 $router->get('/admin/quotes/{id}', [new QuoteAdminController(), 'show']);
 $router->post('/admin/quotes/{id}/status', [new QuoteAdminController(), 'updateStatus']);
 $router->get('/admin/quotes/export', [new QuoteAdminController(), 'export']);
+
+$router->get('/admin/settings/email', [new EmailSettingsController(), 'edit']);
+$router->post('/admin/settings/email', [new EmailSettingsController(), 'save']);
+$router->post('/admin/settings/email/test', [new EmailSettingsController(), 'test']);
 
 $router->get('/admin/media', [new MediaAdminController(), 'index']);
 $router->post('/admin/media/upload', [new MediaAdminController(), 'upload']);
