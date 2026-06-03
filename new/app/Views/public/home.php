@@ -1,7 +1,7 @@
 <!-- Hero -->
-<section class="relative overflow-hidden bg-gradient-to-br from-brand-navy-dark via-brand-navy to-brand-navy text-white">
-  <div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M60 0H0v60\" fill=\"none\" stroke=\"%23fff\" stroke-opacity=\".15\"/%3E%3C/svg%3E')]"></div>
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+<section class="hero-section relative overflow-hidden bg-brand-navy-dark text-white">
+  <?php \App\Core\View::partial('hero-background'); ?>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-32">
     <div class="max-w-3xl" data-aos="fade-up">
       <p class="section-eyebrow text-brand-gold-light mb-4"><?= e(section($hero, 'eyebrow')) ?></p>
       <h1 class="font-sans font-semibold text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight mb-6"><?= e(section($hero, 'title')) ?></h1>
