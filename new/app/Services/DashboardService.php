@@ -74,11 +74,11 @@ final class DashboardService
         $pdo = Database::connection();
         $stmt = $pdo->prepare(
             'SELECT (
-                (SELECT COUNT(*) FROM quote_requests WHERE created_at >= :since) +
-                (SELECT COUNT(*) FROM contacts WHERE created_at >= :since)
+                (SELECT COUNT(*) FROM quote_requests WHERE created_at >= :since_q) +
+                (SELECT COUNT(*) FROM contacts WHERE created_at >= :since_c)
             ) AS total'
         );
-        $stmt->execute(['since' => $since]);
+        $stmt->execute(['since_q' => $since, 'since_c' => $since]);
         return (int) $stmt->fetchColumn();
     }
 
