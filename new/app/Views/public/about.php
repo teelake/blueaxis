@@ -22,13 +22,13 @@ $visionImg = section($blocks['vision'] ?? [], 'image');
   </div>
 </section>
 
-<section class="py-16 bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 space-y-12">
+<section class="py-16 lg:py-20 bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-8 md:gap-12 lg:gap-16">
     <?php foreach (['mission' => $missionImg, 'vision' => $visionImg] as $sec => $img): ?>
-      <div class="grid lg:grid-cols-2 gap-12 items-center <?= $sec === 'vision' ? 'lg:flex-row-reverse' : '' ?>">
-        <div class="card lg:border-0 lg:shadow-none lg:p-0 <?= $sec === 'vision' && $img !== '' ? 'lg:order-last' : '' ?>">
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div class="card <?= $sec === 'vision' && $img !== '' ? 'lg:order-last' : '' ?>">
           <h2 class="text-xl font-semibold text-brand-navy mb-4"><?= e(section($blocks[$sec] ?? [], 'title', ucfirst($sec))) ?></h2>
-          <div class="prose prose-slate text-sm"><?= section($blocks[$sec] ?? [], 'body') ?></div>
+          <div class="prose prose-slate max-w-none"><?= section($blocks[$sec] ?? [], 'body') ?></div>
         </div>
         <?php if ($img !== ''): ?>
           <?php \App\Core\View::partial('section-image', ['imagePath' => $img, 'alt' => section($blocks[$sec] ?? [], 'title'), 'align' => $sec === 'vision' ? 'left' : 'right']); ?>
