@@ -1,9 +1,9 @@
 <?php
-$seo = $seo ?? ['title' => config('app.name'), 'description' => '', 'canonical' => null, 'og_image' => asset('images/BLUEAXIS_logo.png')];
+$seo = $seo ?? ['title' => config('app.name'), 'description' => '', 'canonical' => null, 'og_image' => site_logo_url('header')];
 $title = e($seo['title'] ?? config('app.name'));
 $desc = e($seo['description'] ?? '');
 $canonical = $seo['canonical'] ?? url(ltrim(request_path(), '/'));
-$og = $seo['og_image'] ?? asset('images/BLUEAXIS_logo.png');
+$og = $seo['og_image'] ?? site_logo_url('header');
 ?>
 <title><?= $title ?></title>
 <meta name="description" content="<?= $desc ?>" />

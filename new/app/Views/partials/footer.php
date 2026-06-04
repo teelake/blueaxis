@@ -6,7 +6,9 @@ $contact = Setting::allByGroup('contact');
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
       <div class="lg:col-span-2">
-        <img src="<?= asset('images/BLUEAXIS_logo.png') ?>" alt="" class="h-14 w-auto mb-6 brightness-0 invert opacity-90" />
+        <div class="mb-6">
+          <?php \App\Core\View::partial('site-logo', ['variant' => 'footer']); ?>
+        </div>
         <p class="text-sm leading-relaxed max-w-md text-slate-400">
           BlueAxis Logistics & Warehousing Ltd. — importation, warehousing, and distribution of African food products for B2B partners across Canada.
         </p>

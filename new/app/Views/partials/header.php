@@ -12,17 +12,7 @@ $nav = [
 <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100" x-data="{ open: false }">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between min-h-[5.5rem] sm:min-h-24 py-2 sm:py-2.5">
-      <a href="<?= url('/') ?>" class="site-logo-link" aria-label="BlueAxis Logistics & Warehousing — Home">
-        <img
-          src="<?= asset('images/blueaxis-logistics.png') ?>"
-          alt="BlueAxis Logistics & Warehousing"
-          class="site-logo"
-          width="280"
-          height="76"
-          decoding="async"
-          fetchpriority="high"
-        />
-      </a>
+      <?php \App\Core\View::partial('site-logo', ['variant' => 'header']); ?>
       <nav class="hidden lg:flex items-center gap-8" aria-label="Main">
         <?php foreach ($nav as $path => $label): ?>
           <a href="<?= url(ltrim($path, '/')) ?>"

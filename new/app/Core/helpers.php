@@ -186,6 +186,35 @@ function media_url(?string $path): string
     return app_url_origin() . app_public_web_path() . '/' . ltrim(str_replace('\\', '/', $path), '/');
 }
 
+/** Logo alt text from admin branding settings. */
+function site_logo_alt(): string
+{
+    return \App\Models\Setting::get('site_logo_alt', 'BlueAxis Logistics & Warehousing')
+        ?? 'BlueAxis Logistics & Warehousing';
+}
+
+/** Whether the footer should apply a white/invert treatment to the logo. */
+function site_logo_footer_invert(): bool
+{
+    return \App\Models\Setting::get('site_logo_footer_invert', '1') !== '0';
+}
+
+/**
+ * Public URL for the site logo (uploaded in admin or default asset).
+ * @param string $variant header|footer — used only for default fallback asset
+ */
+function site_logo_url(string $variant = 'header'): string
+{
+    $path = \App\Models\Setting::get('site_logo_path');
+    if ($path !== null && trim($path) !== '') {
+        return media_url($path);
+    }
+
+    return $variant === 'footer'
+        ? asset('images/BLUEAXIS_logo.png')
+        : asset('images/blueaxis-logistics.png');
+}
+
 function url(string $path = ''): string
 {
     $base = site_url_base();

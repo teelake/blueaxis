@@ -1,6 +1,8 @@
 <div class="admin-login-card">
   <div class="text-center mb-8">
-    <img src="<?= asset('images/BLUEAXIS_logo.png') ?>" alt="BlueAxis" class="h-12 mx-auto mb-4" />
+    <div class="flex justify-center mb-4">
+      <?php \App\Core\View::partial('site-logo', ['variant' => 'header', 'link' => false]); ?>
+    </div>
     <h1 class="text-xl font-semibold text-slate-900">Sign in to CMS</h1>
     <p class="text-sm text-slate-500 mt-1">Manage your website content securely</p>
   </div>

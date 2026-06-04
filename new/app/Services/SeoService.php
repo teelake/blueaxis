@@ -88,7 +88,7 @@ final class SeoService
             '@type' => 'Organization',
             'name' => config('app.name'),
             'url' => config('app.url'),
-            'logo' => asset('images/BLUEAXIS_logo.png'),
+            'logo' => site_logo_url('header'),
             'description' => 'Canadian logistics company specializing in African food importation, warehousing, and B2B distribution.',
             'address' => [
                 '@type' => 'PostalAddress',
