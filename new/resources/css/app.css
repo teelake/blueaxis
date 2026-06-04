@@ -419,6 +419,27 @@
   @apply mt-auto;
 }
 
+.contact-map {
+  @apply border-t border-slate-100 bg-slate-50;
+}
+
+.contact-map__embed {
+  @apply w-full border-y border-slate-200;
+}
+
+.contact-map__iframe {
+  @apply block w-full border-0;
+  height: min(55vh, 560px);
+  min-height: 320px;
+}
+
+@media (min-width: 1024px) {
+  .contact-map__iframe {
+    height: min(60vh, 640px);
+    min-height: 400px;
+  }
+}
+
 .quote-cart-list__item {
   @apply text-sm;
 }
