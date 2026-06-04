@@ -71,6 +71,7 @@ $router->get('/admin/products/create', [new ProductAdminController(), 'create'])
 $router->post('/admin/products', [new ProductAdminController(), 'store']);
 $router->get('/admin/products/{id}/edit', [new ProductAdminController(), 'edit']);
 $router->post('/admin/products/{id}', [new ProductAdminController(), 'update']);
+$router->post('/admin/products/{id}/toggle-publish', [new ProductAdminController(), 'togglePublish']);
 $router->post('/admin/products/{id}/delete', [new ProductAdminController(), 'destroy']);
 
 $router->get('/admin/services', [new ServiceAdminController(), 'index']);
@@ -78,6 +79,7 @@ $router->get('/admin/services/create', [new ServiceAdminController(), 'create'])
 $router->post('/admin/services', [new ServiceAdminController(), 'store']);
 $router->get('/admin/services/{id}/edit', [new ServiceAdminController(), 'edit']);
 $router->post('/admin/services/{id}', [new ServiceAdminController(), 'update']);
+$router->post('/admin/services/{id}/toggle-publish', [new ServiceAdminController(), 'togglePublish']);
 $router->post('/admin/services/{id}/delete', [new ServiceAdminController(), 'destroy']);
 
 $router->get('/admin/blog', [new BlogAdminController(), 'index']);
@@ -85,6 +87,7 @@ $router->get('/admin/blog/create', [new BlogAdminController(), 'create']);
 $router->post('/admin/blog', [new BlogAdminController(), 'store']);
 $router->get('/admin/blog/{id}/edit', [new BlogAdminController(), 'edit']);
 $router->post('/admin/blog/{id}', [new BlogAdminController(), 'update']);
+$router->post('/admin/blog/{id}/toggle-status', [new BlogAdminController(), 'toggleStatus']);
 $router->post('/admin/blog/{id}/delete', [new BlogAdminController(), 'destroy']);
 $router->post('/admin/blog/{id}/comments/{commentId}/approve', [new BlogAdminController(), 'approveComment']);
 $router->post('/admin/blog/{id}/comments/{commentId}/spam', [new BlogAdminController(), 'spamComment']);
@@ -104,6 +107,7 @@ $router->get('/admin/users/create', [new UserAdminController(), 'create']);
 $router->post('/admin/users', [new UserAdminController(), 'store']);
 $router->get('/admin/users/{id}/edit', [new UserAdminController(), 'edit']);
 $router->post('/admin/users/{id}', [new UserAdminController(), 'update']);
+$router->post('/admin/users/{id}/toggle-active', [new UserAdminController(), 'toggleActive']);
 
 $router->get('/admin/settings/email', [new EmailSettingsController(), 'edit']);
 $router->post('/admin/settings/email', [new EmailSettingsController(), 'save']);

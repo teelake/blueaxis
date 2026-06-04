@@ -27,7 +27,18 @@
             </span>
           </td>
           <td class="text-slate-500 text-sm"><?= $u['last_login_at'] ? e(date('M j, Y g:ia', strtotime($u['last_login_at']))) : '—' ?></td>
-          <td><a href="<?= url('admin/users/' . $u['id'] . '/edit') ?>" class="text-sm font-semibold text-brand-navy hover:text-brand-gold">Edit</a></td>
+          <td>
+            <?php \App\Core\View::partial('admin/row-actions', [
+                'editUrl' => url('admin/users/' . $u['id'] . '/edit'),
+                'toggleUrl' => url('admin/users/' . $u['id'] . '/toggle-active'),
+                'isActive' => (bool) $u['is_active'],
+                'entityLabel' => 'team member',
+                'toggleOffLabel' => 'Deactivate',
+                'toggleOnLabel' => 'Activate',
+                'toggleOffConfirm' => 'Deactivate this account? They will not be able to sign in.',
+                'toggleOnConfirm' => 'Reactivate this account?',
+            ]); ?>
+          </td>
         </tr>
       <?php endforeach; ?>
     </tbody>

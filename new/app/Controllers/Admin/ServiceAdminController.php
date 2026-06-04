@@ -87,6 +87,18 @@ final class ServiceAdminController extends AdminController
         redirect('admin/services');
     }
 
+    public function togglePublish(array $params): void
+    {
+        $this->authorize(Permission::SERVICES);
+        $this->validateCsrf();
+        $id = (int) ($params['id'] ?? 0);
+        if (Service::find($id)) {
+            Service::togglePublished($id);
+            Session::flash('success', 'Service visibility updated.');
+        }
+        redirect('admin/services');
+    }
+
     /** @return array<string, mixed> */
     private function payloadFromPost(): array
     {

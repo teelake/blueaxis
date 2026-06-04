@@ -70,4 +70,12 @@ final class Service extends Model
         $stmt = self::db()->prepare('DELETE FROM services WHERE id = :id');
         $stmt->execute(['id' => $id]);
     }
+
+    public static function togglePublished(int $id): void
+    {
+        $stmt = self::db()->prepare(
+            'UPDATE services SET is_published = IF(is_published = 1, 0, 1) WHERE id = :id'
+        );
+        $stmt->execute(['id' => $id]);
+    }
 }

@@ -81,6 +81,18 @@ final class BlogAdminController extends AdminController
         redirect('admin/blog');
     }
 
+    public function toggleStatus(array $params): void
+    {
+        $this->authorize(Permission::BLOG);
+        $this->validateCsrf();
+        $id = (int) ($params['id'] ?? 0);
+        if (BlogPost::find($id)) {
+            BlogPost::toggleStatus($id);
+            Session::flash('success', 'Article status updated.');
+        }
+        redirect('admin/blog');
+    }
+
     public function approveComment(array $params): void
     {
         $this->authorize(Permission::BLOG);

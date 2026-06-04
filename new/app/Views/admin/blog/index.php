@@ -40,7 +40,20 @@
           </td>
           <td><?= ($p['is_featured'] ?? 0) ? 'Yes' : '—' ?></td>
           <td class="text-slate-500"><?= e(date('M j, Y', strtotime($p['updated_at']))) ?></td>
-          <td><a href="<?= url('admin/blog/' . $p['id'] . '/edit') ?>" class="text-sm font-semibold text-brand-navy hover:text-brand-gold">Edit</a></td>
+          <td>
+            <?php \App\Core\View::partial('admin/row-actions', [
+                'editUrl' => url('admin/blog/' . $p['id'] . '/edit'),
+                'viewUrl' => $p['status'] === 'published' ? url('blog/' . $p['slug']) : null,
+                'toggleUrl' => url('admin/blog/' . $p['id'] . '/toggle-status'),
+                'deleteUrl' => url('admin/blog/' . $p['id'] . '/delete'),
+                'isActive' => $p['status'] === 'published',
+                'entityLabel' => 'article',
+                'toggleOffLabel' => 'Unpublish',
+                'toggleOnLabel' => 'Publish',
+                'toggleOffConfirm' => 'Move this article to draft? It will be hidden from the blog.',
+                'toggleOnConfirm' => 'Publish this article on the blog?',
+            ]); ?>
+          </td>
         </tr>
       <?php endforeach; ?>
     </tbody>

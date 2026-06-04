@@ -81,6 +81,18 @@ final class ProductAdminController extends AdminController
         redirect('admin/products');
     }
 
+    public function togglePublish(array $params): void
+    {
+        $this->authorize(Permission::PRODUCTS);
+        $this->validateCsrf();
+        $id = (int) ($params['id'] ?? 0);
+        if (Product::find($id)) {
+            Product::togglePublished($id);
+            Session::flash('success', 'Product visibility updated.');
+        }
+        redirect('admin/products');
+    }
+
     /** @return array<string, mixed> */
     private function payloadFromPost(): array
     {

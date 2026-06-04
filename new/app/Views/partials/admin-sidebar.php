@@ -31,7 +31,7 @@ $icons = [
 ];
 $user = Auth::user();
 ?>
-<aside class="admin-sidebar">
+<aside class="admin-sidebar flex flex-col">
   <div class="admin-sidebar__brand">
     <p class="font-semibold text-brand-navy tracking-tight">BlueAxis</p>
     <p class="text-xs text-slate-500 mt-0.5"><?= e($user['role_name'] ?? 'Admin') ?></p>
@@ -46,4 +46,10 @@ $user = Auth::user();
       </a>
     <?php endforeach; ?>
   </nav>
+  <div class="p-3 border-t border-slate-100 mt-auto">
+    <a href="<?= url('/') ?>" target="_blank" rel="noopener noreferrer" class="admin-nav-link">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      View website
+    </a>
+  </div>
 </aside>

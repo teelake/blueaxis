@@ -43,6 +43,34 @@
   @apply sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-4 flex items-center justify-between gap-4;
 }
 
+.admin-view-site {
+  @apply inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-brand-navy bg-white border border-slate-200 rounded-lg shadow-sm transition hover:bg-slate-50 hover:border-brand-gold/40;
+}
+
+.admin-action-group {
+  @apply inline-flex items-center justify-end gap-0.5;
+}
+
+.admin-icon-btn {
+  @apply inline-flex items-center justify-center w-9 h-9 rounded-lg text-slate-500 transition;
+}
+
+.admin-icon-btn:hover {
+  @apply bg-slate-100 text-brand-navy;
+}
+
+.admin-icon-btn svg {
+  @apply w-[18px] h-[18px];
+}
+
+.admin-icon-btn--warning:hover {
+  @apply bg-amber-50 text-amber-700;
+}
+
+.admin-icon-btn--danger:hover {
+  @apply bg-red-50 text-red-600;
+}
+
 .admin-page-head {
   @apply mb-8;
 }

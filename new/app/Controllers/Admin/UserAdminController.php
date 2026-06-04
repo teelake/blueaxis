@@ -134,6 +134,39 @@ final class UserAdminController extends AdminController
         redirect('admin/users');
     }
 
+    public function toggleActive(array $params): void
+    {
+        $this->authorize(Permission::USERS_MANAGE);
+        $this->validateCsrf();
+        $id = (int) ($params['id'] ?? 0);
+        $user = Admin::find($id);
+        if (!$user) {
+            redirect('admin/users');
+        }
+
+        $newActive = !(bool) $user['is_active'];
+
+        if ($user['role_slug'] === 'super_admin' && !$newActive && Admin::countActiveByRoleSlug('super_admin') <= 1) {
+            Session::flash('error', 'You cannot deactivate the last Super Admin.');
+            redirect('admin/users');
+        }
+
+        if ($id === Auth::id() && !$newActive) {
+            Session::flash('error', 'You cannot deactivate your own account.');
+            redirect('admin/users');
+        }
+
+        Admin::updateUser(
+            $id,
+            (string) $user['name'],
+            (string) $user['email'],
+            (int) $user['role_id'],
+            $newActive
+        );
+        Session::flash('success', $newActive ? 'Account activated.' : 'Account deactivated.');
+        redirect('admin/users');
+    }
+
     private function formView(?array $user): void
     {
         $this->view('admin/users/form', [

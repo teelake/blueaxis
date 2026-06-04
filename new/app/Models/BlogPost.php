@@ -163,6 +163,22 @@ final class BlogPost extends Model
         $stmt->execute(['id' => $id]);
     }
 
+    public static function toggleStatus(int $id): void
+    {
+        $post = self::find($id);
+        if (!$post) {
+            return;
+        }
+        if ($post['status'] === 'published') {
+            $stmt = self::db()->prepare("UPDATE blog_posts SET status = 'draft' WHERE id = :id");
+        } else {
+            $stmt = self::db()->prepare(
+                "UPDATE blog_posts SET status = 'published', published_at = COALESCE(published_at, NOW()) WHERE id = :id"
+            );
+        }
+        $stmt->execute(['id' => $id]);
+    }
+
     public static function slugExists(string $slug, ?int $excludeId = null): bool
     {
         $sql = 'SELECT id FROM blog_posts WHERE slug = :slug';

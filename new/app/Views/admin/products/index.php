@@ -41,8 +41,25 @@ $totalPages = max(1, (int) ceil($total / $perPage));
           </td>
           <td><?= e($p['category'] ?? '—') ?></td>
           <td class="text-slate-500"><?= e($p['sku'] ?? '—') ?></td>
-          <td><?= $p['is_published'] ? 'Published' : 'Draft' ?></td>
-          <td class="p-4 text-right"><a href="<?= url('admin/products/' . $p['id'] . '/edit') ?>" class="text-brand-navy font-medium">Edit</a></td>
+          <td>
+            <span class="admin-badge <?= $p['is_published'] ? 'admin-badge--published' : 'admin-badge--draft' ?>">
+              <?= $p['is_published'] ? 'Published' : 'Draft' ?>
+            </span>
+          </td>
+          <td class="p-4 text-right">
+            <?php \App\Core\View::partial('admin/row-actions', [
+                'editUrl' => url('admin/products/' . $p['id'] . '/edit'),
+                'viewUrl' => $p['is_published'] ? url('products/' . $p['slug']) : null,
+                'toggleUrl' => url('admin/products/' . $p['id'] . '/toggle-publish'),
+                'deleteUrl' => url('admin/products/' . $p['id'] . '/delete'),
+                'isActive' => (bool) $p['is_published'],
+                'entityLabel' => 'product',
+                'toggleOffLabel' => 'Unpublish',
+                'toggleOnLabel' => 'Publish',
+                'toggleOffConfirm' => 'Unpublish this product? It will be hidden from the catalog.',
+                'toggleOnConfirm' => 'Publish this product on the website?',
+            ]); ?>
+          </td>
         </tr>
       <?php endforeach; ?>
     </tbody>

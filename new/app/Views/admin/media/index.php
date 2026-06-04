@@ -23,10 +23,14 @@
         <div class="p-3">
           <p class="text-xs font-medium text-slate-800 truncate" title="<?= e($m['original_name']) ?>"><?= e($m['original_name']) ?></p>
           <p class="text-xs text-slate-500 mt-2">Click “Use” when editing a post</p>
-          <form method="post" action="<?= url('admin/media/' . $m['id'] . '/delete') ?>" class="mt-2">
-            <?= \App\Core\Csrf::field() ?>
-            <button type="submit" class="text-xs text-red-600 hover:underline" onclick="return confirm('Delete this image?')">Delete</button>
-          </form>
+          <div class="mt-2 flex justify-end">
+            <?php \App\Core\View::partial('admin/row-actions', [
+                'editUrl' => '',
+                'deleteUrl' => url('admin/media/' . $m['id'] . '/delete'),
+                'entityLabel' => 'image',
+                'deleteConfirm' => 'Delete this image from the library?',
+            ]); ?>
+          </div>
         </div>
       </div>
     <?php endforeach; ?>
