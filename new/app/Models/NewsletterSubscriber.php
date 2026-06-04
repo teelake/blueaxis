@@ -6,7 +6,8 @@ namespace App\Models;
 
 final class NewsletterSubscriber extends Model
 {
-    public static function subscribe(string $email): bool
+    /** @return 'created'|'reactivated'|'existing' */
+    public static function subscribe(string $email): string
     {
         $existing = self::findByEmail($email);
         if ($existing) {
@@ -15,15 +16,16 @@ final class NewsletterSubscriber extends Model
                     "UPDATE newsletter_subscribers SET status = 'active' WHERE id = :id"
                 );
                 $stmt->execute(['id' => $existing['id']]);
+                return 'reactivated';
             }
-            return true;
+            return 'existing';
         }
 
         $stmt = self::db()->prepare(
             'INSERT INTO newsletter_subscribers (email) VALUES (:email)'
         );
         $stmt->execute(['email' => $email]);
-        return true;
+        return 'created';
     }
 
     public static function findByEmail(string $email): ?array

@@ -1,5 +1,6 @@
 <?php
 $current = request_path();
+$quoteCount = quote_cart_count();
 $nav = [
     '/' => 'Home',
     '/about' => 'About',
@@ -22,7 +23,6 @@ $nav = [
         <?php endforeach; ?>
       </nav>
       <div class="hidden lg:flex items-center gap-4">
-        <?php $quoteCount = quote_cart_count(); ?>
         <a href="<?= url('quote') ?>" class="text-sm font-semibold text-brand-navy hover:text-brand-gold relative">
           Quote list<?php if ($quoteCount > 0): ?><span class="ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 text-xs font-bold text-white bg-brand-gold rounded-full"><?= $quoteCount ?></span><?php endif; ?>
         </a>
@@ -36,6 +36,9 @@ $nav = [
       <?php foreach ($nav as $path => $label): ?>
         <a href="<?= url(ltrim($path, '/')) ?>" class="block py-3 text-base font-medium text-slate-700"><?= e($label) ?></a>
       <?php endforeach; ?>
+      <?php if ($quoteCount > 0): ?>
+        <a href="<?= url('quote') ?>" class="block py-3 text-base font-medium text-brand-navy">Quote list (<?= $quoteCount ?>)</a>
+      <?php endif; ?>
       <a href="<?= url('quote') ?>" class="btn-primary mt-3 w-full">Request a Quote</a>
     </div>
   </div>

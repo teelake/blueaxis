@@ -61,7 +61,7 @@ final class Permission
         self::LEADS_QUOTES => 'View quote requests',
         self::LEADS_EXPORT => 'Export leads (CSV)',
         self::SETTINGS_EMAIL => 'Email settings',
-        self::SETTINGS_SITE => 'Site logo & branding',
+        self::SETTINGS_SITE => 'Site logo, branding & social media',
         self::USERS_MANAGE => 'Manage admin users',
         self::PRODUCTS => 'Manage product catalog',
     ];

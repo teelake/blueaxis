@@ -47,6 +47,12 @@
               <a href="<?= url('admin/quotes/' . $item['id']) ?>" class="text-brand-navy hover:text-brand-gold"><?= e($item['name']) ?></a>
             </td>
             <td><?= e($item['service_needed']) ?></td>
+            <td class="text-slate-600 text-xs max-w-[200px]">
+              <?php
+              $pCount = count(\App\Services\QuoteCartService::parseStored($item['products_json'] ?? null));
+              echo $pCount > 0 ? $pCount . ' item' . ($pCount === 1 ? '' : 's') : '—';
+              ?>
+            </td>
             <td>
               <span class="admin-badge admin-badge--pending"><?= e(str_replace('_', ' ', $item['status'])) ?></span>
             </td>

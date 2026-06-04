@@ -12,6 +12,9 @@ $contact = Setting::allByGroup('contact');
         <p class="text-sm leading-relaxed max-w-md text-slate-400">
           BlueAxis Logistics & Warehousing Ltd. — importation, warehousing, and distribution of African food products for B2B partners across Canada.
         </p>
+        <div class="mt-6">
+          <?php \App\Core\View::partial('social-links', ['variant' => 'footer']); ?>
+        </div>
       </div>
       <div>
         <h3 class="text-sm font-semibold text-white mb-4">Company</h3>

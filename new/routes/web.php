@@ -20,6 +20,7 @@ use App\Controllers\Admin\ContentAdminController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\EmailSettingsController;
 use App\Controllers\Admin\SiteSettingsController;
+use App\Controllers\Admin\SocialSettingsController;
 use App\Controllers\Admin\MediaAdminController;
 use App\Controllers\Admin\ProductAdminController;
 use App\Controllers\Admin\QuoteAdminController;
@@ -114,6 +115,9 @@ $router->post('/admin/users/{id}/toggle-active', [new UserAdminController(), 'to
 
 $router->get('/admin/settings/site', [new SiteSettingsController(), 'edit']);
 $router->post('/admin/settings/site', [new SiteSettingsController(), 'save']);
+
+$router->get('/admin/settings/social', [new SocialSettingsController(), 'edit']);
+$router->post('/admin/settings/social', [new SocialSettingsController(), 'save']);
 
 $router->get('/admin/settings/email', [new EmailSettingsController(), 'edit']);
 $router->post('/admin/settings/email', [new EmailSettingsController(), 'save']);

@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Models\NewsletterSubscriber;
+use App\Services\LeadNotificationService;
 use App\Services\Validator;
 
 final class NewsletterController extends Controller
@@ -24,8 +25,12 @@ final class NewsletterController extends Controller
             redirect('/');
         }
 
-        NewsletterSubscriber::subscribe($email);
-        Session::flash('newsletter_success', 'You are subscribed. Thank you for joining our updates list.');
+        $result = NewsletterSubscriber::subscribe($email);
+        LeadNotificationService::newsletterSubscribed($email, $result);
+        $message = $result === 'existing'
+            ? 'You are already subscribed to our updates list.'
+            : 'You are subscribed. Thank you for joining our updates list.';
+        Session::flash('newsletter_success', $message);
         redirect('/#newsletter');
     }
 }

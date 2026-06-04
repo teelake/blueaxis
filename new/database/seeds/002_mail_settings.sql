@@ -13,4 +13,10 @@ INSERT IGNORE INTO settings (`key`, value, type, group_name) VALUES
 ('mail_notify_to', 'info@blueaxis.com', 'text', 'mail'),
 ('mail_notify_contact', '1', 'boolean', 'mail'),
 ('mail_notify_quote', '1', 'boolean', 'mail'),
+('mail_notify_newsletter', '1', 'boolean', 'mail'),
+('mail_notify_comment', '1', 'boolean', 'mail'),
+('mail_confirm_contact', '1', 'boolean', 'mail'),
+('mail_confirm_quote', '1', 'boolean', 'mail'),
+('mail_confirm_newsletter', '1', 'boolean', 'mail'),
+('mail_confirm_comment', '1', 'boolean', 'mail'),
 ('mail_reply_to_lead', '1', 'boolean', 'mail');

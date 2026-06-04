@@ -45,8 +45,8 @@ $checked = static fn (string $key): string => ($s[$key] ?? '0') === '1' ? 'check
         <?php \App\Core\View::partial('admin/field', ['label' => 'From name', 'name' => 'mail_from_name', 'value' => $s['mail_from_name'], 'placeholder' => 'BlueAxis Website']); ?>
       </div>
 
-      <div x-show="tab === 'notifications'" x-cloak class="space-y-5">
-        <p class="admin-section-desc">Get notified when visitors submit the contact or quote forms.</p>
+      <div x-show="tab === 'notifications'" x-cloak class="space-y-6">
+        <p class="admin-section-desc">Control team alerts and automatic confirmation emails for every public form.</p>
         <?php \App\Core\View::partial('admin/field', [
             'label' => 'Send notifications to',
             'name' => 'mail_notify_to',
@@ -54,19 +54,55 @@ $checked = static fn (string $key): string => ($s[$key] ?? '0') === '1' ? 'check
             'type' => 'email',
             'required' => true,
         ]); ?>
-        <div class="space-y-3 pt-2">
-          <label class="flex items-center gap-3 text-sm text-slate-700">
-            <input type="checkbox" name="mail_notify_contact" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_notify_contact') ?> />
-            Email me when someone sends a contact message
-          </label>
-          <label class="flex items-center gap-3 text-sm text-slate-700">
-            <input type="checkbox" name="mail_notify_quote" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_notify_quote') ?> />
-            Email me when someone requests a quote
-          </label>
-          <label class="flex items-center gap-3 text-sm text-slate-700">
-            <input type="checkbox" name="mail_reply_to_lead" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_reply_to_lead') ?> />
-            Allow reply directly to the visitor’s email
-          </label>
+
+        <div>
+          <h3 class="text-sm font-semibold text-brand-navy mb-3">Team alerts</h3>
+          <p class="text-sm text-slate-500 mb-3">Email your team when a visitor submits a form.</p>
+          <div class="space-y-3">
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <input type="checkbox" name="mail_notify_contact" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_notify_contact') ?> />
+              Contact form
+            </label>
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <input type="checkbox" name="mail_notify_quote" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_notify_quote') ?> />
+              Quote request form
+            </label>
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <input type="checkbox" name="mail_notify_newsletter" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_notify_newsletter') ?> />
+              Newsletter signup
+            </label>
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <input type="checkbox" name="mail_notify_comment" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_notify_comment') ?> />
+              Blog comments (pending moderation)
+            </label>
+            <label class="flex items-center gap-3 text-sm text-slate-700 pt-1 border-t border-slate-100">
+              <input type="checkbox" name="mail_reply_to_lead" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_reply_to_lead') ?> />
+              Set Reply-To to the visitor’s email on team alerts
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-semibold text-brand-navy mb-3">Visitor confirmations</h3>
+          <p class="text-sm text-slate-500 mb-3">Automatic thank-you emails sent to the person who submitted the form.</p>
+          <div class="space-y-3">
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <input type="checkbox" name="mail_confirm_contact" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_confirm_contact') ?> />
+              Contact form
+            </label>
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <input type="checkbox" name="mail_confirm_quote" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_confirm_quote') ?> />
+              Quote request form
+            </label>
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <input type="checkbox" name="mail_confirm_newsletter" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_confirm_newsletter') ?> />
+              Newsletter signup
+            </label>
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <input type="checkbox" name="mail_confirm_comment" value="1" class="rounded border-slate-300 text-brand-navy" <?= $checked('mail_confirm_comment') ?> />
+              Blog comments
+            </label>
+          </div>
         </div>
       </div>
     </div>

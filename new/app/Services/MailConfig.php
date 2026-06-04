@@ -23,6 +23,12 @@ final class MailConfig
         'mail_notify_to' => ['default' => 'info@blueaxis.com', 'type' => 'text'],
         'mail_notify_contact' => ['default' => '1', 'type' => 'boolean'],
         'mail_notify_quote' => ['default' => '1', 'type' => 'boolean'],
+        'mail_notify_newsletter' => ['default' => '1', 'type' => 'boolean'],
+        'mail_notify_comment' => ['default' => '1', 'type' => 'boolean'],
+        'mail_confirm_contact' => ['default' => '1', 'type' => 'boolean'],
+        'mail_confirm_quote' => ['default' => '1', 'type' => 'boolean'],
+        'mail_confirm_newsletter' => ['default' => '1', 'type' => 'boolean'],
+        'mail_confirm_comment' => ['default' => '1', 'type' => 'boolean'],
         'mail_reply_to_lead' => ['default' => '1', 'type' => 'boolean'],
     ];
 
@@ -84,6 +90,36 @@ final class MailConfig
     public static function replyToLead(): bool
     {
         return self::bool('mail_reply_to_lead');
+    }
+
+    public static function notifyNewsletter(): bool
+    {
+        return self::bool('mail_notify_newsletter');
+    }
+
+    public static function notifyComment(): bool
+    {
+        return self::bool('mail_notify_comment');
+    }
+
+    public static function confirmContact(): bool
+    {
+        return self::bool('mail_confirm_contact');
+    }
+
+    public static function confirmQuote(): bool
+    {
+        return self::bool('mail_confirm_quote');
+    }
+
+    public static function confirmNewsletter(): bool
+    {
+        return self::bool('mail_confirm_newsletter');
+    }
+
+    public static function confirmComment(): bool
+    {
+        return self::bool('mail_confirm_comment');
     }
 
     public static function bool(string $key): bool
@@ -157,6 +193,12 @@ final class MailConfig
             'mail_notify_to' => 'mail.notify_to',
             'mail_notify_contact' => 'mail.notify_contact',
             'mail_notify_quote' => 'mail.notify_quote',
+            'mail_notify_newsletter' => 'mail.notify_newsletter',
+            'mail_notify_comment' => 'mail.notify_comment',
+            'mail_confirm_contact' => 'mail.confirm_contact',
+            'mail_confirm_quote' => 'mail.confirm_quote',
+            'mail_confirm_newsletter' => 'mail.confirm_newsletter',
+            'mail_confirm_comment' => 'mail.confirm_comment',
             'mail_reply_to_lead' => 'mail.reply_to_lead',
         ];
 

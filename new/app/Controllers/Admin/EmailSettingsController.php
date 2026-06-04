@@ -17,7 +17,7 @@ final class EmailSettingsController extends AdminController
         $settings = MailConfig::forForm();
         $this->view('admin/settings/email', [
             'title' => 'Email settings',
-            'pageDescription' => 'Configure how form submissions are emailed to your team.',
+            'pageDescription' => 'Configure team alerts and visitor confirmation emails for all public forms.',
             'settings' => $settings,
             'hasPassword' => MailConfig::hasStoredPassword(),
             'success' => flash('success'),
@@ -64,6 +64,12 @@ final class EmailSettingsController extends AdminController
             'mail_notify_to' => $notifyTo,
             'mail_notify_contact' => $_POST['mail_notify_contact'] ?? '',
             'mail_notify_quote' => $_POST['mail_notify_quote'] ?? '',
+            'mail_notify_newsletter' => $_POST['mail_notify_newsletter'] ?? '',
+            'mail_notify_comment' => $_POST['mail_notify_comment'] ?? '',
+            'mail_confirm_contact' => $_POST['mail_confirm_contact'] ?? '',
+            'mail_confirm_quote' => $_POST['mail_confirm_quote'] ?? '',
+            'mail_confirm_newsletter' => $_POST['mail_confirm_newsletter'] ?? '',
+            'mail_confirm_comment' => $_POST['mail_confirm_comment'] ?? '',
             'mail_reply_to_lead' => $_POST['mail_reply_to_lead'] ?? '',
         ]);
 

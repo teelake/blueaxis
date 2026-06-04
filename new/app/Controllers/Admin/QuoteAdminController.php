@@ -63,11 +63,13 @@ final class QuoteAdminController extends AdminController
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="quote-requests.csv"');
         $out = fopen('php://output', 'w');
-        fputcsv($out, ['ID', 'Name', 'Company', 'Email', 'Phone', 'Service', 'Message', 'Status', 'Date']);
+        fputcsv($out, ['ID', 'Name', 'Company', 'Email', 'Phone', 'Service', 'Products', 'Message', 'Status', 'Date']);
         foreach (QuoteRequest::exportAll() as $row) {
             fputcsv($out, [
                 $row['id'], $row['name'], $row['company'], $row['email'],
-                $row['phone'], $row['service_needed'], $row['message'],
+                $row['phone'], $row['service_needed'],
+                QuoteCartService::formatLines($row['products_json'] ?? null),
+                $row['message'],
                 $row['status'], $row['created_at'],
             ]);
         }

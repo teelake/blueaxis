@@ -8,6 +8,7 @@ use App\Core\Controller;
 use App\Core\Session;
 use App\Models\BlogComment;
 use App\Models\BlogPost;
+use App\Services\LeadNotificationService;
 use App\Services\Validator;
 
 final class BlogCommentController extends Controller
@@ -32,7 +33,7 @@ final class BlogCommentController extends Controller
             redirect('blog/' . $slug . '#comments');
         }
 
-        BlogComment::create([
+        $commentId = BlogComment::create([
             'post_id' => (int) $post['id'],
             'author_name' => $name,
             'email' => $email,
@@ -40,6 +41,12 @@ final class BlogCommentController extends Controller
             'status' => 'pending',
             'ip_address' => $_SERVER['REMOTE_ADDR'] ?? null,
         ]);
+
+        LeadNotificationService::blogCommentSubmitted(
+            ['author_name' => $name, 'email' => $email, 'body' => $body],
+            $post,
+            $commentId
+        );
 
         Session::flash('comment_success', 'Thank you. Your comment is awaiting moderation.');
         redirect('blog/' . $slug . '#comments');

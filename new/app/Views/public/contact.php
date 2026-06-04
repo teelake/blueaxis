@@ -40,6 +40,12 @@
               <?= e($contact['company_phone'] ?? '') ?>
             </li>
           </ul>
+          <?php if (social_links() !== []): ?>
+            <div class="mt-6 pt-6 border-t border-slate-100">
+              <span class="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">Follow us</span>
+              <?php \App\Core\View::partial('social-links', ['variant' => 'light']); ?>
+            </div>
+          <?php endif; ?>
         </div>
       </aside>
 

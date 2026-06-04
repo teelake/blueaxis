@@ -410,3 +410,11 @@
 .product-card--featured {
   @apply border-brand-gold/30 shadow-elevated;
 }
+
+.product-card__actions {
+  @apply mt-auto;
+}
+
+.quote-cart-list__item {
+  @apply text-sm;
+}
