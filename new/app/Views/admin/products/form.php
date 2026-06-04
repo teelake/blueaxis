@@ -14,8 +14,52 @@
       <div x-show="tab === 'details'" x-cloak class="space-y-5 max-w-2xl">
         <?php \App\Core\View::partial('admin/field', ['label' => 'Product name', 'name' => 'title', 'value' => $product['title'] ?? '', 'required' => true]); ?>
         <?php \App\Core\View::partial('admin/field', ['label' => 'URL slug', 'name' => 'slug', 'value' => $product['slug'] ?? '', 'hint' => 'Leave blank to auto-generate from the title.', 'placeholder' => 'palm-oil-bulk']); ?>
-        <?php \App\Core\View::partial('admin/field', ['label' => 'Category', 'name' => 'category', 'value' => $product['category'] ?? '', 'placeholder' => 'Oils & fats', 'hint' => 'Used for filtering on the product catalog.']); ?>
+        <div>
+          <label for="category" class="block text-sm font-medium text-slate-700 mb-1">Category</label>
+          <input
+            id="category"
+            name="category"
+            list="product-category-suggestions"
+            class="admin-input w-full max-w-lg"
+            value="<?= e($product['category'] ?? '') ?>"
+            placeholder="Oils & fats"
+          />
+          <?php if (!empty($categories)): ?>
+            <datalist id="product-category-suggestions">
+              <?php foreach ($categories as $cat): ?>
+                <option value="<?= e($cat) ?>"></option>
+              <?php endforeach; ?>
+            </datalist>
+          <?php endif; ?>
+          <p class="mt-1 text-xs text-slate-500">
+            Type a category name for this product. Matching names group together on the public catalog filters.
+            There is no separate category list — reuse an existing name from the suggestions or enter a new one.
+          </p>
+        </div>
         <?php \App\Core\View::partial('admin/field', ['label' => 'SKU / product code', 'name' => 'sku', 'value' => $product['sku'] ?? '', 'placeholder' => 'BAX-PO-001']); ?>
+        <div class="grid sm:grid-cols-2 gap-4 max-w-2xl">
+          <div class="admin-field">
+            <label class="admin-label" for="price">List price (optional)</label>
+            <p class="admin-hint">Shown on catalog cards and product pages when set. Leave empty to hide price. Quotes still use your B2B pricing workflow.</p>
+            <input
+              id="price"
+              name="price"
+              type="number"
+              min="0"
+              step="0.01"
+              class="admin-input"
+              value="<?= isset($product['price']) && $product['price'] !== null && $product['price'] !== '' ? e((string) $product['price']) : '' ?>"
+              placeholder="Leave blank to hide"
+            />
+          </div>
+          <?php \App\Core\View::partial('admin/field', [
+              'label' => 'Price unit (optional)',
+              'name' => 'price_unit',
+              'value' => $product['price_unit'] ?? '',
+              'placeholder' => 'per case',
+              'hint' => 'e.g. per case, per kg, per pallet',
+          ]); ?>
+        </div>
         <?php \App\Core\View::partial('admin/field', ['label' => 'Short summary', 'name' => 'excerpt', 'value' => $product['excerpt'] ?? '', 'type' => 'textarea', 'hint' => 'Shown on catalog cards.']); ?>
         <?php \App\Core\View::partial('admin/field', ['label' => 'Display order', 'name' => 'sort_order', 'value' => (string) ($product['sort_order'] ?? 0), 'type' => 'number']); ?>
         <label class="flex items-center gap-3 text-sm font-medium text-slate-700">

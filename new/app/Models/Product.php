@@ -29,8 +29,18 @@ final class Product extends Model
     /** @return list<string> */
     public static function categories(): array
     {
+        return self::distinctCategories(true);
+    }
+
+    /** @return list<string> */
+    public static function distinctCategories(bool $publishedOnly = false): array
+    {
+        $where = "category IS NOT NULL AND category != ''";
+        if ($publishedOnly) {
+            $where .= ' AND is_published = 1';
+        }
         $rows = self::db()->query(
-            "SELECT DISTINCT category FROM products WHERE is_published = 1 AND category IS NOT NULL AND category != '' ORDER BY category"
+            "SELECT DISTINCT category FROM products WHERE {$where} ORDER BY category"
         )->fetchAll();
         return array_column($rows, 'category');
     }
@@ -74,10 +84,10 @@ final class Product extends Model
     public static function create(array $data): int
     {
         $stmt = self::db()->prepare(
-            'INSERT INTO products (title, slug, category, sku, excerpt, description, image_path,
+            'INSERT INTO products (title, slug, category, sku, price, price_unit, excerpt, description, image_path,
              origin_region, pack_format, storage_notes, is_featured, is_published, sort_order,
              meta_title, meta_description)
-             VALUES (:title, :slug, :category, :sku, :excerpt, :description, :image_path,
+             VALUES (:title, :slug, :category, :sku, :price, :price_unit, :excerpt, :description, :image_path,
              :origin_region, :pack_format, :storage_notes, :is_featured, :is_published, :sort_order,
              :meta_title, :meta_description)'
         );
@@ -90,7 +100,7 @@ final class Product extends Model
         $data['id'] = $id;
         $stmt = self::db()->prepare(
             'UPDATE products SET title = :title, slug = :slug, category = :category, sku = :sku,
-             excerpt = :excerpt, description = :description, image_path = :image_path,
+             price = :price, price_unit = :price_unit, excerpt = :excerpt, description = :description, image_path = :image_path,
              origin_region = :origin_region, pack_format = :pack_format, storage_notes = :storage_notes,
              is_featured = :is_featured, is_published = :is_published, sort_order = :sort_order,
              meta_title = :meta_title, meta_description = :meta_description WHERE id = :id'

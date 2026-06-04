@@ -22,6 +22,11 @@
         <?php if (!empty($product['sku'])): ?>
           <p class="mt-2 text-sm font-mono text-slate-500">SKU: <?= e($product['sku']) ?></p>
         <?php endif; ?>
+        <?php $listPrice = format_product_price($product); ?>
+        <?php if ($listPrice !== null): ?>
+          <p class="mt-4 text-2xl font-semibold text-brand-navy tracking-tight"><?= e($listPrice) ?></p>
+          <p class="text-xs text-slate-500 mt-1">List price — final wholesale pricing provided on quote</p>
+        <?php endif; ?>
         <?php if (!empty($product['excerpt'])): ?>
           <p class="mt-6 text-lg text-slate-600 leading-relaxed"><?= e($product['excerpt']) ?></p>
         <?php endif; ?>

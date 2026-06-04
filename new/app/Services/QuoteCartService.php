@@ -11,7 +11,7 @@ final class QuoteCartService
 {
     private const SESSION_KEY = 'quote_cart';
 
-    /** @return list<array{product_id: int, slug: string, title: string, sku: ?string, category: ?string, quantity: int}> */
+    /** @return list<array{product_id: int, slug: string, title: string, sku: ?string, category: ?string, price: ?float, price_unit: ?string, quantity: int}> */
     public static function items(): array
     {
         $raw = $_SESSION[self::SESSION_KEY] ?? [];
@@ -76,7 +76,7 @@ final class QuoteCartService
         return $encoded !== false ? $encoded : null;
     }
 
-    /** @return list<array{product_id: int, slug: string, title: string, sku: ?string, category: ?string, quantity: int}> */
+    /** @return list<array{product_id: int, slug: string, title: string, sku: ?string, category: ?string, price: ?float, price_unit: ?string, quantity: int}> */
     public static function parseStored(?string $json): array
     {
         if ($json === null || trim($json) === '') {
@@ -94,7 +94,14 @@ final class QuoteCartService
             $qty = (int) ($item['quantity'] ?? 1);
             $title = (string) ($item['title'] ?? 'Product');
             $sku = !empty($item['sku']) ? ' (' . $item['sku'] . ')' : '';
-            $lines[] = $qty . '× ' . $title . $sku;
+            $line = $qty . '× ' . $title . $sku;
+            $price = isset($item['price']) && $item['price'] !== null && $item['price'] !== ''
+                ? format_product_price(['price' => $item['price'], 'price_unit' => $item['price_unit'] ?? null])
+                : null;
+            if ($price !== null) {
+                $line .= ' — ' . $price;
+            }
+            $lines[] = $line;
         }
         return implode("\n", $lines);
     }
@@ -109,6 +116,11 @@ final class QuoteCartService
         }
         if (isset($cart[$slug])) {
             $cart[$slug]['quantity'] += $quantity;
+            $cart[$slug]['title'] = (string) $product['title'];
+            $cart[$slug]['sku'] = $product['sku'] ?? null;
+            $cart[$slug]['category'] = $product['category'] ?? null;
+            $cart[$slug]['price'] = product_has_price($product) ? (float) $product['price'] : null;
+            $cart[$slug]['price_unit'] = $product['price_unit'] ?? null;
         } else {
             $cart[$slug] = [
                 'product_id' => (int) $product['id'],
@@ -116,6 +128,8 @@ final class QuoteCartService
                 'title' => (string) $product['title'],
                 'sku' => $product['sku'] ?? null,
                 'category' => $product['category'] ?? null,
+                'price' => product_has_price($product) ? (float) $product['price'] : null,
+                'price_unit' => $product['price_unit'] ?? null,
                 'quantity' => $quantity,
             ];
         }

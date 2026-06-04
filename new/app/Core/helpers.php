@@ -289,6 +289,30 @@ function social_icon_svg(string $id, string $class = 'w-5 h-5'): string
     };
 }
 
+/** Whether a product has a public list price configured. */
+function product_has_price(array $product): bool
+{
+    if (!array_key_exists('price', $product) || $product['price'] === null || $product['price'] === '') {
+        return false;
+    }
+    return (float) $product['price'] >= 0;
+}
+
+/** Formatted list price for display, or null when not set. */
+function format_product_price(array $product): ?string
+{
+    if (!product_has_price($product)) {
+        return null;
+    }
+    $amount = (float) $product['price'];
+    $formatted = 'CAD $' . number_format($amount, $amount == floor($amount) ? 0 : 2);
+    $unit = trim((string) ($product['price_unit'] ?? ''));
+    if ($unit !== '') {
+        $formatted .= ' ' . $unit;
+    }
+    return $formatted;
+}
+
 /** Number of products in the session quote list. */
 function quote_cart_count(): int
 {

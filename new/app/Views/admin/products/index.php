@@ -29,6 +29,7 @@ $totalPages = max(1, (int) ceil($total / $perPage));
         <th>Product</th>
         <th>Category</th>
         <th>SKU</th>
+        <th>Price</th>
         <th>Status</th>
         <th></th>
       </tr>
@@ -49,6 +50,7 @@ $totalPages = max(1, (int) ceil($total / $perPage));
           </td>
           <td><?= e($p['category'] ?? '—') ?></td>
           <td class="text-slate-500"><?= e($p['sku'] ?? '—') ?></td>
+          <td class="text-slate-600 text-sm whitespace-nowrap"><?= format_product_price($p) !== null ? e(format_product_price($p)) : '—' ?></td>
           <td>
             <span class="admin-badge <?= $p['is_published'] ? 'admin-badge--published' : 'admin-badge--draft' ?>">
               <?= $p['is_published'] ? 'Published' : 'Draft' ?>

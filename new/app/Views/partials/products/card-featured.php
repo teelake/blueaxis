@@ -14,6 +14,7 @@
         <p class="product-card__sku"><?= e($product['sku']) ?></p>
       <?php endif; ?>
       <h3 class="text-2xl font-semibold text-brand-navy mb-3"><?= e($product['title']) ?></h3>
+      <?php \App\Core\View::partial('products/price', ['product' => $product, 'priceClass' => 'product-card__price text-lg mb-3']); ?>
       <p class="text-slate-600 mb-6"><?= e($product['excerpt'] ?? '') ?></p>
       <span class="text-sm font-semibold text-brand-navy group-hover:text-brand-gold transition">Explore specifications →</span>
     </div>

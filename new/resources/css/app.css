@@ -395,6 +395,10 @@
 .product-card__title {
   @apply text-lg font-semibold text-brand-navy group-hover:text-brand-gold transition;
 }
+.product-card__price,
+.product-price {
+  @apply text-sm font-semibold text-brand-navy;
+}
 .product-card__excerpt {
   @apply text-sm text-slate-600 mt-2 line-clamp-2;
 }

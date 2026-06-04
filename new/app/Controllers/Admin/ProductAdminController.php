@@ -36,6 +36,7 @@ final class ProductAdminController extends AdminController
             'title' => 'New product',
             'pageDescription' => 'Add a product to your wholesale catalog.',
             'product' => null,
+            'categories' => Product::distinctCategories(),
         ], 'layouts/admin');
     }
 
@@ -59,6 +60,7 @@ final class ProductAdminController extends AdminController
             'title' => 'Edit product',
             'pageDescription' => 'Update catalog details and imagery.',
             'product' => $product,
+            'categories' => Product::distinctCategories(),
         ], 'layouts/admin');
     }
 
@@ -102,6 +104,8 @@ final class ProductAdminController extends AdminController
             'slug' => $slug,
             'category' => trim((string) ($_POST['category'] ?? '')) ?: null,
             'sku' => trim((string) ($_POST['sku'] ?? '')) ?: null,
+            'price' => self::parsePrice($_POST['price'] ?? null),
+            'price_unit' => trim((string) ($_POST['price_unit'] ?? '')) ?: null,
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')) ?: null,
             'description' => HtmlSanitizer::clean((string) ($_POST['description'] ?? '')),
             'image_path' => MediaUploadHelper::resolve('image_path'),
@@ -114,5 +118,18 @@ final class ProductAdminController extends AdminController
             'meta_title' => trim((string) ($_POST['meta_title'] ?? '')) ?: null,
             'meta_description' => trim((string) ($_POST['meta_description'] ?? '')) ?: null,
         ];
+    }
+
+    private static function parsePrice(mixed $raw): ?float
+    {
+        $value = trim((string) $raw);
+        if ($value === '') {
+            return null;
+        }
+        if (!is_numeric($value)) {
+            return null;
+        }
+        $price = round((float) $value, 2);
+        return $price >= 0 ? $price : null;
     }
 }

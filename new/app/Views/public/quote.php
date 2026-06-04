@@ -41,6 +41,14 @@ $selectedService = $_SESSION['_old']['service_needed'] ?? ($hasCart ? 'Product c
                   <?php if (!empty($item['category'])): ?>
                     <p class="text-xs text-slate-500 mt-1"><?= e($item['category']) ?></p>
                   <?php endif; ?>
+                  <?php
+                  $cartPrice = format_product_price([
+                      'price' => $item['price'] ?? null,
+                      'price_unit' => $item['price_unit'] ?? null,
+                  ]);
+                  if ($cartPrice !== null): ?>
+                    <p class="text-sm font-medium text-brand-navy mt-1"><?= e($cartPrice) ?></p>
+                  <?php endif; ?>
                 </div>
                 <form method="post" action="<?= url('quote/cart/remove') ?>" class="shrink-0">
                   <?= \App\Core\Csrf::field() ?>

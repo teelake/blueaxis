@@ -16,6 +16,7 @@
         <p class="product-card__sku"><?= e($product['sku']) ?></p>
       <?php endif; ?>
       <h3 class="product-card__title"><?= e($product['title']) ?></h3>
+      <?php \App\Core\View::partial('products/price', ['product' => $product, 'priceClass' => 'product-card__price']); ?>
       <?php if (!empty($product['excerpt'])): ?>
         <p class="product-card__excerpt"><?= e($product['excerpt']) ?></p>
       <?php endif; ?>
