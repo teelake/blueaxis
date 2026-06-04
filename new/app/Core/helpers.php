@@ -249,3 +249,14 @@ function section(array $section, string $key, string $default = ''): string
 {
     return (string) ($section[$key]['content'] ?? $default);
 }
+
+/** @param array<string, array<string, array{content?: string}>> $blocks */
+function content_json_list(array $blocks, string $section, string $key, array $default = []): array
+{
+    $raw = $blocks[$section][$key]['content'] ?? null;
+    if ($raw === null || trim((string) $raw) === '') {
+        return $default;
+    }
+    $decoded = json_decode((string) $raw, true);
+    return is_array($decoded) ? $decoded : $default;
+}

@@ -10,22 +10,29 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
-<body class="bg-slate-100 min-h-screen">
+<body class="admin-shell">
   <div class="flex min-h-screen">
     <?php require APP_PATH . '/Views/partials/admin-sidebar.php'; ?>
-    <div class="flex-1 flex flex-col min-w-0">
+    <div class="admin-main">
       <?php require APP_PATH . '/Views/partials/admin-topbar.php'; ?>
-      <main class="flex-1 p-6 lg:p-8 overflow-auto">
+      <main class="flex-1 px-4 sm:px-8 py-6 lg:py-8 overflow-auto max-w-6xl w-full mx-auto">
+        <?php if (!empty($pageDescription)): ?>
+          <div class="admin-page-head">
+            <h1><?= e($title ?? 'Admin') ?></h1>
+            <p><?= e($pageDescription) ?></p>
+          </div>
+        <?php endif; ?>
         <?php if ($success = flash('success')): ?>
-          <div class="mb-6 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 text-sm"><?= e($success) ?></div>
+          <div class="admin-alert admin-alert--success"><?= e($success) ?></div>
         <?php endif; ?>
         <?php if ($error = flash('error')): ?>
-          <div class="mb-6 rounded-lg bg-red-50 border border-red-200 text-red-800 px-4 py-3 text-sm"><?= e($error) ?></div>
+          <div class="admin-alert admin-alert--error"><?= e($error) ?></div>
         <?php endif; ?>
         <?= $content ?>
       </main>
     </div>
   </div>
+  <script src="<?= asset('js/admin-ui.js') ?>"></script>
   <script src="<?= asset('js/rich-editor.js') ?>"></script>
 </body>
 </html>
