@@ -45,9 +45,16 @@
             </div>
           <?php endif; ?>
         </dl>
-        <div class="mt-10 flex flex-wrap gap-4">
-          <a href="<?= url('quote') ?>" class="btn-primary">Request wholesale quote</a>
-          <a href="<?= url('contact') ?>" class="btn-secondary">Speak with our team</a>
+        <div class="mt-10 flex flex-wrap gap-4 items-center">
+          <?php \App\Core\View::partial('product-add-to-quote', [
+              'product' => $product,
+              'redirect' => 'quote',
+              'qty' => true,
+              'label' => 'Add to quote list',
+              'btnClass' => 'btn-primary',
+          ]); ?>
+          <a href="<?= url('quote') ?>" class="btn-secondary">View quote form</a>
+          <a href="<?= url('contact') ?>" class="text-sm font-semibold text-brand-navy hover:text-brand-gold">Contact us</a>
         </div>
       </div>
     </div>

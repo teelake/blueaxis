@@ -43,6 +43,8 @@ $router->get('/blog/{slug}', [new BlogController(), 'show']);
 $router->post('/blog/{slug}/comments', [new BlogCommentController(), 'store']);
 $router->get('/quote', [new QuoteController(), 'index']);
 $router->post('/quote', [new QuoteController(), 'submit']);
+$router->post('/quote/cart/add', [new QuoteController(), 'addToCart']);
+$router->post('/quote/cart/remove', [new QuoteController(), 'removeFromCart']);
 $router->get('/contact', [new ContactController(), 'index']);
 $router->post('/contact', [new ContactController(), 'submitContact']);
 $router->get('/sitemap.xml', [new SeoController(), 'sitemap']);

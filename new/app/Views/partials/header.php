@@ -22,6 +22,10 @@ $nav = [
         <?php endforeach; ?>
       </nav>
       <div class="hidden lg:flex items-center gap-4">
+        <?php $quoteCount = quote_cart_count(); ?>
+        <a href="<?= url('quote') ?>" class="text-sm font-semibold text-brand-navy hover:text-brand-gold relative">
+          Quote list<?php if ($quoteCount > 0): ?><span class="ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 text-xs font-bold text-white bg-brand-gold rounded-full"><?= $quoteCount ?></span><?php endif; ?>
+        </a>
         <a href="<?= url('quote') ?>" class="btn-primary">Request a Quote</a>
       </div>
       <button type="button" class="lg:hidden p-2 text-brand-navy" @click="open = !open" aria-label="Toggle menu">

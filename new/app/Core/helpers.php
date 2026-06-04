@@ -226,6 +226,12 @@ function site_favicon_url(): string
     return asset('images/BLUEAXIS_logo.png');
 }
 
+/** Number of products in the session quote list. */
+function quote_cart_count(): int
+{
+    return \App\Services\QuoteCartService::count();
+}
+
 function url(string $path = ''): string
 {
     $base = site_url_base();

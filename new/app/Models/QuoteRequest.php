@@ -9,10 +9,18 @@ final class QuoteRequest extends Model
     public static function create(array $data): int
     {
         $stmt = self::db()->prepare(
-            'INSERT INTO quote_requests (name, company, email, phone, service_needed, message)
-             VALUES (:name, :company, :email, :phone, :service_needed, :message)'
+            'INSERT INTO quote_requests (name, company, email, phone, service_needed, message, products_json)
+             VALUES (:name, :company, :email, :phone, :service_needed, :message, :products_json)'
         );
-        $stmt->execute($data);
+        $stmt->execute([
+            'name' => $data['name'],
+            'company' => $data['company'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'service_needed' => $data['service_needed'],
+            'message' => $data['message'],
+            'products_json' => $data['products_json'] ?? null,
+        ]);
         return (int) self::db()->lastInsertId();
     }
 

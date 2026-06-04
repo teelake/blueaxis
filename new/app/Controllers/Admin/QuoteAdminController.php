@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Permission;
 use App\Core\Session;
 use App\Models\QuoteRequest;
+use App\Services\QuoteCartService;
 
 final class QuoteAdminController extends AdminController
 {

@@ -41,22 +41,33 @@ final class LeadNotificationService
         $replyTo = MailConfig::replyToLead() ? ($lead['email'] ?? null) : null;
         $adminUrl = url('admin/quotes/' . $id);
 
+        $productLines = QuoteCartService::formatLines($lead['products_json'] ?? null);
+        $rows = [
+            'Reference' => '#' . $id,
+            'Name' => $lead['name'] ?? '',
+            'Company' => $lead['company'] ?? '—',
+            'Email' => $lead['email'] ?? '',
+            'Phone' => $lead['phone'] ?? '—',
+            'Service' => $lead['service_needed'] ?? '',
+        ];
+        if ($productLines !== '') {
+            $rows['Products'] = nl2br(e($productLines));
+        }
+        $rows['Details'] = nl2br(e($lead['message'] ?? '—'));
+
         $html = self::wrap(
             'New quote request',
-            self::rows([
-                'Reference' => '#' . $id,
-                'Name' => $lead['name'] ?? '',
-                'Company' => $lead['company'] ?? '—',
-                'Email' => $lead['email'] ?? '',
-                'Phone' => $lead['phone'] ?? '—',
-                'Service' => $lead['service_needed'] ?? '',
-                'Details' => nl2br(e($lead['message'] ?? '—')),
-            ]) . '<p style="margin-top:20px"><a href="' . e($adminUrl) . '" style="color:#102A56;font-weight:600">View in admin →</a></p>'
+            self::rows($rows) . '<p style="margin-top:20px"><a href="' . e($adminUrl) . '" style="color:#102A56;font-weight:600">View in admin →</a></p>'
         );
+
+        $subjectService = $lead['service_needed'] ?? 'General';
+        if ($productLines !== '') {
+            $subjectService = 'Products + ' . $subjectService;
+        }
 
         MailService::send(
             $to,
-            '[BlueAxis] Quote request: ' . ($lead['service_needed'] ?? 'General'),
+            '[BlueAxis] Quote request: ' . $subjectService,
             $html,
             $replyTo
         );

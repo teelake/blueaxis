@@ -1,6 +1,6 @@
 <?php /** @var array $product */ ?>
-<article class="product-card group" data-aos="fade-up">
-  <a href="<?= url('products/' . $product['slug']) ?>" class="block h-full">
+<article class="product-card group flex flex-col" data-aos="fade-up">
+  <a href="<?= url('products/' . $product['slug']) ?>" class="block flex-1">
     <div class="product-card__media">
       <?php if (!empty($product['image_path'])): ?>
         <img src="<?= e(media_url($product['image_path'])) ?>" alt="<?= e($product['title']) ?>" loading="lazy" />
@@ -30,4 +30,13 @@
       <span class="product-card__link">View product →</span>
     </div>
   </a>
+  <div class="product-card__actions px-6 pb-6 pt-0 border-t border-slate-100">
+    <?php \App\Core\View::partial('product-add-to-quote', [
+        'product' => $product,
+        'redirect' => 'quote',
+        'qty' => false,
+        'label' => '+ Add to quote',
+        'btnClass' => 'btn-secondary w-full justify-center',
+    ]); ?>
+  </div>
 </article>

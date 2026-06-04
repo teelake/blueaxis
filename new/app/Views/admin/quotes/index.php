@@ -35,6 +35,7 @@
         <tr>
           <th>Name</th>
           <th>Service</th>
+          <th>Products</th>
           <th>Status</th>
           <th>Date</th>
         </tr>
