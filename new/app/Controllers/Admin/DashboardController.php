@@ -17,6 +17,7 @@ final class DashboardController extends Controller
         Auth::requireLogin();
         $this->view('admin/dashboard', [
             'title' => 'Dashboard',
+            'pageDescription' => 'Overview of leads, content, and site activity.',
             'stats' => [
                 'quotes' => QuoteRequest::count(),
                 'quotes_new' => QuoteRequest::countByStatus('new'),

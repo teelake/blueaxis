@@ -1,16 +1,10 @@
-<form method="post" action="<?= url('admin/profile/password') ?>" class="max-w-lg card space-y-4">
-  <?= \App\Core\Csrf::field() ?>
-  <div>
-    <label class="block text-sm font-medium mb-1">Current password</label>
-    <input type="password" name="current_password" required class="input-field" autocomplete="current-password" />
-  </div>
-  <div>
-    <label class="block text-sm font-medium mb-1">New password</label>
-    <input type="password" name="new_password" required minlength="8" class="input-field" autocomplete="new-password" />
-  </div>
-  <div>
-    <label class="block text-sm font-medium mb-1">Confirm new password</label>
-    <input type="password" name="new_password_confirmation" required minlength="8" class="input-field" autocomplete="new-password" />
-  </div>
-  <button type="submit" class="btn-primary">Update password</button>
-</form>
+<div class="admin-panel admin-panel__body max-w-lg">
+  <p class="admin-section-desc mb-6">Choose a strong password you do not use elsewhere.</p>
+  <form method="post" action="<?= url('admin/profile/password') ?>" class="space-y-5">
+    <?= \App\Core\Csrf::field() ?>
+    <?php \App\Core\View::partial('admin/field', ['label' => 'Current password', 'name' => 'current_password', 'type' => 'password', 'required' => true]); ?>
+    <?php \App\Core\View::partial('admin/field', ['label' => 'New password', 'name' => 'new_password', 'type' => 'password', 'hint' => 'At least 8 characters.', 'required' => true]); ?>
+    <?php \App\Core\View::partial('admin/field', ['label' => 'Confirm new password', 'name' => 'new_password_confirmation', 'type' => 'password', 'required' => true]); ?>
+    <button type="submit" class="btn-primary">Update password</button>
+  </form>
+</div>

@@ -1,22 +1,23 @@
-<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-8">
   <?php
   $cards = [
       ['label' => 'Quote requests', 'value' => $stats['quotes'], 'sub' => $stats['quotes_new'] . ' new', 'url' => 'admin/quotes'],
-      ['label' => 'Contact inquiries', 'value' => $stats['contacts'], 'sub' => $stats['contacts_unread'] . ' unread', 'url' => 'admin/contacts'],
-      ['label' => 'Published posts', 'value' => $stats['posts'], 'sub' => 'Blog', 'url' => 'admin/blog'],
-      ['label' => 'Site visits (placeholder)', 'value' => number_format($stats['visits']), 'sub' => number_format($stats['pageviews']) . ' pageviews', 'url' => '#'],
+      ['label' => 'Contact messages', 'value' => $stats['contacts'], 'sub' => $stats['contacts_unread'] . ' unread', 'url' => 'admin/contacts'],
+      ['label' => 'Published articles', 'value' => $stats['posts'], 'sub' => 'View blog', 'url' => 'admin/blog'],
+      ['label' => 'Site visits', 'value' => number_format($stats['visits']), 'sub' => 'Analytics placeholder', 'url' => '#'],
   ];
   foreach ($cards as $c): ?>
-    <a href="<?= $c['url'] !== '#' ? url($c['url']) : '#' ?>" class="card hover:shadow-elevated transition block">
-      <p class="text-sm text-slate-500"><?= e($c['label']) ?></p>
-      <p class="text-3xl font-bold text-brand-navy mt-2"><?= e((string) $c['value']) ?></p>
-      <p class="text-xs text-brand-gold mt-1"><?= e($c['sub']) ?></p>
+    <a href="<?= $c['url'] !== '#' ? url($c['url']) : '#' ?>" class="admin-stat-card">
+      <p class="admin-stat-card__label"><?= e($c['label']) ?></p>
+      <p class="admin-stat-card__value"><?= e((string) $c['value']) ?></p>
+      <p class="admin-stat-card__meta"><?= e($c['sub']) ?></p>
     </a>
   <?php endforeach; ?>
 </div>
 
-<div class="card">
-  <h2 class="font-semibold text-brand-navy mb-4">Traffic overview (placeholder)</h2>
+<div class="admin-panel admin-panel__body">
+  <h2 class="admin-section-title">Traffic overview</h2>
+  <p class="admin-section-desc mb-6">Connect analytics later — sample chart below.</p>
   <canvas id="trafficChart" height="80"></canvas>
 </div>
 <script>
@@ -27,9 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
     type: 'line',
     data: {
       labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-      datasets: [{ label: 'Visits', data: [820, 932, 901, 1240, 1100, 1280], borderColor: '#102A56', tension: 0.3 }]
+      datasets: [{ label: 'Visits', data: [820, 932, 901, 1240, 1100, 1280], borderColor: '#102A56', backgroundColor: 'rgba(16,42,86,0.06)', fill: true, tension: 0.35 }]
     },
-    options: { responsive: true, plugins: { legend: { display: false } } }
+    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
   });
 });
 </script>

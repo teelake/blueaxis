@@ -23,7 +23,8 @@ final class BlogAdminController extends Controller
         $status = (string) ($_GET['status'] ?? '');
         $result = BlogPost::allAdmin($status, $page, (int) config('app.per_page_admin'));
         $this->view('admin/blog/index', [
-            'title' => 'Blog Posts',
+            'title' => 'Blog',
+            'pageDescription' => 'Write articles, manage tags, images, and reader comments.',
             'posts' => $result['posts'],
             'total' => $result['total'],
             'status' => $status,
@@ -118,7 +119,8 @@ final class BlogAdminController extends Controller
         $tags = $post ? implode(', ', BlogTag::namesForPost((int) $post['id'])) : '';
         $comments = $post ? BlogComment::forPost((int) $post['id']) : [];
         $this->view('admin/blog/form', [
-            'title' => $post ? 'Edit Post' : 'Create Post',
+            'title' => $post ? 'Edit article' : 'New article',
+            'pageDescription' => $post ? 'Update this blog post and manage comments.' : 'Write and publish a new blog article.',
             'post' => $post,
             'categories' => BlogCategory::all(),
             'tags' => $tags,

@@ -20,7 +20,8 @@ final class ProfileAdminController extends Controller
             redirect('admin/login');
         }
         $this->view('admin/profile/edit', [
-            'title' => 'Edit profile',
+            'title' => 'Your profile',
+            'pageDescription' => 'Update the name and email shown in the admin.',
             'admin' => $admin,
         ], 'layouts/admin');
     }
@@ -58,6 +59,7 @@ final class ProfileAdminController extends Controller
         Auth::requireLogin();
         $this->view('admin/profile/password', [
             'title' => 'Change password',
+            'pageDescription' => 'Set a new password for your admin account.',
         ], 'layouts/admin');
     }
 

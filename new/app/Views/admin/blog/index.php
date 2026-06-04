@@ -1,30 +1,46 @@
 <?php if (!empty($pendingComments)): ?>
-  <div class="mb-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 px-4 py-3 text-sm">
-    <?= (int) $pendingComments ?> comment(s) awaiting moderation — open a post to review.
+  <div class="admin-alert admin-alert--success mb-6" style="background:#fffbeb;border-color:#fde68a;color:#92400e">
+    <?= (int) $pendingComments ?> comment(s) waiting for your approval — open an article to review.
   </div>
 <?php endif; ?>
-<div class="flex flex-wrap gap-4 justify-between mb-6">
-  <form method="get" class="flex gap-2">
-    <select name="status" class="input-field">
-      <option value="">All</option>
+
+<div class="flex flex-wrap gap-4 justify-between items-center mb-6">
+  <form method="get" class="flex flex-wrap gap-2 items-center">
+    <label class="text-sm font-medium text-slate-600">Show</label>
+    <select name="status" class="admin-select max-w-[180px]">
+      <option value="">All articles</option>
       <option value="published" <?= $status === 'published' ? 'selected' : '' ?>>Published</option>
-      <option value="draft" <?= $status === 'draft' ? 'selected' : '' ?>>Draft</option>
+      <option value="draft" <?= $status === 'draft' ? 'selected' : '' ?>>Drafts</option>
     </select>
-    <button class="btn-secondary">Filter</button>
+    <button type="submit" class="btn-secondary">Apply</button>
   </form>
-  <a href="<?= url('admin/blog/create') ?>" class="btn-primary">New post</a>
+  <a href="<?= url('admin/blog/create') ?>" class="btn-primary">+ New article</a>
 </div>
-<div class="bg-white rounded-xl border overflow-hidden">
-  <table class="w-full text-sm">
-    <thead class="bg-slate-50"><tr><th class="p-4 text-left">Title</th><th>Status</th><th>Featured</th><th>Date</th><th></th></tr></thead>
+
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Featured</th>
+        <th>Updated</th>
+        <th></th>
+      </tr>
+    </thead>
     <tbody>
+      <?php if (empty($posts)): ?>
+        <tr><td colspan="5" class="text-slate-500 py-8 text-center">No articles yet. Create your first post.</td></tr>
+      <?php endif; ?>
       <?php foreach ($posts as $p): ?>
-        <tr class="border-t">
-          <td class="p-4"><?= e($p['title']) ?></td>
-          <td><?= e($p['status']) ?></td>
+        <tr>
+          <td class="font-medium text-slate-900"><?= e($p['title']) ?></td>
+          <td>
+            <span class="admin-badge <?= $p['status'] === 'published' ? 'admin-badge--published' : 'admin-badge--draft' ?>"><?= e($p['status']) ?></span>
+          </td>
           <td><?= ($p['is_featured'] ?? 0) ? 'Yes' : '—' ?></td>
-          <td><?= e($p['updated_at']) ?></td>
-          <td class="p-4"><a href="<?= url('admin/blog/' . $p['id'] . '/edit') ?>">Edit</a></td>
+          <td class="text-slate-500"><?= e(date('M j, Y', strtotime($p['updated_at']))) ?></td>
+          <td><a href="<?= url('admin/blog/' . $p['id'] . '/edit') ?>" class="text-sm font-semibold text-brand-navy hover:text-brand-gold">Edit</a></td>
         </tr>
       <?php endforeach; ?>
     </tbody>

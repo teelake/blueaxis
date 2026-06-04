@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="<?= asset('css/app.css') ?>" />
 </head>
-<body class="min-h-screen bg-brand-navy-dark flex items-center justify-center p-6">
+<body class="admin-login-wrap">
   <?= $content ?>
 </body>
 </html>

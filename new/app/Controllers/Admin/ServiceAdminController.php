@@ -25,7 +25,12 @@ final class ServiceAdminController extends Controller
     public function create(): void
     {
         Auth::requireLogin();
-        $this->view('admin/services/form', ['title' => 'Create Service', 'service' => null], 'layouts/admin');
+        $this->view('admin/services/form', [
+            'title' => 'New service',
+            'pageDescription' => 'Add a service to show on your website.',
+            'service' => null,
+            'benefitItems' => [['text' => '']],
+        ], 'layouts/admin');
     }
 
     public function store(): void
@@ -45,7 +50,21 @@ final class ServiceAdminController extends Controller
         if (!$service) {
             redirect('admin/services');
         }
-        $this->view('admin/services/form', ['title' => 'Edit Service', 'service' => $service], 'layouts/admin');
+        $benefits = [];
+        if (!empty($service['benefits'])) {
+            foreach (json_decode((string) $service['benefits'], true) ?: [] as $b) {
+                $benefits[] = ['text' => is_string($b) ? $b : (string) ($b['text'] ?? '')];
+            }
+        }
+        if ($benefits === []) {
+            $benefits = [['text' => '']];
+        }
+        $this->view('admin/services/form', [
+            'title' => 'Edit service',
+            'pageDescription' => 'Update how this service appears on the site.',
+            'service' => $service,
+            'benefitItems' => $benefits,
+        ], 'layouts/admin');
     }
 
     public function update(array $params): void
@@ -70,7 +89,16 @@ final class ServiceAdminController extends Controller
     /** @return array<string, mixed> */
     private function payloadFromPost(): array
     {
-        $benefits = array_filter(array_map('trim', explode("\n", (string) ($_POST['benefits_lines'] ?? ''))));
+        $benefits = [];
+        foreach ($_POST['benefits'] ?? [] as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $text = trim((string) ($row['text'] ?? ''));
+            if ($text !== '') {
+                $benefits[] = $text;
+            }
+        }
         return [
             'title' => trim((string) ($_POST['title'] ?? '')),
             'slug' => slugify((string) ($_POST['slug'] ?? $_POST['title'] ?? '')),

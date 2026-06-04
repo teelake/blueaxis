@@ -18,7 +18,8 @@ final class MediaAdminController extends Controller
         $page = (int) ($_GET['page'] ?? 1);
         $result = Media::paginate($page, 24);
         $this->view('admin/media/index', [
-            'title' => 'Media Library',
+            'title' => 'Media library',
+            'pageDescription' => 'Upload and manage images used across your website.',
             'items' => $result['items'],
             'total' => $result['total'],
             'success' => flash('success'),
