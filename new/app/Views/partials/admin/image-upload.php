@@ -41,5 +41,5 @@ $previewUrl = $value !== '' ? media_url($value) : '';
     <input type="file" id="<?= e($id) ?>_file" data-upload-input accept="image/*" class="sr-only" />
     <input type="hidden" name="<?= e($name) ?>" data-upload-path value="<?= e($value) ?>" />
   </div>
-  <button type="button" data-upload-clear class="text-xs font-medium text-slate-500 hover:text-red-600 mt-2 <?= $value === '' ? 'hidden' : '' ?>" style="<?= $value === '' ? 'display:none' : '' ?>">Remove image</button>
+  <button type="button" data-upload-clear class="text-xs font-medium text-slate-500 hover:text-red-600 mt-2 <?= $value === '' ? 'hidden' : '' ?>">Remove image</button>
 </div>

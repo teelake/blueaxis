@@ -35,7 +35,10 @@ $totalPages = max(1, (int) ceil($total / $perPage));
               <div class="w-12 h-12 rounded-lg bg-slate-100"></div>
             <?php endif; ?>
           </td>
-          <td class="p-4 font-medium"><?= e($p['title']) ?><?= $p['is_featured'] ? ' <span class="text-xs text-brand-gold font-semibold">Featured</span>' : '' ?></td>
+          <td class="p-4 font-medium">
+            <?= e($p['title']) ?>
+            <?php if ($p['is_featured']): ?><span class="ml-2 text-xs text-brand-gold font-semibold">Featured</span><?php endif; ?>
+          </td>
           <td><?= e($p['category'] ?? '—') ?></td>
           <td class="text-slate-500"><?= e($p['sku'] ?? '—') ?></td>
           <td><?= $p['is_published'] ? 'Published' : 'Draft' ?></td>

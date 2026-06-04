@@ -8,6 +8,7 @@ use App\Core\Permission;
 use App\Core\Session;
 use App\Models\Service;
 use App\Services\HtmlSanitizer;
+use App\Services\MediaUploadHelper;
 
 final class ServiceAdminController extends AdminController
 {
@@ -105,7 +106,7 @@ final class ServiceAdminController extends AdminController
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')),
             'description' => HtmlSanitizer::clean((string) ($_POST['description'] ?? '')),
             'benefits' => json_encode($benefits),
-            'banner_image' => trim((string) ($_POST['banner_image'] ?? '')) ?: null,
+            'banner_image' => MediaUploadHelper::resolve('banner_image'),
             'icon' => trim((string) ($_POST['icon'] ?? '')) ?: null,
             'meta_title' => trim((string) ($_POST['meta_title'] ?? '')) ?: null,
             'meta_description' => trim((string) ($_POST['meta_description'] ?? '')) ?: null,

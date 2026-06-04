@@ -50,7 +50,14 @@ $benefitsJson = htmlspecialchars(json_encode($benefitItems ?? [['text' => '']]),
       </div>
 
       <div x-show="tab === 'seo'" x-cloak class="space-y-5 max-w-2xl">
-        <?php \App\Core\View::partial('admin/field', ['label' => 'Banner image path', 'name' => 'banner_image', 'value' => $service['banner_image'] ?? '', 'hint' => 'Upload in Media library, then paste the path shown there.']); ?>
+        <?php \App\Core\View::partial('admin/image-upload', [
+            'name' => 'banner_image',
+            'id' => 'service_banner',
+            'value' => $service['banner_image'] ?? '',
+            'label' => 'Banner image',
+            'hint' => 'Hero image on the service detail page.',
+            'csrf' => \App\Core\Csrf::token(),
+        ]); ?>
         <?php \App\Core\View::partial('admin/field', ['label' => 'SEO title', 'name' => 'meta_title', 'value' => $service['meta_title'] ?? '', 'hint' => 'Optional. Defaults to service name.']); ?>
         <?php \App\Core\View::partial('admin/field', ['label' => 'SEO description', 'name' => 'meta_description', 'value' => $service['meta_description'] ?? '', 'type' => 'textarea']); ?>
       </div>

@@ -141,11 +141,7 @@ final class BlogAdminController extends AdminController
             ? ($_POST['published_at'] ?: date('Y-m-d H:i:s'))
             : null;
 
-        $featured = trim((string) ($_POST['featured_image'] ?? '')) ?: null;
-        if (!empty($_FILES['featured_image_file']['tmp_name'])) {
-            $uploaded = MediaService::upload($_FILES['featured_image_file']);
-            $featured = $uploaded['path'];
-        }
+        $featured = \App\Services\MediaUploadHelper::resolve('featured_image');
 
         return [
             'category_id' => $_POST['category_id'] ? (int) $_POST['category_id'] : null,

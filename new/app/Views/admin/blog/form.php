@@ -57,28 +57,17 @@ $defaultTab = $post ? 'content' : 'content';
         </label>
       </div>
 
-      <div x-show="tab === 'media'" x-cloak class="space-y-8 max-w-2xl" x-data="featuredImagePicker()" x-init="initFeatured('<?= e($featuredUrl) ?>', '<?= e($post['featured_image'] ?? '') ?>')">
+      <div x-show="tab === 'media'" x-cloak class="space-y-8 max-w-2xl">
         <div>
           <h2 class="admin-section-title">Featured image</h2>
-          <p class="admin-section-desc">Large image at the top of the article. Upload a file or choose from your library.</p>
-          <div class="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden aspect-video flex items-center justify-center mt-4">
-            <img x-show="preview" :src="preview" alt="" class="w-full h-full object-cover" />
-            <span x-show="!preview" class="text-sm text-slate-400">No image selected</span>
-          </div>
-          <input type="hidden" name="featured_image" x-model="path" />
-          <div class="mt-4 admin-field">
-            <label class="admin-label">Upload new image</label>
-            <input type="file" name="featured_image_file" accept="image/*" class="text-sm text-slate-600" @change="onFile($event)" />
-          </div>
-          <p class="admin-hint mt-4">Or click a thumbnail below:</p>
-          <div class="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-48 overflow-y-auto mt-2">
-            <?php foreach ($mediaItems as $m): ?>
-              <button type="button" class="rounded-lg border-2 border-transparent hover:border-brand-gold overflow-hidden focus:outline-none focus:border-brand-navy" @click="pick('<?= e($m['path']) ?>', '<?= e(media_url($m['path'])) ?>')">
-                <img src="<?= e(media_url($m['path'])) ?>" alt="" class="w-full h-16 object-cover" />
-              </button>
-            <?php endforeach; ?>
-          </div>
-          <button type="button" class="admin-btn-ghost mt-2" x-show="path" @click="clear()">Remove featured image</button>
+          <p class="admin-section-desc">Large image at the top of the article. Drag and drop or click to upload.</p>
+          <?php \App\Core\View::partial('admin/image-upload', [
+              'name' => 'featured_image',
+              'id' => 'blog_featured',
+              'value' => $post['featured_image'] ?? '',
+              'label' => 'Featured image',
+              'csrf' => $csrf,
+          ]); ?>
         </div>
         <div>
           <?php

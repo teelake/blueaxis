@@ -1,4 +1,19 @@
-<!-- Hero -->
+<?php if (!empty($heroSlides)): ?>
+  <?php \App\Core\View::partial('hero-slider', ['slides' => $heroSlides]); ?>
+  <section class="hero-section relative overflow-hidden bg-brand-navy-dark text-white border-b border-white/10">
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+      <div class="max-w-3xl" data-aos="fade-up">
+        <p class="section-eyebrow text-brand-gold-light mb-3"><?= e(section($hero, 'eyebrow')) ?></p>
+        <h1 class="font-sans font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight tracking-tight mb-4"><?= e(section($hero, 'title')) ?></h1>
+        <p class="text-base text-slate-300 leading-relaxed mb-6 max-w-2xl"><?= e(section($hero, 'lead')) ?></p>
+        <div class="flex flex-wrap gap-4">
+          <a href="<?= url(ltrim(section($hero, 'cta_primary_url', '/quote'), '/')) ?>" class="btn-accent"><?= e(section($hero, 'cta_primary_label', 'Request a Quote')) ?></a>
+          <a href="<?= url(ltrim(section($hero, 'cta_secondary_url', '/services'), '/')) ?>" class="btn-secondary-hero"><?= e(section($hero, 'cta_secondary_label', 'Our Services')) ?></a>
+        </div>
+      </div>
+    </div>
+  </section>
+<?php else: ?>
 <section class="hero-section relative overflow-hidden bg-brand-navy-dark text-white">
   <?php \App\Core\View::partial('hero-background'); ?>
   <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-32">
@@ -13,6 +28,7 @@
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- Trust Indicators -->
 <section class="border-b border-slate-100 bg-slate-50">
@@ -29,14 +45,18 @@
 </section>
 
 <!-- About -->
+<?php $aboutImage = section($about, 'image'); ?>
 <section class="py-20 lg:py-28">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
-    <div data-aos="fade-right">
+    <div data-aos="fade-right" class="<?= $aboutImage !== '' ? '' : 'lg:col-span-1' ?>">
       <p class="section-eyebrow mb-3">About BlueAxis</p>
       <h2 class="section-title mb-6"><?= e(section($about, 'title')) ?></h2>
       <div class="prose prose-slate max-w-none text-slate-600"><?= section($about, 'body') ?></div>
       <a href="<?= url('about') ?>" class="inline-flex mt-8 text-sm font-semibold text-brand-navy hover:text-brand-gold transition">Learn more about us →</a>
     </div>
+    <?php if ($aboutImage !== ''): ?>
+      <?php \App\Core\View::partial('section-image', ['imagePath' => $aboutImage, 'alt' => section($about, 'title', 'About BlueAxis'), 'align' => 'right']); ?>
+    <?php else: ?>
     <div class="card bg-brand-gold-muted/30 border-brand-gold/20" data-aos="fade-left">
       <ul class="space-y-4 text-sm text-brand-navy-dark">
         <li class="flex gap-3"><span class="text-brand-gold font-bold">01</span> Strategic African food importation</li>
@@ -45,6 +65,7 @@
         <li class="flex gap-3"><span class="text-brand-gold font-bold">04</span> Long-term wholesale partnerships</li>
       </ul>
     </div>
+    <?php endif; ?>
   </div>
 </section>
 
@@ -95,19 +116,24 @@
 </section>
 
 <!-- Industries -->
+<?php $indImage = section($industries ?? [], 'image'); ?>
 <section class="py-20 bg-brand-navy text-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       <div data-aos="fade-right">
-        <p class="section-eyebrow text-brand-gold-light mb-3">Industries Served</p>
-        <h2 class="text-3xl md:text-4xl font-semibold mb-6">Built for B2B food supply chains</h2>
-        <p class="text-slate-300">We partner with organizations that need dependable logistics—not consumer retail experiences.</p>
+        <p class="section-eyebrow text-brand-gold-light mb-3"><?= e(section($industries ?? [], 'eyebrow', 'Industries Served')) ?></p>
+        <h2 class="text-3xl md:text-4xl font-semibold mb-6"><?= e(section($industries ?? [], 'title', 'Built for B2B food supply chains')) ?></h2>
+        <p class="text-slate-300"><?= e(section($industries ?? [], 'lead', 'We partner with organizations that need dependable logistics—not consumer retail experiences.')) ?></p>
       </div>
+      <?php if ($indImage !== ''): ?>
+        <?php \App\Core\View::partial('section-image', ['imagePath' => $indImage, 'alt' => section($industries ?? [], 'title'), 'align' => 'right']); ?>
+      <?php else: ?>
       <ul class="grid sm:grid-cols-2 gap-4" data-aos="fade-left">
         <?php foreach (['Grocery stores', 'African food retailers', 'Food distributors', 'Restaurants', 'Wholesale buyers', 'Import/export partners'] as $ind): ?>
           <li class="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-sm"><?= e($ind) ?></li>
         <?php endforeach; ?>
       </ul>
+      <?php endif; ?>
     </div>
   </div>
 </section>
@@ -172,12 +198,21 @@
 <?php \App\Core\View::partial('home-newsletter', get_defined_vars()); ?>
 
 <!-- CTA -->
+<?php $ctaImage = section($cta, 'image'); ?>
 <section class="py-20">
-  <div class="max-w-4xl mx-auto px-4 text-center" data-aos="zoom-in">
-    <div class="rounded-2xl bg-brand-navy px-8 py-16 text-white shadow-elevated">
-      <h2 class="text-2xl md:text-3xl font-semibold mb-4"><?= e(section($cta, 'title')) ?></h2>
-      <p class="text-slate-300 mb-8 max-w-xl mx-auto"><?= e(section($cta, 'body')) ?></p>
-      <a href="<?= url(ltrim(section($cta, 'button_url', '/contact'), '/')) ?>" class="btn-accent"><?= e(section($cta, 'button_label', 'Get in Touch')) ?></a>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-10 items-center rounded-2xl bg-brand-navy text-white shadow-elevated overflow-hidden" data-aos="zoom-in">
+      <?php if ($ctaImage !== ''): ?>
+        <div class="relative min-h-[280px] lg:min-h-full lg:h-full">
+          <img src="<?= e(media_url($ctaImage)) ?>" alt="" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+          <div class="absolute inset-0 bg-brand-navy/40 lg:hidden"></div>
+        </div>
+      <?php endif; ?>
+      <div class="px-8 py-16 <?= $ctaImage === '' ? 'lg:col-span-2 text-center' : '' ?>">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-4"><?= e(section($cta, 'title')) ?></h2>
+        <p class="text-slate-300 mb-8 max-w-xl <?= $ctaImage === '' ? 'mx-auto' : '' ?>"><?= e(section($cta, 'body')) ?></p>
+        <a href="<?= url(ltrim(section($cta, 'button_url', '/contact'), '/')) ?>" class="btn-accent"><?= e(section($cta, 'button_label', 'Get in Touch')) ?></a>
+      </div>
     </div>
   </div>
 </section>

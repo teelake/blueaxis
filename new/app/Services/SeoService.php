@@ -33,6 +33,7 @@ final class SeoService
             ['loc' => $base . '/', 'priority' => '1.0'],
             ['loc' => $base . '/about', 'priority' => '0.8'],
             ['loc' => $base . '/services', 'priority' => '0.9'],
+            ['loc' => $base . '/products', 'priority' => '0.9'],
             ['loc' => $base . '/blog', 'priority' => '0.8'],
             ['loc' => $base . '/quote', 'priority' => '0.9'],
             ['loc' => $base . '/contact', 'priority' => '0.7'],
@@ -40,6 +41,14 @@ final class SeoService
 
         foreach (Service::published() as $service) {
             $urls[] = ['loc' => $base . '/services/' . $service['slug'], 'priority' => '0.7'];
+        }
+
+        foreach (Product::published() as $product) {
+            $urls[] = [
+                'loc' => $base . '/products/' . $product['slug'],
+                'lastmod' => date('Y-m-d', strtotime($product['updated_at'])),
+                'priority' => '0.7',
+            ];
         }
 
         $stmt = \App\Core\Database::connection()->query(

@@ -5,23 +5,36 @@
   </div>
 </section>
 
+<?php
+$overviewImg = section($blocks['overview'] ?? [], 'image');
+$missionImg = section($blocks['mission'] ?? [], 'image');
+$visionImg = section($blocks['vision'] ?? [], 'image');
+?>
 <section class="py-20">
-  <div class="max-w-3xl mx-auto px-4 prose prose-lg prose-slate">
-    <h2><?= e(section($blocks['overview'] ?? [], 'title', 'Company Overview')) ?></h2>
-    <?= section($blocks['overview'] ?? [], 'body') ?>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="prose prose-lg prose-slate max-w-none">
+      <h2><?= e(section($blocks['overview'] ?? [], 'title', 'Company Overview')) ?></h2>
+      <?= section($blocks['overview'] ?? [], 'body') ?>
+    </div>
+    <?php if ($overviewImg !== ''): ?>
+      <?php \App\Core\View::partial('section-image', ['imagePath' => $overviewImg, 'alt' => section($blocks['overview'] ?? [], 'title'), 'align' => 'right']); ?>
+    <?php endif; ?>
   </div>
 </section>
 
 <section class="py-16 bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
-    <div class="card">
-      <h2 class="text-xl font-semibold text-brand-navy mb-4"><?= e(section($blocks['mission'] ?? [], 'title', 'Mission')) ?></h2>
-      <div class="prose prose-slate text-sm"><?= section($blocks['mission'] ?? [], 'body') ?></div>
-    </div>
-    <div class="card">
-      <h2 class="text-xl font-semibold text-brand-navy mb-4"><?= e(section($blocks['vision'] ?? [], 'title', 'Vision')) ?></h2>
-      <div class="prose prose-slate text-sm"><?= section($blocks['vision'] ?? [], 'body') ?></div>
-    </div>
+  <div class="max-w-7xl mx-auto px-4 space-y-12">
+    <?php foreach (['mission' => $missionImg, 'vision' => $visionImg] as $sec => $img): ?>
+      <div class="grid lg:grid-cols-2 gap-12 items-center <?= $sec === 'vision' ? 'lg:flex-row-reverse' : '' ?>">
+        <div class="card lg:border-0 lg:shadow-none lg:p-0 <?= $sec === 'vision' && $img !== '' ? 'lg:order-last' : '' ?>">
+          <h2 class="text-xl font-semibold text-brand-navy mb-4"><?= e(section($blocks[$sec] ?? [], 'title', ucfirst($sec))) ?></h2>
+          <div class="prose prose-slate text-sm"><?= section($blocks[$sec] ?? [], 'body') ?></div>
+        </div>
+        <?php if ($img !== ''): ?>
+          <?php \App\Core\View::partial('section-image', ['imagePath' => $img, 'alt' => section($blocks[$sec] ?? [], 'title'), 'align' => $sec === 'vision' ? 'left' : 'right']); ?>
+        <?php endif; ?>
+      </div>
+    <?php endforeach; ?>
   </div>
 </section>
 

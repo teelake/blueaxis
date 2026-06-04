@@ -10,7 +10,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
-<body class="admin-shell">
+<body class="admin-shell" data-media-origin="<?= e(app_url_origin()) ?>" data-media-public="<?= e(app_public_web_path()) ?>">
   <div class="flex min-h-screen">
     <?php require APP_PATH . '/Views/partials/admin-sidebar.php'; ?>
     <div class="admin-main">

@@ -12,8 +12,15 @@
     var csrf = wrap.getAttribute('data-csrf');
     if (!input || !hidden || !url || !csrf) return;
 
+    var clearBtn = wrap.querySelector('[data-upload-clear]');
+
     function setPreview(path, fullUrl) {
       hidden.value = path || '';
+      hidden.dispatchEvent(new Event('input', { bubbles: true }));
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', !path);
+        clearBtn.style.display = path ? '' : 'none';
+      }
       if (path && preview) {
         preview.src = fullUrl || path;
         preview.classList.remove('hidden');
@@ -27,9 +34,19 @@
       }
     }
 
+    function resolveMediaUrl(path) {
+      if (!path) return '';
+      if (/^https?:\/\//i.test(path)) return path;
+      var origin = document.body.getAttribute('data-media-origin') || '';
+      var pub = document.body.getAttribute('data-media-public') || '';
+      return origin + pub + '/' + path.replace(/^\/+/, '');
+    }
+
     var initial = wrap.getAttribute('data-initial-url');
     var initialPath = wrap.getAttribute('data-initial-path');
-    if (initialPath) setPreview(initialPath, initial);
+    if (initialPath) {
+      setPreview(initialPath, initial || resolveMediaUrl(initialPath));
+    }
 
     function uploadFile(file) {
       if (!file || !file.type.match(/^image\//)) {
@@ -79,9 +96,10 @@
       });
     });
 
-    var clearBtn = wrap.querySelector('[data-upload-clear]');
     if (clearBtn) {
-      clearBtn.addEventListener('click', function () {
+      clearBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         setPreview('', '');
         input.value = '';
       });
@@ -98,5 +116,10 @@
     document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();
+  }
+
+  if (typeof MutationObserver !== 'undefined') {
+    var observer = new MutationObserver(boot);
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 })();

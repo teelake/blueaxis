@@ -330,3 +330,75 @@
     @apply py-1;
   }
 }
+
+/* Hero image slider */
+.hero-slider__slide {
+  @apply relative min-h-[420px] sm:min-h-[480px] lg:min-h-[560px];
+}
+.hero-slider__image {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+.hero-slider__overlay {
+  @apply absolute inset-0 bg-gradient-to-r from-brand-navy-dark/95 via-brand-navy-dark/70 to-brand-navy-dark/40;
+}
+.hero-slider__dots {
+  @apply absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2;
+}
+.hero-slider__dot {
+  @apply w-2.5 h-2.5 rounded-full bg-white/40 transition;
+}
+.hero-slider__dot.is-active {
+  @apply bg-brand-gold w-8;
+}
+.hero-slider__nav {
+  @apply absolute top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 text-white text-2xl hover:bg-white/20 transition hidden sm:flex items-center justify-center;
+}
+.hero-slider__nav--prev { @apply left-4; }
+.hero-slider__nav--next { @apply right-4; }
+
+/* Product catalog */
+.catalog-filter {
+  @apply inline-flex px-4 py-2 text-sm font-medium rounded-full border border-slate-200 text-slate-600 transition hover:border-brand-gold hover:text-brand-navy;
+}
+.catalog-filter.is-active {
+  @apply bg-brand-navy text-white border-brand-navy;
+}
+.product-card {
+  @apply bg-white border border-slate-100 rounded-xl shadow-card overflow-hidden transition hover:shadow-elevated hover:border-brand-gold/30;
+}
+.product-card__media {
+  @apply relative aspect-[4/3] overflow-hidden bg-slate-100;
+}
+.product-card__media img {
+  @apply w-full h-full object-cover transition duration-500 group-hover:scale-105;
+}
+.product-card__placeholder {
+  @apply absolute inset-0 bg-gradient-to-br from-brand-navy/10 to-brand-gold/10;
+}
+.product-card__badge {
+  @apply absolute top-3 left-3 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide bg-white/95 text-brand-navy rounded-md shadow-sm;
+}
+.product-card__body {
+  @apply p-6;
+}
+.product-card__sku {
+  @apply text-xs font-mono text-slate-400 mb-1;
+}
+.product-card__title {
+  @apply text-lg font-semibold text-brand-navy group-hover:text-brand-gold transition;
+}
+.product-card__excerpt {
+  @apply text-sm text-slate-600 mt-2 line-clamp-2;
+}
+.product-card__meta {
+  @apply mt-4 pt-4 border-t border-slate-100 space-y-1 text-xs text-slate-500;
+}
+.product-card__meta li span {
+  @apply font-semibold text-slate-400 uppercase tracking-wide mr-2;
+}
+.product-card__link {
+  @apply inline-block mt-4 text-sm font-semibold text-brand-navy group-hover:text-brand-gold transition;
+}
+.product-card--featured {
+  @apply border-brand-gold/30 shadow-elevated;
+}

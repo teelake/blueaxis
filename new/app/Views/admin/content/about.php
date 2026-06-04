@@ -1,5 +1,6 @@
 <?php
 $valuesJson = htmlspecialchars(json_encode($valueItems), ENT_QUOTES, 'UTF-8');
+$csrf = \App\Core\Csrf::token();
 ?>
 <form method="post" action="<?= url('admin/content/about') ?>" x-data="adminTabs('overview')">
   <?= \App\Core\Csrf::field() ?>
@@ -32,6 +33,14 @@ $valuesJson = htmlspecialchars(json_encode($valueItems), ENT_QUOTES, 'UTF-8');
                 'height' => 220,
             ]); ?>
           </div>
+          <?php \App\Core\View::partial('admin/image-upload', [
+              'name' => $sec . '[image]',
+              'id' => 'about_' . $sec . '_image',
+              'value' => $blocks[$sec]['image']['content'] ?? '',
+              'label' => 'Section image',
+              'hint' => 'Optional image alongside this block on the About page.',
+              'csrf' => $csrf,
+          ]); ?>
         </div>
       <?php endforeach; ?>
 
