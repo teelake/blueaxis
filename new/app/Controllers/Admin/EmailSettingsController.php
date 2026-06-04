@@ -17,7 +17,8 @@ final class EmailSettingsController extends Controller
         $this->requireSuperAdmin();
         $settings = MailConfig::forForm();
         $this->view('admin/settings/email', [
-            'title' => 'Email Settings',
+            'title' => 'Email settings',
+            'pageDescription' => 'Configure how form submissions are emailed to your team.',
             'settings' => $settings,
             'hasPassword' => MailConfig::hasStoredPassword(),
             'success' => flash('success'),

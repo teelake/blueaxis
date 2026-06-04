@@ -17,6 +17,7 @@ final class ServiceAdminController extends Controller
         Auth::requireLogin();
         $this->view('admin/services/index', [
             'title' => 'Services',
+            'pageDescription' => 'Manage the services shown on your website.',
             'services' => Service::allAdmin(),
             'success' => flash('success'),
         ], 'layouts/admin');
