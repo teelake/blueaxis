@@ -71,6 +71,64 @@
   @apply bg-red-50 text-red-600;
 }
 
+.admin-empty-state {
+  @apply flex flex-col items-center justify-center text-center py-16 px-6 sm:py-20;
+}
+
+.admin-empty-state__icon {
+  @apply w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mb-5;
+}
+
+.admin-empty-state__icon svg {
+  @apply w-8 h-8;
+}
+
+.admin-empty-state__title {
+  @apply text-lg font-semibold text-slate-900;
+}
+
+.admin-empty-state__desc {
+  @apply text-sm text-slate-500 mt-2 max-w-md leading-relaxed;
+}
+
+/* Submit button loading */
+.btn-primary.is-loading,
+.btn-secondary.is-loading,
+.btn-accent.is-loading,
+.admin-icon-btn.is-loading {
+  @apply pointer-events-none cursor-wait;
+}
+
+.btn-primary.is-loading,
+.btn-secondary.is-loading,
+.btn-accent.is-loading {
+  @apply inline-flex items-center justify-center gap-2 opacity-90;
+}
+
+.admin-icon-btn.is-loading {
+  @apply opacity-80;
+}
+
+.btn-spinner {
+  @apply w-4 h-4 shrink-0 animate-spin;
+}
+
+.admin-icon-btn .btn-spinner {
+  @apply w-[18px] h-[18px];
+}
+
+.btn-spinner__track {
+  opacity: 0.25;
+}
+
+.btn-spinner__arc {
+  opacity: 1;
+}
+
+.btn-loading-label {
+  @apply whitespace-nowrap;
+}
+
 .admin-page-head {
   @apply mb-8;
 }

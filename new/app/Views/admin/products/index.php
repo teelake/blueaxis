@@ -6,16 +6,27 @@ $totalPages = max(1, (int) ceil($total / $perPage));
   <p class="text-sm text-slate-600"><?= (int) $total ?> products</p>
   <div class="flex flex-wrap gap-3 items-center">
     <input type="search" name="q" value="<?= e($search) ?>" placeholder="Search title, SKU, category…" class="admin-input max-w-xs" />
-    <button type="submit" class="btn-secondary">Search</button>
+    <button type="submit" class="btn-secondary" data-loading-text="Searching…">Search</button>
     <a href="<?= url('admin/products/create') ?>" class="btn-primary">Add product</a>
   </div>
 </form>
-<div class="bg-white rounded-xl border overflow-hidden">
-  <table class="w-full text-sm">
-    <thead class="bg-slate-50 text-left">
+<?php if ($products === []): ?>
+  <?php \App\Core\View::partial('admin/empty-state', [
+      'icon' => ($search ?? '') !== '' ? 'search' : 'catalog',
+      'title' => ($search ?? '') !== '' ? 'No products match your search' : 'No products in the catalog',
+      'description' => ($search ?? '') !== ''
+          ? 'Try another title, SKU, or category keyword.'
+          : 'Add wholesale SKUs with images and logistics specs for your product catalog page.',
+      'actionUrl' => ($search ?? '') !== '' ? url('admin/products') : url('admin/products/create'),
+      'actionLabel' => ($search ?? '') !== '' ? 'Clear search' : 'Add first product',
+  ]); ?>
+<?php else: ?>
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
       <tr>
-        <th class="p-4 w-16"></th>
-        <th class="p-4">Product</th>
+        <th class="w-16"></th>
+        <th>Product</th>
         <th>Category</th>
         <th>SKU</th>
         <th>Status</th>
@@ -23,9 +34,6 @@ $totalPages = max(1, (int) ceil($total / $perPage));
       </tr>
     </thead>
     <tbody>
-      <?php if ($products === []): ?>
-        <tr><td colspan="6" class="p-8 text-center text-slate-500">No products yet. Add your first catalog item.</td></tr>
-      <?php endif; ?>
       <?php foreach ($products as $p): ?>
         <tr class="border-t">
           <td class="p-4">
@@ -65,7 +73,8 @@ $totalPages = max(1, (int) ceil($total / $perPage));
     </tbody>
   </table>
 </div>
-<?php if ($totalPages > 1): ?>
+<?php endif; ?>
+<?php if ($totalPages > 1 && $products !== []): ?>
   <div class="flex gap-2 mt-6 justify-center">
     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
       <a href="<?= url('admin/products?page=' . $i . ($search !== '' ? '&q=' . urlencode($search) : '')) ?>" class="px-3 py-1 rounded text-sm <?= $i === $page ? 'bg-brand-navy text-white' : 'bg-white border text-slate-600' ?>"><?= $i ?></a>

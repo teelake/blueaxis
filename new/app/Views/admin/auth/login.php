@@ -22,6 +22,6 @@
         'type' => 'password',
         'required' => true,
     ]); ?>
-    <button type="submit" class="btn-primary w-full mt-2">Sign in</button>
+    <button type="submit" class="btn-primary w-full mt-2" data-loading-text="Signing in…">Sign in</button>
   </form>
 </div>

@@ -22,6 +22,7 @@
   <main><?= $content ?></main>
   <?php \App\Core\View::partial('footer'); ?>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="<?= asset('js/form-loading.js') ?>"></script>
   <script>AOS.init({ duration: 600, once: true, offset: 24, easing: 'ease-out-cubic', startEvent: 'DOMContentLoaded' });</script>
 </body>
 </html>

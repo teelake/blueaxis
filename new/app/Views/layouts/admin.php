@@ -32,6 +32,7 @@
       </main>
     </div>
   </div>
+  <script src="<?= asset('js/form-loading.js') ?>"></script>
   <script src="<?= asset('js/admin-ui.js') ?>"></script>
   <script src="<?= asset('js/admin-image-upload.js') ?>"></script>
   <script src="<?= asset('js/rich-editor.js') ?>"></script>

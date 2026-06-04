@@ -68,7 +68,7 @@ $csrf = \App\Core\Csrf::token();
 
     <div class="admin-sticky-footer">
       <p class="text-sm text-slate-500">Changes apply to the About page after you save.</p>
-      <button type="submit" class="btn-primary">Save about page</button>
+      <button type="submit" class="btn-primary" data-loading-text="Saving…">Save about page</button>
     </div>
   </div>
 </form>

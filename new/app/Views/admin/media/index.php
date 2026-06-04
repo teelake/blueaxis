@@ -7,13 +7,17 @@
       <label class="admin-label">Choose file</label>
       <input type="file" name="file" accept="image/*" required class="text-sm text-slate-600" />
     </div>
-    <button type="submit" class="btn-primary">Upload</button>
+    <button type="submit" class="btn-primary" data-loading-text="Uploading…">Upload</button>
   </form>
 </div>
 
 <?php if (empty($items)): ?>
-  <div class="admin-panel admin-panel__body text-center text-slate-500 py-12">
-    No images yet. Upload your first file above.
+  <div class="admin-panel">
+    <?php \App\Core\View::partial('admin/empty-state', [
+        'icon' => 'media',
+        'title' => 'No images in your library',
+        'description' => 'Upload photos here, then use them in blog posts, products, services, and page sections.',
+    ]); ?>
   </div>
 <?php else: ?>
   <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">

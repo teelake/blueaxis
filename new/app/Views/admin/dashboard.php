@@ -48,20 +48,34 @@
   </div>
 <?php endif; ?>
 
+<?php
+$chartEmpty = array_sum($leadChart['quotes'] ?? []) + array_sum($leadChart['contacts'] ?? []) === 0;
+?>
 <div class="admin-panel admin-panel__body">
   <h2 class="admin-section-title">Lead activity</h2>
   <p class="admin-section-desc mb-6">Quote requests and contact form submissions over the last 6 months.</p>
-  <canvas id="leadChart" height="100"></canvas>
-  <div class="flex flex-wrap gap-6 mt-6 text-xs font-medium text-slate-500">
-    <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-brand-navy"></span> Quote requests</span>
-    <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-brand-gold"></span> Contact messages</span>
-  </div>
+  <?php if ($chartEmpty): ?>
+    <?php \App\Core\View::partial('admin/empty-state', [
+        'icon' => 'chart',
+        'title' => 'No lead activity yet',
+        'description' => 'When visitors request quotes or send contact messages, trends will appear in this chart.',
+        'actionUrl' => url('admin/quotes'),
+        'actionLabel' => 'View quote requests',
+    ]); ?>
+  <?php else: ?>
+    <canvas id="leadChart" height="100"></canvas>
+    <div class="flex flex-wrap gap-6 mt-6 text-xs font-medium text-slate-500">
+      <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-brand-navy"></span> Quote requests</span>
+      <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-brand-gold"></span> Contact messages</span>
+    </div>
+  <?php endif; ?>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const ctx = document.getElementById('leadChart');
   if (!ctx || typeof Chart === 'undefined') return;
+  if (<?= $chartEmpty ? 'true' : 'false' ?>) return;
   const labels = <?= json_encode($leadChart['labels'], JSON_THROW_ON_ERROR) ?>;
   const quotes = <?= json_encode($leadChart['quotes'], JSON_THROW_ON_ERROR) ?>;
   const contacts = <?= json_encode($leadChart['contacts'], JSON_THROW_ON_ERROR) ?>;

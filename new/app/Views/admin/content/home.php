@@ -241,7 +241,7 @@ $slidesJson = htmlspecialchars(json_encode($heroSlides ?? []), ENT_QUOTES, 'UTF-
 
     <div class="admin-sticky-footer">
       <p class="text-sm text-slate-500">Changes apply to the live homepage after you save.</p>
-      <button type="submit" class="btn-primary">Save home page</button>
+      <button type="submit" class="btn-primary" data-loading-text="Saving…">Save home page</button>
     </div>
   </div>
 </form>
