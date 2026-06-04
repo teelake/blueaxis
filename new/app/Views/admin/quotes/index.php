@@ -1,3 +1,10 @@
+<?php
+use App\Services\QuoteCartService;
+
+$perPage = (int) config('app.per_page_admin');
+$totalPages = max(1, (int) ceil(($total ?? 0) / $perPage));
+$page = max(1, (int) ($_GET['page'] ?? 1));
+?>
 <div class="flex flex-wrap justify-between gap-4 mb-6">
   <form method="get" class="flex flex-wrap gap-2 items-center">
     <input name="q" value="<?= e($search) ?>" class="admin-input max-w-xs" placeholder="Search name, email…" />
@@ -28,38 +35,60 @@
   ]);
   ?>
 <?php else: ?>
-  <p class="text-sm text-slate-600 mb-4"><?= (int) $total ?> request<?= $total === 1 ? '' : 's' ?></p>
+  <p class="text-sm text-slate-600 mb-4"><?= (int) $total ?> request<?= $total === 1 ? '' : 's' ?> — open View for the full quote details.</p>
   <div class="admin-table-wrap">
     <table class="admin-table">
       <thead>
         <tr>
-          <th>Name</th>
+          <th>Requester</th>
           <th>Service</th>
           <th>Products</th>
           <th>Status</th>
           <th>Date</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($items as $item): ?>
+          <?php
+          $pCount = count(QuoteCartService::parseStored($item['products_json'] ?? null));
+          $statusKey = (string) ($item['status'] ?? 'new');
+          ?>
           <tr>
             <td class="font-medium">
-              <a href="<?= url('admin/quotes/' . $item['id']) ?>" class="text-brand-navy hover:text-brand-gold"><?= e($item['name']) ?></a>
+              <a href="<?= url('admin/quotes/' . $item['id']) ?>" class="text-brand-navy hover:text-brand-gold block">
+                <?= e($item['name']) ?>
+              </a>
+              <p class="text-xs text-slate-500 mt-0.5"><?= e($item['company'] ?? '') ?> · <?= e($item['email']) ?></p>
             </td>
-            <td><?= e($item['service_needed']) ?></td>
-            <td class="text-slate-600 text-xs max-w-[200px]">
-              <?php
-              $pCount = count(\App\Services\QuoteCartService::parseStored($item['products_json'] ?? null));
-              echo $pCount > 0 ? $pCount . ' item' . ($pCount === 1 ? '' : 's') : '—';
-              ?>
+            <td class="text-sm"><?= e($item['service_needed']) ?></td>
+            <td class="text-slate-600 text-sm">
+              <?= $pCount > 0 ? $pCount . ' product' . ($pCount === 1 ? '' : 's') : '—' ?>
             </td>
             <td>
-              <span class="admin-badge admin-badge--pending"><?= e(str_replace('_', ' ', $item['status'])) ?></span>
+              <span class="admin-badge admin-badge--pending"><?= e(str_replace('_', ' ', $statusKey)) ?></span>
             </td>
-            <td class="text-slate-500"><?= e(date('M j, Y g:ia', strtotime($item['created_at']))) ?></td>
+            <td class="text-slate-500 whitespace-nowrap"><?= e(date('M j, Y g:ia', strtotime($item['created_at']))) ?></td>
+            <td class="text-right">
+              <?php \App\Core\View::partial('admin/row-actions', [
+                  'detailUrl' => url('admin/quotes/' . $item['id']),
+                  'entityLabel' => 'quote request',
+              ]); ?>
+            </td>
           </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
   </div>
+  <?php if ($totalPages > 1): ?>
+    <nav class="flex flex-wrap gap-2 justify-center mt-8" aria-label="Pagination">
+      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <?php
+        $qs = http_build_query(array_filter(['q' => $search ?? '', 'status' => $status ?? '', 'page' => $i > 1 ? $i : null]));
+        $href = url('admin/quotes') . ($qs !== '' ? '?' . $qs : '');
+        ?>
+        <a href="<?= e($href) ?>" class="px-3 py-1.5 text-sm rounded-lg border <?= $i === $page ? 'bg-brand-navy text-white border-brand-navy' : 'border-slate-200 text-slate-600 hover:bg-slate-50' ?>"><?= $i ?></a>
+      <?php endfor; ?>
+    </nav>
+  <?php endif; ?>
 <?php endif; ?>

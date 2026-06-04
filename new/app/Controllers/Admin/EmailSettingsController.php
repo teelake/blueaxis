@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Permission;
 use App\Core\Session;
+use App\Services\FormRules;
 use App\Services\MailConfig;
 use App\Services\MailService;
 
@@ -30,27 +31,16 @@ final class EmailSettingsController extends AdminController
         $this->authorize(Permission::SETTINGS_EMAIL);
         $this->validateCsrf();
 
-        $driver = trim((string) ($_POST['mail_driver'] ?? 'mail'));
-        if (!in_array($driver, ['mail', 'smtp'], true)) {
-            $driver = 'mail';
-        }
-
-        $notifyTo = trim((string) ($_POST['mail_notify_to'] ?? ''));
-        if ($notifyTo === '' || !filter_var($notifyTo, FILTER_VALIDATE_EMAIL)) {
-            Session::flash('error', 'Please enter a valid notification email address.');
-            redirect('admin/settings/email');
-        }
-
-        $from = trim((string) ($_POST['mail_from_address'] ?? ''));
-        if ($from === '' || !filter_var($from, FILTER_VALIDATE_EMAIL)) {
-            Session::flash('error', 'Please enter a valid from email address.');
-            redirect('admin/settings/email');
-        }
-
-        if ($driver === 'smtp' && trim((string) ($_POST['mail_host'] ?? '')) === '') {
-            Session::flash('error', 'SMTP host is required when using SMTP driver.');
-            redirect('admin/settings/email');
-        }
+        $data = [
+            'mail_driver' => trim((string) ($_POST['mail_driver'] ?? 'mail')),
+            'mail_host' => trim((string) ($_POST['mail_host'] ?? '')),
+            'mail_port' => (int) ($_POST['mail_port'] ?? 587),
+            'mail_from_address' => trim((string) ($_POST['mail_from_address'] ?? '')),
+            'mail_from_name' => trim((string) ($_POST['mail_from_name'] ?? '')),
+            'mail_notify_to' => trim((string) ($_POST['mail_notify_to'] ?? '')),
+        ];
+        $driver = in_array($data['mail_driver'], ['mail', 'smtp'], true) ? $data['mail_driver'] : 'mail';
+        $this->validateOrRedirect(FormRules::emailSettings($data), 'admin/settings/email', $_POST);
 
         MailConfig::save([
             'mail_driver' => $driver,
@@ -59,9 +49,9 @@ final class EmailSettingsController extends AdminController
             'mail_username' => (string) ($_POST['mail_username'] ?? ''),
             'mail_password' => (string) ($_POST['mail_password'] ?? ''),
             'mail_encryption' => (string) ($_POST['mail_encryption'] ?? 'tls'),
-            'mail_from_address' => $from,
+            'mail_from_address' => $data['mail_from_address'],
             'mail_from_name' => (string) ($_POST['mail_from_name'] ?? ''),
-            'mail_notify_to' => $notifyTo,
+            'mail_notify_to' => $data['mail_notify_to'],
             'mail_notify_contact' => $_POST['mail_notify_contact'] ?? '',
             'mail_notify_quote' => $_POST['mail_notify_quote'] ?? '',
             'mail_notify_newsletter' => $_POST['mail_notify_newsletter'] ?? '',
@@ -83,7 +73,13 @@ final class EmailSettingsController extends AdminController
         $this->validateCsrf();
 
         $to = trim((string) ($_POST['test_email'] ?? ''));
-        if ($to === '' || !filter_var($to, FILTER_VALIDATE_EMAIL)) {
+        if ($to !== '') {
+            $testV = FormRules::emailTest($to);
+            if ($testV->fails()) {
+                Session::flash('error', $testV->firstError() ?? 'Invalid test email.');
+                redirect('admin/settings/email');
+            }
+        } else {
             $to = MailConfig::notifyTo();
         }
 

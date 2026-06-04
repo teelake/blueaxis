@@ -56,29 +56,23 @@
           <form method="post" action="<?= url('contact') ?>" class="grid gap-4">
             <?= \App\Core\Csrf::field() ?>
             <div class="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium mb-1">Name *</label>
-                <input name="name" required class="input-field" value="<?= old('name') ?>" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium mb-1">Company</label>
-                <input name="company" class="input-field" value="<?= old('company') ?>" />
-              </div>
+              <?php \App\Core\View::partial('public/field', ['label' => 'Name', 'name' => 'name', 'required' => true, 'maxlength' => 120]); ?>
+              <?php \App\Core\View::partial('public/field', ['label' => 'Company', 'name' => 'company', 'maxlength' => 200]); ?>
             </div>
             <div class="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium mb-1">Email *</label>
-                <input type="email" name="email" required class="input-field" value="<?= old('email') ?>" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium mb-1">Phone</label>
-                <input name="phone" type="tel" class="input-field" value="<?= old('phone') ?>" />
-              </div>
+              <?php \App\Core\View::partial('public/field', ['label' => 'Email', 'name' => 'email', 'type' => 'email', 'required' => true, 'maxlength' => 255]); ?>
+              <?php \App\Core\View::partial('public/field', ['label' => 'Phone', 'name' => 'phone', 'type' => 'tel', 'maxlength' => 24]); ?>
             </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Message *</label>
-              <textarea name="message" rows="5" required class="input-field" placeholder="How can we help?"><?= old('message') ?></textarea>
-            </div>
+            <?php \App\Core\View::partial('public/field', [
+                'label' => 'Message',
+                'name' => 'message',
+                'type' => 'textarea',
+                'required' => true,
+                'minlength' => 10,
+                'maxlength' => 5000,
+                'placeholder' => 'How can we help?',
+                'rows' => 5,
+            ]); ?>
             <button type="submit" class="btn-primary w-fit">Send message</button>
           </form>
         </div>

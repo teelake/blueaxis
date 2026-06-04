@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Permission;
 use App\Core\Session;
 use App\Models\Setting;
+use App\Services\FormRules;
 
 final class SocialSettingsController extends AdminController
 {
@@ -59,12 +60,23 @@ final class SocialSettingsController extends AdminController
         $this->authorize(Permission::SETTINGS_SITE);
         $this->validateCsrf();
 
+        $allErrors = [];
+        $urls = [];
         foreach (self::PLATFORMS as $key => $meta) {
-            $url = normalize_social_url((string) ($_POST[$key] ?? ''));
-            if ($url !== '' && !filter_var($url, FILTER_VALIDATE_URL)) {
-                Session::flash('error', 'Please enter a valid URL for ' . $meta['label'] . '.');
-                redirect('admin/settings/social');
+            $urls[$key] = normalize_social_url((string) ($_POST[$key] ?? ''));
+            foreach (FormRules::socialUrl($key, $urls[$key], $meta['label'])->errors() as $field => $message) {
+                $allErrors[$field] = $message;
             }
+        }
+        if ($allErrors !== []) {
+            Session::setErrors($allErrors);
+            Session::setOld($_POST);
+            Session::flash('error', reset($allErrors) ?: 'Please correct the social media URLs.');
+            redirect('admin/settings/social');
+        }
+        Session::clearErrors();
+
+        foreach ($urls as $key => $url) {
             Setting::set($key, $url, 'text', self::GROUP);
         }
 

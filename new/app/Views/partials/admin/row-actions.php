@@ -2,6 +2,7 @@
 /**
  * Icon action buttons for admin tables.
  * @var string $editUrl
+ * @var string|null $detailUrl Admin detail page (e.g. view full message)
  * @var string|null $viewUrl Public page (opens new tab)
  * @var string|null $toggleUrl POST URL to publish/unpublish or activate/deactivate
  * @var bool $isActive Whether item is published/active
@@ -9,6 +10,7 @@
  * @var string $entityLabel For confirm dialogs, e.g. "product"
  */
 $editUrl = $editUrl ?? '';
+$detailUrl = $detailUrl ?? null;
 $viewUrl = $viewUrl ?? null;
 $toggleUrl = $toggleUrl ?? null;
 $deleteUrl = $deleteUrl ?? null;
@@ -21,6 +23,11 @@ $toggleOnConfirm = $toggleOnConfirm ?? 'Activate this ' . $entityLabel . ' on th
 $deleteConfirm = $deleteConfirm ?? 'Delete this ' . $entityLabel . ' permanently? This cannot be undone.';
 ?>
 <div class="admin-action-group" role="group" aria-label="Actions">
+  <?php if ($detailUrl): ?>
+    <a href="<?= e($detailUrl) ?>" class="admin-icon-btn" title="View details" aria-label="View details">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+    </a>
+  <?php endif; ?>
   <?php if ($editUrl !== ''): ?>
     <a href="<?= e($editUrl) ?>" class="admin-icon-btn" title="Edit" aria-label="Edit">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>

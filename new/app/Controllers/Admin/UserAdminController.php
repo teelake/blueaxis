@@ -9,6 +9,7 @@ use App\Core\Permission;
 use App\Core\Session;
 use App\Models\Admin;
 use App\Models\Role;
+use App\Services\FormRules;
 
 final class UserAdminController extends AdminController
 {
@@ -35,27 +36,21 @@ final class UserAdminController extends AdminController
     {
         $this->authorize(Permission::USERS_MANAGE);
         $this->validateCsrf();
-        $name = trim((string) ($_POST['name'] ?? ''));
-        $email = trim((string) ($_POST['email'] ?? ''));
-        $password = (string) ($_POST['password'] ?? '');
-        $roleId = (int) ($_POST['role_id'] ?? 0);
+        $input = [
+            'name' => trim((string) ($_POST['name'] ?? '')),
+            'email' => trim((string) ($_POST['email'] ?? '')),
+            'password' => (string) ($_POST['password'] ?? ''),
+            'role_id' => (int) ($_POST['role_id'] ?? 0),
+        ];
 
-        if ($name === '' || $email === '' || strlen($password) < 8) {
-            Session::flash('error', 'Name, email, and a password (8+ characters) are required.');
-            redirect('admin/users/create');
-        }
+        $this->validateOrRedirect(FormRules::adminUserCreate($input), 'admin/users/create', $input);
 
-        if (Admin::findByEmail($email)) {
+        if (Admin::findByEmail($input['email'])) {
             Session::flash('error', 'An account with that email already exists.');
             redirect('admin/users/create');
         }
 
-        if (!Role::findBySlug($this->roleSlugFromId($roleId))) {
-            Session::flash('error', 'Please select a valid role.');
-            redirect('admin/users/create');
-        }
-
-        Admin::createUser($name, $email, $password, $roleId);
+        Admin::createUser($input['name'], $input['email'], $input['password'], $input['role_id']);
         Session::flash('success', 'Team member created.');
         redirect('admin/users');
     }
@@ -80,23 +75,27 @@ final class UserAdminController extends AdminController
             redirect('admin/users');
         }
 
-        $name = trim((string) ($_POST['name'] ?? ''));
-        $email = trim((string) ($_POST['email'] ?? ''));
-        $roleId = (int) ($_POST['role_id'] ?? 0);
+        $input = [
+            'name' => trim((string) ($_POST['name'] ?? '')),
+            'email' => trim((string) ($_POST['email'] ?? '')),
+            'role_id' => (int) ($_POST['role_id'] ?? 0),
+            'password' => (string) ($_POST['password'] ?? ''),
+        ];
         $isActive = isset($_POST['is_active']);
-        $newPassword = (string) ($_POST['password'] ?? '');
+        $newPassword = $input['password'];
 
-        if ($name === '' || $email === '') {
-            Session::flash('error', 'Name and email are required.');
-            redirect('admin/users/' . $id . '/edit');
-        }
+        $this->validateOrRedirect(
+            FormRules::adminUserUpdate($input, $newPassword !== ''),
+            'admin/users/' . $id . '/edit',
+            $input
+        );
 
-        if (Admin::emailTakenByOther($email, $id)) {
+        if (Admin::emailTakenByOther($input['email'], $id)) {
             Session::flash('error', 'That email is already used by another account.');
             redirect('admin/users/' . $id . '/edit');
         }
 
-        $newRoleSlug = $this->roleSlugFromId($roleId);
+        $newRoleSlug = $this->roleSlugFromId($input['role_id']);
         if ($newRoleSlug === null) {
             Session::flash('error', 'Please select a valid role.');
             redirect('admin/users/' . $id . '/edit');
@@ -121,12 +120,8 @@ final class UserAdminController extends AdminController
             redirect('admin/users/' . $id . '/edit');
         }
 
-        Admin::updateUser($id, $name, $email, $roleId, $isActive);
+        Admin::updateUser($id, $input['name'], $input['email'], $input['role_id'], $isActive);
         if ($newPassword !== '') {
-            if (strlen($newPassword) < 8) {
-                Session::flash('error', 'Password must be at least 8 characters.');
-                redirect('admin/users/' . $id . '/edit');
-            }
             Admin::setPassword($id, $newPassword);
         }
 

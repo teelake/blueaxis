@@ -11,6 +11,7 @@ use App\Models\BlogCategory;
 use App\Models\BlogComment;
 use App\Models\BlogPost;
 use App\Models\BlogTag;
+use App\Services\FormRules;
 use App\Services\HtmlSanitizer;
 use App\Services\MediaService;
 
@@ -43,7 +44,9 @@ final class BlogAdminController extends AdminController
     {
         $this->authorize(Permission::BLOG);
         $this->validateCsrf();
-        $id = BlogPost::create($this->payload());
+        $payload = $this->payload();
+        $this->validateOrRedirect(FormRules::blogPost($payload), 'admin/blog/create', $_POST);
+        $id = BlogPost::create($payload);
         BlogTag::syncForPost($id, $this->tagNames());
         Session::flash('success', 'Post created.');
         redirect('admin/blog/' . $id . '/edit');
@@ -66,6 +69,7 @@ final class BlogAdminController extends AdminController
         $id = (int) ($params['id'] ?? 0);
         $data = $this->payload();
         unset($data['author_id']);
+        $this->validateOrRedirect(FormRules::blogPost($data), 'admin/blog/' . $id . '/edit', $_POST);
         BlogPost::update($id, $data);
         BlogTag::syncForPost($id, $this->tagNames());
         Session::flash('success', 'Post updated.');
@@ -147,7 +151,11 @@ final class BlogAdminController extends AdminController
     /** @return array<string, mixed> */
     private function payload(): array
     {
-        $slug = slugify((string) ($_POST['slug'] ?? $_POST['title'] ?? ''));
+        $title = trim((string) ($_POST['title'] ?? ''));
+        $slug = slugify((string) ($_POST['slug'] ?? $title));
+        if ($slug === '') {
+            $slug = slugify($title) ?: 'post';
+        }
         $status = ($_POST['status'] ?? 'draft') === 'published' ? 'published' : 'draft';
         $publishedAt = $status === 'published'
             ? ($_POST['published_at'] ?: date('Y-m-d H:i:s'))
@@ -158,7 +166,7 @@ final class BlogAdminController extends AdminController
         return [
             'category_id' => $_POST['category_id'] ? (int) $_POST['category_id'] : null,
             'author_id' => Auth::id(),
-            'title' => trim((string) ($_POST['title'] ?? '')),
+            'title' => $title,
             'slug' => $slug,
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')),
             'content' => HtmlSanitizer::clean((string) ($_POST['content'] ?? '')),

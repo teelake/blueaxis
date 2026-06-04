@@ -9,10 +9,10 @@ use App\Core\Session;
 use App\Models\Page;
 use App\Models\QuoteRequest;
 use App\Models\Service;
+use App\Services\FormRules;
 use App\Services\LeadNotificationService;
 use App\Services\QuoteCartService;
 use App\Services\SeoService;
-use App\Services\Validator;
 
 final class QuoteController extends Controller
 {
@@ -47,7 +47,13 @@ final class QuoteController extends Controller
         $qty = max(1, (int) ($_POST['quantity'] ?? 1));
         $redirectTo = trim((string) ($_POST['redirect'] ?? 'quote'));
 
-        if ($slug === '' || !QuoteCartService::addBySlug($slug, $qty)) {
+        $cartValidator = FormRules::quoteCartAdd($slug, $qty);
+        if ($cartValidator->fails()) {
+            Session::flash('error', $cartValidator->firstError() ?? 'Could not add this product to your quote list.');
+            redirect($redirectTo !== '' ? $redirectTo : 'products');
+        }
+
+        if (!QuoteCartService::addBySlug($slug, $qty)) {
             Session::flash('error', 'Could not add this product to your quote list.');
             redirect($redirectTo !== '' ? $redirectTo : 'products');
         }
@@ -90,18 +96,7 @@ final class QuoteController extends Controller
             $input['service_needed'] = 'Product catalog / wholesale SKUs';
         }
 
-        $v = new Validator();
-        $v->required('name', $input['name'])
-            ->required('company', $input['company'], 'Company name is required for quote requests.')
-            ->required('email', $input['email'])
-            ->email('email', $input['email'])
-            ->required('service_needed', $input['service_needed']);
-
-        if ($v->fails()) {
-            Session::setOld($input);
-            Session::flash('error', 'Please complete all required fields.');
-            redirect('quote');
-        }
+        $this->validateOrRedirect(FormRules::quote($input), 'quote', $input);
 
         $id = QuoteRequest::create($input);
         LeadNotificationService::quoteSubmitted($input, $id);

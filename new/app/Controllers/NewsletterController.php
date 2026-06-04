@@ -7,8 +7,8 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Models\NewsletterSubscriber;
+use App\Services\FormRules;
 use App\Services\LeadNotificationService;
-use App\Services\Validator;
 
 final class NewsletterController extends Controller
 {
@@ -17,13 +17,13 @@ final class NewsletterController extends Controller
         $this->validateCsrf();
         $email = trim((string) ($_POST['email'] ?? ''));
 
-        $v = new Validator();
-        $v->required('email', $email)->email('email', $email);
-
+        $v = FormRules::newsletter($email);
         if ($v->fails()) {
-            Session::flash('newsletter_error', 'Please enter a valid email address.');
-            redirect('/');
+            Session::setErrors($v->errors());
+            Session::flash('newsletter_error', $v->firstError() ?? 'Please enter a valid email address.');
+            redirect('/#newsletter');
         }
+        Session::clearErrors();
 
         $result = NewsletterSubscriber::subscribe($email);
         LeadNotificationService::newsletterSubscribed($email, $result);

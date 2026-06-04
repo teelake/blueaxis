@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Permission;
 use App\Core\Session;
 use App\Models\Product;
+use App\Services\FormRules;
 use App\Services\HtmlSanitizer;
 use App\Services\MediaUploadHelper;
 
@@ -44,7 +45,9 @@ final class ProductAdminController extends AdminController
     {
         $this->authorize(Permission::PRODUCTS);
         $this->validateCsrf();
-        Product::create($this->payloadFromPost());
+        $payload = $this->payloadFromPost();
+        $this->validateOrRedirect(FormRules::product($payload), 'admin/products/create', $_POST);
+        Product::create($payload);
         Session::flash('success', 'Product created.');
         redirect('admin/products');
     }
@@ -69,7 +72,9 @@ final class ProductAdminController extends AdminController
         $this->authorize(Permission::PRODUCTS);
         $this->validateCsrf();
         $id = (int) ($params['id'] ?? 0);
-        Product::update($id, $this->payloadFromPost());
+        $payload = $this->payloadFromPost();
+        $this->validateOrRedirect(FormRules::product($payload), 'admin/products/' . $id . '/edit', $_POST);
+        Product::update($id, $payload);
         Session::flash('success', 'Product updated.');
         redirect('admin/products');
     }
@@ -98,9 +103,13 @@ final class ProductAdminController extends AdminController
     /** @return array<string, mixed> */
     private function payloadFromPost(): array
     {
-        $slug = slugify((string) ($_POST['slug'] ?? $_POST['title'] ?? ''));
+        $title = trim((string) ($_POST['title'] ?? ''));
+        $slug = slugify((string) ($_POST['slug'] ?? $title));
+        if ($slug === '') {
+            $slug = slugify($title) ?: 'product';
+        }
         return [
-            'title' => trim((string) ($_POST['title'] ?? '')),
+            'title' => $title,
             'slug' => $slug,
             'category' => trim((string) ($_POST['category'] ?? '')) ?: null,
             'sku' => trim((string) ($_POST['sku'] ?? '')) ?: null,

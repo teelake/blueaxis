@@ -16,7 +16,8 @@ final class ContactAdminController extends AdminController
         $search = trim((string) ($_GET['q'] ?? ''));
         $result = Contact::paginate($page, (int) config('app.per_page_admin'), $search);
         $this->view('admin/contacts/index', [
-            'title' => 'Contact Inquiries',
+            'title' => 'Contact messages',
+            'pageDescription' => 'Browse inquiries from the contact form. Open any row to read the full message.',
             'items' => $result['items'],
             'total' => $result['total'],
             'search' => $search,
@@ -26,11 +27,19 @@ final class ContactAdminController extends AdminController
     public function show(array $params): void
     {
         $this->authorize(Permission::LEADS_CONTACTS);
-        $item = Contact::find((int) ($params['id'] ?? 0));
+        $id = (int) ($params['id'] ?? 0);
+        $item = Contact::find($id);
         if ($item) {
-            Contact::markRead((int) $item['id']);
+            Contact::markRead($id);
+            $item['is_read'] = 1;
         }
-        $this->view('admin/contacts/show', ['title' => 'Inquiry', 'item' => $item], 'layouts/admin');
+        $this->view('admin/contacts/show', [
+            'title' => $item ? 'Contact #' . $id : 'Message not found',
+            'pageDescription' => $item ? 'Full message and contact details.' : null,
+            'item' => $item,
+            'success' => flash('success'),
+            'error' => flash('error'),
+        ], 'layouts/admin');
     }
 
     public function export(): void

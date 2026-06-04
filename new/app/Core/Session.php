@@ -39,4 +39,26 @@ final class Session
     {
         unset($_SESSION['_old']);
     }
+
+    /** @param array<string, string> $errors */
+    public static function setErrors(array $errors): void
+    {
+        $_SESSION['_errors'] = $errors;
+    }
+
+    /** @return array<string, string> */
+    public static function errors(): array
+    {
+        return $_SESSION['_errors'] ?? [];
+    }
+
+    public static function error(string $field): ?string
+    {
+        return $_SESSION['_errors'][$field] ?? null;
+    }
+
+    public static function clearErrors(): void
+    {
+        unset($_SESSION['_errors']);
+    }
 }

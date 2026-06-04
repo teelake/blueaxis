@@ -15,14 +15,17 @@
         'label' => 'Email address',
         'name' => 'email',
         'type' => 'email',
+        'value' => $_SESSION['_old']['email'] ?? '',
         'placeholder' => 'admin@blueaxis.com',
         'required' => true,
+        'maxlength' => 255,
     ]); ?>
     <?php \App\Core\View::partial('admin/field', [
         'label' => 'Password',
         'name' => 'password',
         'type' => 'password',
         'required' => true,
+        'minlength' => 1,
     ]); ?>
     <button type="submit" class="btn-primary w-full mt-2" data-loading-text="Signing in…">Sign in</button>
   </form>

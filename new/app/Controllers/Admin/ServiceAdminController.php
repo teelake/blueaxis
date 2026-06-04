@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Permission;
 use App\Core\Session;
 use App\Models\Service;
+use App\Services\FormRules;
 use App\Services\HtmlSanitizer;
 use App\Services\MediaUploadHelper;
 
@@ -39,6 +40,7 @@ final class ServiceAdminController extends AdminController
         $this->authorize(Permission::SERVICES);
         $this->validateCsrf();
         $data = $this->payloadFromPost();
+        $this->validateOrRedirect(FormRules::service($data), 'admin/services/create', $_POST);
         Service::create($data);
         Session::flash('success', 'Service created.');
         redirect('admin/services');
@@ -73,7 +75,9 @@ final class ServiceAdminController extends AdminController
         $this->authorize(Permission::SERVICES);
         $this->validateCsrf();
         $id = (int) ($params['id'] ?? 0);
-        Service::update($id, $this->payloadFromPost());
+        $data = $this->payloadFromPost();
+        $this->validateOrRedirect(FormRules::service($data), 'admin/services/' . $id . '/edit', $_POST);
+        Service::update($id, $data);
         Session::flash('success', 'Service updated.');
         redirect('admin/services');
     }
@@ -112,9 +116,14 @@ final class ServiceAdminController extends AdminController
                 $benefits[] = $text;
             }
         }
+        $title = trim((string) ($_POST['title'] ?? ''));
+        $slug = slugify((string) ($_POST['slug'] ?? $title));
+        if ($slug === '') {
+            $slug = slugify($title) ?: 'service';
+        }
         return [
-            'title' => trim((string) ($_POST['title'] ?? '')),
-            'slug' => slugify((string) ($_POST['slug'] ?? $_POST['title'] ?? '')),
+            'title' => $title,
+            'slug' => $slug,
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')),
             'description' => HtmlSanitizer::clean((string) ($_POST['description'] ?? '')),
             'benefits' => json_encode($benefits),

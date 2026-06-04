@@ -73,24 +73,12 @@ $selectedService = $_SESSION['_old']['service_needed'] ?? ($hasCart ? 'Product c
         <?php endforeach; ?>
 
         <div class="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Full name *</label>
-            <input name="name" required class="input-field" value="<?= old('name') ?>" autocomplete="name" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Company *</label>
-            <input name="company" required class="input-field" value="<?= old('company') ?>" autocomplete="organization" />
-          </div>
+          <?php \App\Core\View::partial('public/field', ['label' => 'Full name', 'name' => 'name', 'required' => true, 'maxlength' => 120]); ?>
+          <?php \App\Core\View::partial('public/field', ['label' => 'Company', 'name' => 'company', 'required' => true, 'maxlength' => 200]); ?>
         </div>
         <div class="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Business email *</label>
-            <input type="email" name="email" required class="input-field" value="<?= old('email') ?>" autocomplete="email" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Phone</label>
-            <input name="phone" type="tel" class="input-field" value="<?= old('phone') ?>" autocomplete="tel" />
-          </div>
+          <?php \App\Core\View::partial('public/field', ['label' => 'Business email', 'name' => 'email', 'type' => 'email', 'required' => true, 'maxlength' => 255]); ?>
+          <?php \App\Core\View::partial('public/field', ['label' => 'Phone', 'name' => 'phone', 'type' => 'tel', 'maxlength' => 24]); ?>
         </div>
 
         <?php if ($hasCart): ?>
@@ -118,7 +106,7 @@ $selectedService = $_SESSION['_old']['service_needed'] ?? ($hasCart ? 'Product c
 
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Service required *</label>
-          <select name="service_needed" required class="input-field">
+          <select name="service_needed" required class="input-field w-full<?= field_invalid_class('service_needed') ?>">
             <option value="">Select a service</option>
             <?php if ($hasCart): ?>
               <option value="Product catalog / wholesale SKUs" <?= $selectedService === 'Product catalog / wholesale SKUs' ? 'selected' : '' ?>>Product catalog / wholesale SKUs</option>
@@ -128,12 +116,16 @@ $selectedService = $_SESSION['_old']['service_needed'] ?? ($hasCart ? 'Product c
             <?php endforeach; ?>
             <option value="Multiple services" <?= $selectedService === 'Multiple services' ? 'selected' : '' ?>>Multiple services</option>
           </select>
+          <?php if ($err = field_error('service_needed')): ?><p class="text-xs text-red-600 mt-1" role="alert"><?= $err ?></p><?php endif; ?>
         </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-1">Project details</label>
-          <p class="text-xs text-slate-500 mb-2">Volumes, timelines, delivery regions, or notes about the products above.</p>
-          <textarea name="message" rows="5" class="input-field" placeholder="Brief description of your requirements…"><?= old('message') ?></textarea>
-        </div>
+        <?php \App\Core\View::partial('public/field', [
+            'label' => 'Project details',
+            'name' => 'message',
+            'type' => 'textarea',
+            'maxlength' => 5000,
+            'placeholder' => 'Brief description of your requirements…',
+            'rows' => 5,
+        ]); ?>
         <button type="submit" class="btn-primary w-full sm:w-auto" data-loading-text="Submitting…">Submit quote request</button>
       </form>
     </div>

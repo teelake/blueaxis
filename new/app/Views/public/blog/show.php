@@ -61,19 +61,19 @@
       <form method="post" action="<?= url('blog/' . $post['slug'] . '/comments') ?>" class="space-y-4">
         <?= \App\Core\Csrf::field() ?>
         <div class="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Name *</label>
-            <input name="author_name" required class="input-field" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Email *</label>
-            <input type="email" name="email" required class="input-field" />
-          </div>
+          <?php \App\Core\View::partial('public/field', ['label' => 'Name', 'name' => 'author_name', 'required' => true, 'maxlength' => 120]); ?>
+          <?php \App\Core\View::partial('public/field', ['label' => 'Email', 'name' => 'email', 'type' => 'email', 'required' => true, 'maxlength' => 255]); ?>
         </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Comment *</label>
-          <textarea name="body" rows="4" required class="input-field" placeholder="Your comment (moderated before publishing)"></textarea>
-        </div>
+        <?php \App\Core\View::partial('public/field', [
+            'label' => 'Comment',
+            'name' => 'body',
+            'type' => 'textarea',
+            'required' => true,
+            'minlength' => 3,
+            'maxlength' => 2000,
+            'placeholder' => 'Your comment (moderated before publishing)',
+            'rows' => 4,
+        ]); ?>
         <button type="submit" class="btn-primary">Submit comment</button>
       </form>
     </div>

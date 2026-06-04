@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Permission;
 use App\Core\Session;
 use App\Models\Setting;
+use App\Services\FormRules;
 use App\Services\MediaUploadHelper;
 
 final class SiteSettingsController extends AdminController
@@ -46,7 +47,11 @@ final class SiteSettingsController extends AdminController
         );
 
         $alt = trim((string) ($_POST['site_logo_alt'] ?? ''));
-        Setting::set('site_logo_alt', $alt !== '' ? $alt : 'BlueAxis Logistics & Warehousing', 'text', self::GROUP);
+        if ($alt === '') {
+            $alt = 'BlueAxis Logistics & Warehousing';
+        }
+        $this->validateOrRedirect(FormRules::siteBranding($alt), 'admin/settings/site', $_POST);
+        Setting::set('site_logo_alt', $alt, 'text', self::GROUP);
         Setting::set(
             'site_logo_footer_invert',
             isset($_POST['site_logo_footer_invert']) ? '1' : '0',

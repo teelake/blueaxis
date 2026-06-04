@@ -8,8 +8,8 @@ use App\Core\Controller;
 use App\Core\Session;
 use App\Models\BlogComment;
 use App\Models\BlogPost;
+use App\Services\FormRules;
 use App\Services\LeadNotificationService;
-use App\Services\Validator;
 
 final class BlogCommentController extends Controller
 {
@@ -26,12 +26,15 @@ final class BlogCommentController extends Controller
         $email = trim((string) ($_POST['email'] ?? ''));
         $body = trim((string) ($_POST['body'] ?? ''));
 
-        $v = new Validator();
-        $v->required('author_name', $name)->required('email', $email)->email('email', $email)->required('body', $body);
-        if ($v->fails() || strlen($body) < 3) {
-            Session::flash('comment_error', 'Please fill in all comment fields.');
+        $input = ['author_name' => $name, 'email' => $email, 'body' => $body];
+        $v = FormRules::blogComment($input);
+        if ($v->fails()) {
+            Session::setErrors($v->errors());
+            Session::setOld($input);
+            Session::flash('comment_error', $v->firstError() ?? 'Please fill in all comment fields.');
             redirect('blog/' . $slug . '#comments');
         }
+        Session::clearErrors();
 
         $commentId = BlogComment::create([
             'post_id' => (int) $post['id'],

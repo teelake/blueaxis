@@ -12,7 +12,7 @@
 
     <div class="admin-panel__body">
       <div x-show="tab === 'details'" x-cloak class="space-y-5 max-w-2xl">
-        <?php \App\Core\View::partial('admin/field', ['label' => 'Product name', 'name' => 'title', 'value' => $product['title'] ?? '', 'required' => true]); ?>
+        <?php \App\Core\View::partial('admin/field', ['label' => 'Product name', 'name' => 'title', 'value' => $product['title'] ?? '', 'required' => true, 'maxlength' => 200]); ?>
         <?php \App\Core\View::partial('admin/field', ['label' => 'URL slug', 'name' => 'slug', 'value' => $product['slug'] ?? '', 'hint' => 'Leave blank to auto-generate from the title.', 'placeholder' => 'palm-oil-bulk']); ?>
         <div>
           <label for="category" class="block text-sm font-medium text-slate-700 mb-1">Category</label>

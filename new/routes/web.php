@@ -98,13 +98,13 @@ $router->post('/admin/blog/{id}/comments/{commentId}/spam', [new BlogAdminContro
 $router->post('/admin/blog/{id}/comments/{commentId}/delete', [new BlogAdminController(), 'deleteComment']);
 
 $router->get('/admin/contacts', [new ContactAdminController(), 'index']);
-$router->get('/admin/contacts/{id}', [new ContactAdminController(), 'show']);
 $router->get('/admin/contacts/export', [new ContactAdminController(), 'export']);
+$router->get('/admin/contacts/{id}', [new ContactAdminController(), 'show']);
 
 $router->get('/admin/quotes', [new QuoteAdminController(), 'index']);
+$router->get('/admin/quotes/export', [new QuoteAdminController(), 'export']);
 $router->get('/admin/quotes/{id}', [new QuoteAdminController(), 'show']);
 $router->post('/admin/quotes/{id}/status', [new QuoteAdminController(), 'updateStatus']);
-$router->get('/admin/quotes/export', [new QuoteAdminController(), 'export']);
 
 $router->get('/admin/users', [new UserAdminController(), 'index']);
 $router->get('/admin/users/create', [new UserAdminController(), 'create']);

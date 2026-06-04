@@ -6,8 +6,8 @@ namespace App\Controllers\Admin;
 
 use App\Core\Auth;
 use App\Core\Controller;
-use App\Core\Csrf;
 use App\Core\Session;
+use App\Services\FormRules;
 
 final class AuthController extends Controller
 {
@@ -27,6 +27,13 @@ final class AuthController extends Controller
         $this->validateCsrf();
         $email = trim((string) ($_POST['email'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
+
+        $this->validateOrRedirect(
+            FormRules::adminLogin($email, $password),
+            'admin/login',
+            ['email' => $email],
+            'Please enter a valid email and password.'
+        );
 
         if (!Auth::attempt($email, $password)) {
             Session::flash('error', 'Invalid credentials.');

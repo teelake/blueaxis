@@ -9,6 +9,7 @@ use App\Core\Session;
 use App\Models\ContentBlock;
 use App\Models\HeroSlide;
 use App\Services\HtmlSanitizer;
+use App\Services\Validator;
 
 final class ContentAdminController extends AdminController
 {
@@ -40,7 +41,14 @@ final class ContentAdminController extends AdminController
     {
         $this->authorize(Permission::CONTENT);
         $this->validateCsrf();
-        HeroSlide::syncAll($this->parseHeroSlides());
+        $slides = $this->parseHeroSlides();
+        $slideErrors = $this->validateHeroSlides($slides);
+        if ($slideErrors !== []) {
+            Session::setErrors($slideErrors);
+            Session::flash('error', reset($slideErrors) ?: 'Please fix hero slide links.');
+            redirect('admin/content/home');
+        }
+        HeroSlide::syncAll($slides);
 
         $sections = ['hero', 'about', 'industries', 'cta'];
         foreach ($sections as $section) {
@@ -125,16 +133,35 @@ final class ContentAdminController extends AdminController
             if ($image === '') {
                 continue;
             }
+            $linkUrl = trim((string) ($row['link_url'] ?? ''));
             $slides[] = [
                 'title' => trim((string) ($row['title'] ?? '')),
                 'subtitle' => trim((string) ($row['subtitle'] ?? '')),
                 'image_path' => $image,
-                'link_url' => trim((string) ($row['link_url'] ?? '')),
+                'link_url' => $linkUrl,
                 'link_label' => trim((string) ($row['link_label'] ?? '')),
                 'is_active' => !empty($row['is_active']),
             ];
         }
         return $slides;
+    }
+
+    /** @param list<array<string, mixed>> $slides @return array<string, string> */
+    private function validateHeroSlides(array $slides): array
+    {
+        $errors = [];
+        foreach ($slides as $i => $slide) {
+            $url = (string) ($slide['link_url'] ?? '');
+            if ($url === '') {
+                continue;
+            }
+            $v = new Validator();
+            $v->url('hero_slides', $url, true, 'Slide ' . ($i + 1) . ': enter a valid link URL or leave blank.');
+            foreach ($v->errors() as $field => $message) {
+                $errors['hero_slide_' . $i] = $message;
+            }
+        }
+        return $errors;
     }
 
     /** @return list<array{stat: string, label: string}> */

@@ -335,6 +335,22 @@ function old(string $key, string $default = ''): string
     return e($_SESSION['_old'][$key] ?? $default);
 }
 
+function field_error(string $field): ?string
+{
+    $message = \App\Core\Session::error($field);
+    return $message !== null ? e($message) : null;
+}
+
+function has_field_error(string $field): bool
+{
+    return \App\Core\Session::error($field) !== null;
+}
+
+function field_invalid_class(string $field): string
+{
+    return has_field_error($field) ? ' border-red-400 focus:border-red-500 focus:ring-red-500/20' : '';
+}
+
 function flash(string $key): ?string
 {
     $value = $_SESSION['_flash'][$key] ?? null;

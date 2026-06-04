@@ -6,6 +6,7 @@ namespace App\Core;
 
 abstract class Controller
 {
+    use ValidatesForms;
     protected function view(string $view, array $data = [], ?string $layout = 'layouts/public'): void
     {
         View::render($view, $data, $layout);

@@ -20,9 +20,11 @@
           id="newsletter-email"
           name="email"
           required
+          maxlength="255"
           placeholder="Business email address"
-          class="input-field flex-1 min-w-0 text-slate-900"
+          class="input-field flex-1 min-w-0 text-slate-900<?= field_invalid_class('email') ?>"
           autocomplete="email"
+          aria-invalid="<?= has_field_error('email') ? 'true' : 'false' ?>"
         />
         <button type="submit" class="btn-accent shrink-0 w-full sm:w-auto justify-center">Subscribe</button>
       </form>

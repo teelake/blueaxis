@@ -7,7 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Auth;
 use App\Core\Session;
 use App\Models\Admin;
-use App\Services\Validator;
+use App\Services\FormRules;
 
 final class ProfileAdminController extends AdminController
 {
@@ -33,12 +33,8 @@ final class ProfileAdminController extends AdminController
         $name = trim((string) ($_POST['name'] ?? ''));
         $email = trim((string) ($_POST['email'] ?? ''));
 
-        $v = new Validator();
-        $v->required('name', $name)->required('email', $email)->email('email', $email);
-        if ($v->fails()) {
-            Session::flash('error', 'Please provide a valid name and email.');
-            redirect('admin/profile');
-        }
+        $input = ['name' => $name, 'email' => $email];
+        $this->validateOrRedirect(FormRules::adminProfile($input), 'admin/profile', $input);
 
         $existing = Admin::findByEmail($email);
         if ($existing && (int) $existing['id'] !== $id) {
@@ -77,14 +73,10 @@ final class ProfileAdminController extends AdminController
             redirect('admin/profile/password');
         }
 
-        if (strlen($new) < 8) {
-            Session::flash('error', 'New password must be at least 8 characters.');
-            redirect('admin/profile/password');
-        }
-        if ($new !== $confirm) {
-            Session::flash('error', 'New passwords do not match.');
-            redirect('admin/profile/password');
-        }
+        $this->validateOrRedirect(
+            FormRules::adminPasswordChange($current, $new, $confirm),
+            'admin/profile/password'
+        );
 
         Admin::setPassword($id, $new);
         Session::flash('success', 'Password changed successfully.');

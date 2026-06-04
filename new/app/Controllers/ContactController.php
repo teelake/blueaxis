@@ -9,9 +9,9 @@ use App\Core\Session;
 use App\Models\Contact;
 use App\Models\Page;
 use App\Models\Setting;
+use App\Services\FormRules;
 use App\Services\LeadNotificationService;
 use App\Services\SeoService;
-use App\Services\Validator;
 
 final class ContactController extends Controller
 {
@@ -40,15 +40,7 @@ final class ContactController extends Controller
             'message' => trim((string) ($_POST['message'] ?? '')),
         ];
 
-        $v = new Validator();
-        $v->required('name', $input['name'])->required('email', $input['email'])
-            ->email('email', $input['email'])->required('message', $input['message']);
-
-        if ($v->fails()) {
-            Session::setOld($input);
-            Session::flash('error', 'Please correct the highlighted fields.');
-            redirect('contact');
-        }
+        $this->validateOrRedirect(FormRules::contact($input), 'contact', $input);
 
         $id = Contact::create($input);
         LeadNotificationService::contactSubmitted($input, $id);

@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Permission;
 use App\Core\Session;
 use App\Models\QuoteRequest;
+use App\Services\FormRules;
 use App\Services\QuoteCartService;
 
 final class QuoteAdminController extends AdminController
@@ -19,7 +20,8 @@ final class QuoteAdminController extends AdminController
         $status = trim((string) ($_GET['status'] ?? ''));
         $result = QuoteRequest::paginate($page, (int) config('app.per_page_admin'), $search, $status);
         $this->view('admin/quotes/index', [
-            'title' => 'Quote Requests',
+            'title' => 'Quote requests',
+            'pageDescription' => 'B2B quote submissions from your website. Open any request for full details and status.',
             'items' => $result['items'],
             'total' => $result['total'],
             'search' => $search,
@@ -31,11 +33,14 @@ final class QuoteAdminController extends AdminController
     public function show(array $params): void
     {
         $this->authorize(Permission::LEADS_QUOTES);
-        $item = QuoteRequest::find((int) ($params['id'] ?? 0));
+        $id = (int) ($params['id'] ?? 0);
+        $item = QuoteRequest::find($id);
         $this->view('admin/quotes/show', [
-            'title' => 'Quote Request',
+            'title' => $item ? 'Quote #' . $id : 'Quote not found',
+            'pageDescription' => $item ? 'Full quote request, products, and follow-up.' : null,
             'item' => $item,
             'success' => flash('success'),
+            'error' => flash('error'),
         ], 'layouts/admin');
     }
 
@@ -44,15 +49,10 @@ final class QuoteAdminController extends AdminController
         $this->authorize(Permission::LEADS_QUOTES);
         $this->validateCsrf();
         $status = (string) ($_POST['status'] ?? 'new');
-        $allowed = ['new', 'in_review', 'contacted', 'closed'];
-        if (!in_array($status, $allowed, true)) {
-            $status = 'new';
-        }
-        QuoteRequest::updateStatus(
-            (int) ($params['id'] ?? 0),
-            $status,
-            trim((string) ($_POST['admin_notes'] ?? '')) ?: null
-        );
+        $notes = trim((string) ($_POST['admin_notes'] ?? ''));
+        $id = (int) ($params['id'] ?? 0);
+        $this->validateOrRedirect(FormRules::quoteStatus($status, $notes), 'admin/quotes/' . $id);
+        QuoteRequest::updateStatus($id, $status, $notes !== '' ? $notes : null);
         Session::flash('success', 'Quote status updated.');
         redirect('admin/quotes/' . ($params['id'] ?? ''));
     }
