@@ -37,6 +37,33 @@
       </span>
     </label>
 
+    <hr class="border-slate-200" />
+
+    <div>
+      <h2 class="admin-section-title">Favicon</h2>
+      <p class="admin-section-desc">Small icon shown in the browser tab and when saving the site to a phone home screen. Square PNG (32×32 or 512×512) or ICO works best.</p>
+    </div>
+
+    <?php \App\Core\View::partial('admin/image-upload', [
+        'name' => 'site_favicon_path',
+        'id' => 'site_favicon',
+        'value' => $faviconPath,
+        'label' => 'Favicon image',
+        'hint' => 'If empty, the default site icon is used.',
+        'accept' => 'image/png,image/jpeg,image/webp,image/gif,image/x-icon,.ico',
+        'formats' => 'PNG, ICO, JPG, WebP',
+        'compact' => true,
+        'csrf' => $csrf,
+    ]); ?>
+
+    <div class="favicon-preview">
+      <img src="<?= e(site_favicon_url()) ?>" alt="" width="32" height="32" />
+      <div class="text-left">
+        <p class="text-sm font-medium text-slate-700">Current favicon preview</p>
+        <p class="text-xs text-slate-500">Save to update what visitors see in their browser tab.</p>
+      </div>
+    </div>
+
     <div class="rounded-xl border border-slate-200 bg-slate-50 p-6 space-y-4">
       <p class="text-sm font-semibold text-slate-700">Preview</p>
       <div>

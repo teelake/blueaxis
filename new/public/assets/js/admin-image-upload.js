@@ -48,9 +48,16 @@
       setPreview(initialPath, initial || resolveMediaUrl(initialPath));
     }
 
+    function isAllowedFile(file) {
+      if (!file) return false;
+      if (file.type && file.type.match(/^image\//)) return true;
+      if (/\.ico$/i.test(file.name || '')) return true;
+      return false;
+    }
+
     function uploadFile(file) {
-      if (!file || !file.type.match(/^image\//)) {
-        alert('Please choose an image file (JPG, PNG, or WebP).');
+      if (!isAllowedFile(file)) {
+        alert('Please choose an image file (PNG, JPG, WebP, GIF, or ICO).');
         return;
       }
       wrap.classList.add('is-uploading');

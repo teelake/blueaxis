@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="<?= asset('css/app.css') ?>" />
-  <link rel="icon" href="<?= e(site_logo_url('header')) ?>" />
+  <link rel="icon" href="<?= e(site_favicon_url()) ?>" sizes="any" />
+  <link rel="apple-touch-icon" href="<?= e(site_favicon_url()) ?>" />
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   <style>[data-aos],.aos-animate{overflow:visible!important}[x-cloak]{display:none!important}</style>

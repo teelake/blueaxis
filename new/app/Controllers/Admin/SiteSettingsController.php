@@ -18,8 +18,9 @@ final class SiteSettingsController extends AdminController
         $this->authorize(Permission::SETTINGS_SITE);
         $this->view('admin/settings/site', [
             'title' => 'Site branding',
-            'pageDescription' => 'Upload the logo shown in the website header and footer.',
+            'pageDescription' => 'Manage your logo, favicon, and how they appear on the public site.',
             'logoPath' => Setting::get('site_logo_path', ''),
+            'faviconPath' => Setting::get('site_favicon_path', ''),
             'logoAlt' => Setting::get('site_logo_alt', 'BlueAxis Logistics & Warehousing'),
             'footerInvert' => Setting::get('site_logo_footer_invert', '1') !== '0',
             'success' => flash('success'),
@@ -37,6 +38,12 @@ final class SiteSettingsController extends AdminController
             'image',
             self::GROUP
         );
+        Setting::set(
+            'site_favicon_path',
+            MediaUploadHelper::resolve('site_favicon_path') ?? '',
+            'image',
+            self::GROUP
+        );
 
         $alt = trim((string) ($_POST['site_logo_alt'] ?? ''));
         Setting::set('site_logo_alt', $alt !== '' ? $alt : 'BlueAxis Logistics & Warehousing', 'text', self::GROUP);
@@ -47,7 +54,7 @@ final class SiteSettingsController extends AdminController
             self::GROUP
         );
 
-        Session::flash('success', 'Site logo saved. Refresh the public site to see changes.');
+        Session::flash('success', 'Site branding saved. Refresh the public site to see changes.');
         redirect('admin/settings/site');
     }
 }

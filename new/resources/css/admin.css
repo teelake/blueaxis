@@ -317,3 +317,19 @@
 .image-upload-zone__drop input[data-upload-input] {
   @apply absolute inset-0 w-full h-full opacity-0 cursor-pointer;
 }
+
+.image-upload-zone--compact .image-upload-zone__drop {
+  @apply min-h-[120px] max-w-[200px];
+}
+
+.image-upload-zone--compact .image-upload-zone__drop img[data-upload-preview] {
+  @apply object-contain p-4;
+}
+
+.favicon-preview {
+  @apply inline-flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3;
+}
+
+.favicon-preview img {
+  @apply w-8 h-8 object-contain;
+}

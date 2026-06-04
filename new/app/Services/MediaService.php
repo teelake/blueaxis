@@ -21,8 +21,13 @@ final class MediaService
         }
 
         $mime = mime_content_type($file['tmp_name']) ?: $file['type'];
+        $extFromName = strtolower(pathinfo((string) ($file['name'] ?? ''), PATHINFO_EXTENSION));
         if (!in_array($mime, config('app.allowed_image_types'), true)) {
-            throw new \RuntimeException('Invalid file type.');
+            if ($extFromName === 'ico') {
+                $mime = 'image/x-icon';
+            } else {
+                throw new \RuntimeException('Invalid file type.');
+            }
         }
 
         $ext = match ($mime) {
@@ -30,7 +35,8 @@ final class MediaService
             'image/png' => 'png',
             'image/webp' => 'webp',
             'image/gif' => 'gif',
-            default => 'bin',
+            'image/x-icon', 'image/vnd.microsoft.icon' => 'ico',
+            default => $extFromName !== '' ? $extFromName : 'bin',
         };
 
         $filename = bin2hex(random_bytes(16)) . '.' . $ext;

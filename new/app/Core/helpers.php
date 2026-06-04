@@ -215,6 +215,17 @@ function site_logo_url(string $variant = 'header'): string
         : asset('images/blueaxis-logistics.png');
 }
 
+/** Favicon URL for browser tab (uploaded in admin or default asset). */
+function site_favicon_url(): string
+{
+    $path = \App\Models\Setting::get('site_favicon_path');
+    if ($path !== null && trim($path) !== '') {
+        return media_url($path);
+    }
+
+    return asset('images/BLUEAXIS_logo.png');
+}
+
 function url(string $path = ''): string
 {
     $base = site_url_base();
