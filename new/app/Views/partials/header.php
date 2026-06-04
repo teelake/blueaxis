@@ -4,6 +4,7 @@ $nav = [
     '/' => 'Home',
     '/about' => 'About',
     '/services' => 'Services',
+    '/products' => 'Products',
     '/blog' => 'Blog',
     '/contact' => 'Contact',
 ];

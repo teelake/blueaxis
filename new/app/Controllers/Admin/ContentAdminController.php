@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Permission;
 use App\Core\Session;
 use App\Models\ContentBlock;
+use App\Models\HeroSlide;
 use App\Services\HtmlSanitizer;
 
 final class ContentAdminController extends AdminController
@@ -15,10 +16,15 @@ final class ContentAdminController extends AdminController
     {
         $this->authorize(Permission::CONTENT);
         $blocks = ContentBlock::forPage('home');
+        $slideRows = HeroSlide::allOrdered();
+        if ($slideRows === []) {
+            $slideRows = [['title' => '', 'subtitle' => '', 'image_path' => '', 'link_url' => '', 'link_label' => '', 'is_active' => 1]];
+        }
         $this->view('admin/content/home', [
             'title' => 'Home Page',
             'pageDescription' => 'Edit the content visitors see on your homepage.',
             'blocks' => $blocks,
+            'heroSlides' => $slideRows,
             'trustItems' => content_json_list($blocks, 'trust', 'items', [
                 ['stat' => 'B2B', 'label' => 'Wholesale focus'],
                 ['stat' => 'MB + CA', 'label' => 'Regional & national reach'],
@@ -34,12 +40,18 @@ final class ContentAdminController extends AdminController
     {
         $this->authorize(Permission::CONTENT);
         $this->validateCsrf();
-        $sections = ['hero', 'about', 'cta'];
+        HeroSlide::syncAll($this->parseHeroSlides());
+
+        $sections = ['hero', 'about', 'industries', 'cta'];
         foreach ($sections as $section) {
             if (!isset($_POST[$section]) || !is_array($_POST[$section])) {
                 continue;
             }
             foreach ($_POST[$section] as $key => $value) {
+                if ($key === 'image') {
+                    ContentBlock::upsert('home', $section, 'image', trim((string) $value), 'text');
+                    continue;
+                }
                 $type = str_contains($key, 'body') ? 'html' : 'text';
                 $val = $type === 'html' ? HtmlSanitizer::clean((string) $value) : trim((string) $value);
                 ContentBlock::upsert('home', $section, $key, $val, $type);
@@ -87,6 +99,10 @@ final class ContentAdminController extends AdminController
                 continue;
             }
             foreach ($_POST[$section] as $key => $value) {
+                if ($key === 'image') {
+                    ContentBlock::upsert('about', $section, 'image', trim((string) $value), 'text');
+                    continue;
+                }
                 $type = $key === 'body' ? 'html' : 'text';
                 $val = $type === 'html' ? HtmlSanitizer::clean((string) $value) : trim((string) $value);
                 ContentBlock::upsert('about', $section, $key, $val, $type);
@@ -95,6 +111,30 @@ final class ContentAdminController extends AdminController
         ContentBlock::upsert('about', 'values', 'content', json_encode($this->parseValueItems()), 'json');
         Session::flash('success', 'About page saved successfully.');
         redirect('admin/content/about');
+    }
+
+    /** @return list<array<string, mixed>> */
+    private function parseHeroSlides(): array
+    {
+        $slides = [];
+        foreach ($_POST['hero_slides'] ?? [] as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $image = trim((string) ($row['image_path'] ?? ''));
+            if ($image === '') {
+                continue;
+            }
+            $slides[] = [
+                'title' => trim((string) ($row['title'] ?? '')),
+                'subtitle' => trim((string) ($row['subtitle'] ?? '')),
+                'image_path' => $image,
+                'link_url' => trim((string) ($row['link_url'] ?? '')),
+                'link_label' => trim((string) ($row['link_label'] ?? '')),
+                'is_active' => !empty($row['is_active']),
+            ];
+        }
+        return $slides;
     }
 
     /** @return list<array{stat: string, label: string}> */

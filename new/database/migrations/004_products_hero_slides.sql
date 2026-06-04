@@ -1,0 +1,36 @@
+CREATE TABLE IF NOT EXISTS hero_slides (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NULL,
+    subtitle VARCHAR(320) NULL,
+    image_path VARCHAR(500) NOT NULL,
+    link_url VARCHAR(255) NULL,
+    link_label VARCHAR(80) NULL,
+    sort_order SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_active_sort (is_active, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS products (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    slug VARCHAR(220) NOT NULL UNIQUE,
+    category VARCHAR(100) NULL,
+    sku VARCHAR(80) NULL,
+    excerpt TEXT NULL,
+    description LONGTEXT NULL,
+    image_path VARCHAR(500) NULL,
+    origin_region VARCHAR(120) NULL,
+    pack_format VARCHAR(120) NULL,
+    storage_notes VARCHAR(255) NULL,
+    is_featured TINYINT(1) NOT NULL DEFAULT 0,
+    is_published TINYINT(1) NOT NULL DEFAULT 1,
+    sort_order SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    meta_title VARCHAR(70) NULL,
+    meta_description VARCHAR(320) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_published_sort (is_published, sort_order),
+    INDEX idx_category (category)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -207,3 +207,27 @@
 .admin-login-card {
   @apply w-full max-w-md admin-panel admin-panel__body shadow-elevated;
 }
+
+.image-upload-zone__drop {
+  @apply relative rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/80 min-h-[180px] flex items-center justify-center overflow-hidden transition-colors cursor-pointer;
+}
+
+.image-upload-zone.is-dragover .image-upload-zone__drop {
+  @apply border-brand-gold bg-brand-gold-muted/30;
+}
+
+.image-upload-zone.is-uploading .image-upload-zone__drop {
+  @apply opacity-60 pointer-events-none;
+}
+
+.image-upload-zone__drop img[data-upload-preview] {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+.image-upload-zone__placeholder {
+  @apply text-center p-6 pointer-events-none;
+}
+
+.image-upload-zone__drop input[data-upload-input] {
+  @apply absolute inset-0 w-full h-full opacity-0 cursor-pointer;
+}

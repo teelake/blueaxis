@@ -8,6 +8,7 @@ $links = [
     ['url' => 'admin/content/home', 'label' => 'Home page', 'match' => '/admin/content/home', 'icon' => 'home', 'permission' => Permission::CONTENT],
     ['url' => 'admin/content/about', 'label' => 'About page', 'match' => '/admin/content/about', 'icon' => 'info', 'permission' => Permission::CONTENT],
     ['url' => 'admin/services', 'label' => 'Services', 'match' => '/admin/services', 'icon' => 'box', 'permission' => Permission::SERVICES],
+    ['url' => 'admin/products', 'label' => 'Products', 'match' => '/admin/products', 'icon' => 'package', 'permission' => Permission::PRODUCTS],
     ['url' => 'admin/blog', 'label' => 'Blog', 'match' => '/admin/blog', 'icon' => 'article', 'permission' => Permission::BLOG],
     ['url' => 'admin/quotes', 'label' => 'Quotes', 'match' => '/admin/quotes', 'icon' => 'quote', 'permission' => Permission::LEADS_QUOTES],
     ['url' => 'admin/contacts', 'label' => 'Contacts', 'match' => '/admin/contacts', 'icon' => 'mail', 'permission' => Permission::LEADS_CONTACTS],

@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Models\BlogPost;
 use App\Models\ContentBlock;
+use App\Models\HeroSlide;
 use App\Models\Page;
 use App\Models\Service;
 use App\Services\SeoService;
@@ -19,7 +20,9 @@ final class HomeController extends Controller
         $blocks = ContentBlock::forPage('home');
         $hero = $blocks['hero'] ?? [];
         $about = $blocks['about'] ?? [];
+        $industries = $blocks['industries'] ?? [];
         $cta = $blocks['cta'] ?? [];
+        $heroSlides = HeroSlide::active();
         $trustItems = [];
         if (!empty($blocks['trust']['items']['content'])) {
             $trustItems = json_decode((string) $blocks['trust']['items']['content'], true) ?: [];
@@ -67,7 +70,9 @@ final class HomeController extends Controller
         $this->view('public/home', [
             'seo' => $seo,
             'hero' => $hero,
+            'heroSlides' => $heroSlides,
             'about' => $about,
+            'industries' => $industries,
             'cta' => $cta,
             'trustItems' => $trustItems,
             'testimonials' => $testimonials,

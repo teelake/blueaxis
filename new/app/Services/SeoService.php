@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Models\BlogPost;
 use App\Models\Page;
+use App\Models\Product;
 use App\Models\Service;
 
 final class SeoService

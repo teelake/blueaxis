@@ -17,6 +17,7 @@ final class Permission
     public const LEADS_EXPORT = 'leads.export';
     public const SETTINGS_EMAIL = 'settings.email';
     public const USERS_MANAGE = 'users.manage';
+    public const PRODUCTS = 'products.manage';
 
     /** @var array<string, list<string>> */
     private const ROLE_PERMISSIONS = [
@@ -26,6 +27,7 @@ final class Permission
             self::SERVICES,
             self::BLOG,
             self::MEDIA,
+            self::PRODUCTS,
             self::LEADS_CONTACTS,
             self::LEADS_QUOTES,
             self::LEADS_EXPORT,
@@ -38,6 +40,7 @@ final class Permission
             self::SERVICES,
             self::BLOG,
             self::MEDIA,
+            self::PRODUCTS,
             self::LEADS_CONTACTS,
             self::LEADS_QUOTES,
             self::LEADS_EXPORT,
@@ -56,6 +59,7 @@ final class Permission
         self::LEADS_EXPORT => 'Export leads (CSV)',
         self::SETTINGS_EMAIL => 'Email settings',
         self::USERS_MANAGE => 'Manage admin users',
+        self::PRODUCTS => 'Manage product catalog',
     ];
 
     /** @return list<string> */
