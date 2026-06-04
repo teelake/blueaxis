@@ -94,6 +94,9 @@ final class ContentAdminController extends AdminController
             'valueItems' => content_json_list($blocks, 'values', 'content', [
                 ['title' => '', 'description' => ''],
             ]),
+            'leadershipMembers' => content_json_list($blocks, 'leadership', 'members', [
+                ['name' => '', 'role' => '', 'bio' => '', 'image_path' => ''],
+            ]),
             'success' => flash('success'),
         ], 'layouts/admin');
     }
@@ -117,6 +120,14 @@ final class ContentAdminController extends AdminController
             }
         }
         ContentBlock::upsert('about', 'values', 'content', json_encode($this->parseValueItems()), 'json');
+
+        foreach (['title', 'lead'] as $key) {
+            if (isset($_POST['leadership'][$key])) {
+                ContentBlock::upsert('about', 'leadership', $key, trim((string) $_POST['leadership'][$key]), 'text');
+            }
+        }
+        ContentBlock::upsert('about', 'leadership', 'members', json_encode($this->parseLeadershipMembers()), 'json');
+
         Session::flash('success', 'About page saved successfully.');
         redirect('admin/content/about');
     }
@@ -218,6 +229,28 @@ final class ContentAdminController extends AdminController
                 continue;
             }
             $items[] = ['title' => $title, 'description' => $description];
+        }
+        return $items;
+    }
+
+    /** @return list<array{name: string, role: string, bio: string, image_path: string}> */
+    private function parseLeadershipMembers(): array
+    {
+        $items = [];
+        foreach ($_POST['leadership_items'] ?? [] as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $name = trim((string) ($row['name'] ?? ''));
+            if ($name === '') {
+                continue;
+            }
+            $items[] = [
+                'name' => $name,
+                'role' => trim((string) ($row['role'] ?? '')),
+                'bio' => trim((string) ($row['bio'] ?? '')),
+                'image_path' => trim((string) ($row['image_path'] ?? '')),
+            ];
         }
         return $items;
     }

@@ -86,7 +86,10 @@ INSERT INTO content_blocks (page_slug, section_key, block_key, content, content_
 ('about', 'mission', 'body', '<p>To deliver dependable logistics infrastructure that connects African food producers with Canadian wholesale markets through integrity, operational excellence, and long-term partnerships.</p>', 'html', 2),
 ('about', 'vision', 'title', 'Vision', 'text', 1),
 ('about', 'vision', 'body', '<p>To become Canada''s most trusted B2B logistics partner for African food supply chains, with scalable operations across North America.</p>', 'html', 2),
-('about', 'values', 'content', '[{"title":"Integrity","description":"Transparent operations and honest partner relationships."},{"title":"Reliability","description":"Consistent fulfillment you can plan your business around."},{"title":"Excellence","description":"Disciplined processes across import, storage, and distribution."},{"title":"Partnership","description":"We grow when our wholesale and retail partners grow."}]', 'json', 3);
+('about', 'values', 'content', '[{"title":"Integrity","description":"Transparent operations and honest partner relationships."},{"title":"Reliability","description":"Consistent fulfillment you can plan your business around."},{"title":"Excellence","description":"Disciplined processes across import, storage, and distribution."},{"title":"Partnership","description":"We grow when our wholesale and retail partners grow."}]', 'json', 3),
+('about', 'leadership', 'title', 'Leadership', 'text', 1),
+('about', 'leadership', 'lead', 'Meet the team guiding BlueAxis Logistics & Warehousing.', 'text', 2),
+('about', 'leadership', 'members', '[]', 'json', 3);
 
 INSERT INTO blog_posts (category_id, author_id, title, slug, excerpt, content, status, is_featured, published_at, meta_title, meta_description) VALUES
 (1, 1, 'Building Resilient Food Supply Chains in Manitoba', 'resilient-food-supply-chains-manitoba',

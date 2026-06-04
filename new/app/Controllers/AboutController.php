@@ -20,10 +20,13 @@ final class AboutController extends Controller
             $values = json_decode((string) $blocks['values']['content']['content'], true) ?: [];
         }
 
+        $leadershipMembers = content_json_list($blocks, 'leadership', 'members', []);
+
         $this->view('public/about', [
             'seo' => SeoService::metaForPage($page),
             'blocks' => $blocks,
             'values' => $values,
+            'leadershipMembers' => $leadershipMembers,
         ]);
     }
 }
