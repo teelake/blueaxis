@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controllers\Admin;
 
-use App\Core\Auth;
-use App\Core\Controller;
+use App\Core\Permission;
 use App\Models\Contact;
 
-final class ContactAdminController extends Controller
+final class ContactAdminController extends AdminController
 {
     public function index(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::LEADS_CONTACTS);
         $page = (int) ($_GET['page'] ?? 1);
         $search = trim((string) ($_GET['q'] ?? ''));
         $result = Contact::paginate($page, (int) config('app.per_page_admin'), $search);
@@ -26,7 +25,7 @@ final class ContactAdminController extends Controller
 
     public function show(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::LEADS_CONTACTS);
         $item = Contact::find((int) ($params['id'] ?? 0));
         if ($item) {
             Contact::markRead((int) $item['id']);
@@ -36,7 +35,7 @@ final class ContactAdminController extends Controller
 
     public function export(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::LEADS_EXPORT);
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="contacts.csv"');
         $out = fopen('php://output', 'w');

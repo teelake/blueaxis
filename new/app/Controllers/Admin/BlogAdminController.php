@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Auth;
-use App\Core\Controller;
+use App\Core\Permission;
 use App\Core\Session;
 use App\Models\BlogCategory;
 use App\Models\BlogComment;
@@ -14,11 +14,11 @@ use App\Models\BlogTag;
 use App\Services\HtmlSanitizer;
 use App\Services\MediaService;
 
-final class BlogAdminController extends Controller
+final class BlogAdminController extends AdminController
 {
     public function index(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $page = (int) ($_GET['page'] ?? 1);
         $status = (string) ($_GET['status'] ?? '');
         $result = BlogPost::allAdmin($status, $page, (int) config('app.per_page_admin'));
@@ -35,13 +35,13 @@ final class BlogAdminController extends Controller
 
     public function create(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $this->formView(null);
     }
 
     public function store(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $this->validateCsrf();
         $id = BlogPost::create($this->payload());
         BlogTag::syncForPost($id, $this->tagNames());
@@ -51,7 +51,7 @@ final class BlogAdminController extends Controller
 
     public function edit(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $post = BlogPost::find((int) ($params['id'] ?? 0));
         if (!$post) {
             redirect('admin/blog');
@@ -61,7 +61,7 @@ final class BlogAdminController extends Controller
 
     public function update(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $this->validateCsrf();
         $id = (int) ($params['id'] ?? 0);
         $data = $this->payload();
@@ -74,7 +74,7 @@ final class BlogAdminController extends Controller
 
     public function destroy(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $this->validateCsrf();
         BlogPost::delete((int) ($params['id'] ?? 0));
         Session::flash('success', 'Post deleted.');
@@ -83,7 +83,7 @@ final class BlogAdminController extends Controller
 
     public function approveComment(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $this->validateCsrf();
         $comment = BlogComment::find((int) ($params['commentId'] ?? 0));
         if ($comment) {
@@ -95,7 +95,7 @@ final class BlogAdminController extends Controller
 
     public function spamComment(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $this->validateCsrf();
         $comment = BlogComment::find((int) ($params['commentId'] ?? 0));
         if ($comment) {
@@ -107,7 +107,7 @@ final class BlogAdminController extends Controller
 
     public function deleteComment(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::BLOG);
         $this->validateCsrf();
         BlogComment::delete((int) ($params['commentId'] ?? 0));
         Session::flash('success', 'Comment deleted.');

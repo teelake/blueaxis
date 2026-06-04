@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controllers\Admin;
 
-use App\Core\Auth;
-use App\Core\Controller;
+use App\Core\Permission;
 use App\Core\Session;
 use App\Models\ContentBlock;
 use App\Services\HtmlSanitizer;
 
-final class ContentAdminController extends Controller
+final class ContentAdminController extends AdminController
 {
     public function editHome(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::CONTENT);
         $blocks = ContentBlock::forPage('home');
         $this->view('admin/content/home', [
             'title' => 'Home Page',
@@ -33,7 +32,7 @@ final class ContentAdminController extends Controller
 
     public function saveHome(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::CONTENT);
         $this->validateCsrf();
         $sections = ['hero', 'about', 'cta'];
         foreach ($sections as $section) {
@@ -66,7 +65,7 @@ final class ContentAdminController extends Controller
 
     public function editAbout(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::CONTENT);
         $blocks = ContentBlock::forPage('about');
         $this->view('admin/content/about', [
             'title' => 'About Page',
@@ -81,7 +80,7 @@ final class ContentAdminController extends Controller
 
     public function saveAbout(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::CONTENT);
         $this->validateCsrf();
         foreach (['overview', 'mission', 'vision'] as $section) {
             if (!isset($_POST[$section])) {

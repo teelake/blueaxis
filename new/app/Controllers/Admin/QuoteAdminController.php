@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controllers\Admin;
 
-use App\Core\Auth;
-use App\Core\Controller;
+use App\Core\Permission;
 use App\Core\Session;
 use App\Models\QuoteRequest;
 
-final class QuoteAdminController extends Controller
+final class QuoteAdminController extends AdminController
 {
     public function index(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::LEADS_QUOTES);
         $page = (int) ($_GET['page'] ?? 1);
         $search = trim((string) ($_GET['q'] ?? ''));
         $status = trim((string) ($_GET['status'] ?? ''));
@@ -30,7 +29,7 @@ final class QuoteAdminController extends Controller
 
     public function show(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::LEADS_QUOTES);
         $item = QuoteRequest::find((int) ($params['id'] ?? 0));
         $this->view('admin/quotes/show', [
             'title' => 'Quote Request',
@@ -41,7 +40,7 @@ final class QuoteAdminController extends Controller
 
     public function updateStatus(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::LEADS_QUOTES);
         $this->validateCsrf();
         $status = (string) ($_POST['status'] ?? 'new');
         $allowed = ['new', 'in_review', 'contacted', 'closed'];
@@ -59,7 +58,7 @@ final class QuoteAdminController extends Controller
 
     public function export(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::LEADS_EXPORT);
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="quote-requests.csv"');
         $out = fopen('php://output', 'w');

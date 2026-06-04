@@ -32,6 +32,8 @@ final class Auth
             'email' => $admin['email'],
             'role' => $admin['role_slug'],
             'role_id' => (int) $admin['role_id'],
+            'role_name' => $admin['role_name'] ?? '',
+            'permissions' => Permission::forRole((string) $admin['role_slug']),
         ];
         Admin::updateLastLogin((int) $admin['id']);
         return true;
@@ -56,6 +58,32 @@ final class Auth
     {
         $user = self::user();
         return $user && in_array($user['role'], $roles, true);
+    }
+
+    public static function can(string $permission): bool
+    {
+        $user = self::user();
+        if (!$user) {
+            return false;
+        }
+        $role = (string) ($user['role'] ?? '');
+        if ($role === 'super_admin') {
+            return true;
+        }
+        $perms = $user['permissions'] ?? null;
+        if (!is_array($perms)) {
+            return Permission::roleCan($role, $permission);
+        }
+        return in_array($permission, $perms, true);
+    }
+
+    public static function requirePermission(string $permission): void
+    {
+        self::requireLogin();
+        if (!self::can($permission)) {
+            Session::flash('error', 'You do not have permission to access that area.');
+            redirect('admin/dashboard');
+        }
     }
 
     public static function logout(): void

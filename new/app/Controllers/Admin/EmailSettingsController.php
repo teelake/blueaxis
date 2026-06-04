@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controllers\Admin;
 
-use App\Core\Auth;
-use App\Core\Controller;
+use App\Core\Permission;
 use App\Core\Session;
 use App\Services\MailConfig;
 use App\Services\MailService;
 
-final class EmailSettingsController extends Controller
+final class EmailSettingsController extends AdminController
 {
     public function edit(): void
     {
-        $this->requireSuperAdmin();
+        $this->authorize(Permission::SETTINGS_EMAIL);
         $settings = MailConfig::forForm();
         $this->view('admin/settings/email', [
             'title' => 'Email settings',
@@ -28,7 +27,7 @@ final class EmailSettingsController extends Controller
 
     public function save(): void
     {
-        $this->requireSuperAdmin();
+        $this->authorize(Permission::SETTINGS_EMAIL);
         $this->validateCsrf();
 
         $driver = trim((string) ($_POST['mail_driver'] ?? 'mail'));
@@ -74,7 +73,7 @@ final class EmailSettingsController extends Controller
 
     public function test(): void
     {
-        $this->requireSuperAdmin();
+        $this->authorize(Permission::SETTINGS_EMAIL);
         $this->validateCsrf();
 
         $to = trim((string) ($_POST['test_email'] ?? ''));
@@ -82,24 +81,17 @@ final class EmailSettingsController extends Controller
             $to = MailConfig::notifyTo();
         }
 
-        $html = '<p style="font-family:sans-serif;color:#334155">This is a test email from <strong>BlueAxis CMS</strong>.</p>'
-            . '<p style="color:#64748b;font-size:14px">If you received this, your mail configuration is working.</p>';
+        $ok = MailService::send(
+            $to,
+            'BlueAxis — test email',
+            '<p>This is a test message from your BlueAxis admin email settings.</p>'
+        );
 
-        if (MailService::send($to, '[BlueAxis] Test email', $html)) {
-            Session::flash('success', 'Test email sent to ' . $to . '.');
+        if ($ok) {
+            Session::flash('success', 'Test email sent to ' . $to);
         } else {
             Session::flash('error', 'Test email failed. Check storage/logs/mail.log for details.');
         }
         redirect('admin/settings/email');
-    }
-
-    private function requireSuperAdmin(): void
-    {
-        Auth::requireLogin();
-        if (!Auth::hasRole('super_admin')) {
-            http_response_code(403);
-            Session::flash('error', 'Only Super Admins can manage email settings.');
-            redirect('admin/dashboard');
-        }
     }
 }

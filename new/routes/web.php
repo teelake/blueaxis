@@ -21,6 +21,7 @@ use App\Controllers\Admin\EmailSettingsController;
 use App\Controllers\Admin\MediaAdminController;
 use App\Controllers\Admin\QuoteAdminController;
 use App\Controllers\Admin\ServiceAdminController;
+use App\Controllers\Admin\UserAdminController;
 use App\Core\Auth;
 use App\Core\Router;
 
@@ -86,6 +87,12 @@ $router->get('/admin/quotes', [new QuoteAdminController(), 'index']);
 $router->get('/admin/quotes/{id}', [new QuoteAdminController(), 'show']);
 $router->post('/admin/quotes/{id}/status', [new QuoteAdminController(), 'updateStatus']);
 $router->get('/admin/quotes/export', [new QuoteAdminController(), 'export']);
+
+$router->get('/admin/users', [new UserAdminController(), 'index']);
+$router->get('/admin/users/create', [new UserAdminController(), 'create']);
+$router->post('/admin/users', [new UserAdminController(), 'store']);
+$router->get('/admin/users/{id}/edit', [new UserAdminController(), 'edit']);
+$router->post('/admin/users/{id}', [new UserAdminController(), 'update']);
 
 $router->get('/admin/settings/email', [new EmailSettingsController(), 'edit']);
 $router->post('/admin/settings/email', [new EmailSettingsController(), 'save']);

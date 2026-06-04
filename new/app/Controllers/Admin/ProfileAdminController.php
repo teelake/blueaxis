@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Auth;
-use App\Core\Controller;
 use App\Core\Session;
 use App\Models\Admin;
 use App\Services\Validator;
 
-final class ProfileAdminController extends Controller
+final class ProfileAdminController extends AdminController
 {
     public function edit(): void
     {
-        Auth::requireLogin();
+        $this->requireAuth();
         $admin = Admin::find(Auth::id() ?? 0);
         if (!$admin) {
             redirect('admin/login');
@@ -28,7 +27,7 @@ final class ProfileAdminController extends Controller
 
     public function update(): void
     {
-        Auth::requireLogin();
+        $this->requireAuth();
         $this->validateCsrf();
         $id = Auth::id() ?? 0;
         $name = trim((string) ($_POST['name'] ?? ''));
@@ -56,7 +55,7 @@ final class ProfileAdminController extends Controller
 
     public function passwordForm(): void
     {
-        Auth::requireLogin();
+        $this->requireAuth();
         $this->view('admin/profile/password', [
             'title' => 'Change password',
             'pageDescription' => 'Set a new password for your admin account.',
@@ -65,7 +64,7 @@ final class ProfileAdminController extends Controller
 
     public function updatePassword(): void
     {
-        Auth::requireLogin();
+        $this->requireAuth();
         $this->validateCsrf();
         $id = Auth::id() ?? 0;
         $current = (string) ($_POST['current_password'] ?? '');

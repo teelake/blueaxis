@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controllers\Admin;
 
-use App\Core\Auth;
-use App\Core\Controller;
+use App\Core\Permission;
 use App\Core\Session;
 use App\Models\Service;
 use App\Services\HtmlSanitizer;
 
-final class ServiceAdminController extends Controller
+final class ServiceAdminController extends AdminController
 {
     public function index(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::SERVICES);
         $this->view('admin/services/index', [
             'title' => 'Services',
             'pageDescription' => 'Manage the services shown on your website.',
@@ -25,7 +24,7 @@ final class ServiceAdminController extends Controller
 
     public function create(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::SERVICES);
         $this->view('admin/services/form', [
             'title' => 'New service',
             'pageDescription' => 'Add a service to show on your website.',
@@ -36,7 +35,7 @@ final class ServiceAdminController extends Controller
 
     public function store(): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::SERVICES);
         $this->validateCsrf();
         $data = $this->payloadFromPost();
         Service::create($data);
@@ -46,7 +45,7 @@ final class ServiceAdminController extends Controller
 
     public function edit(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::SERVICES);
         $service = Service::find((int) ($params['id'] ?? 0));
         if (!$service) {
             redirect('admin/services');
@@ -70,7 +69,7 @@ final class ServiceAdminController extends Controller
 
     public function update(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::SERVICES);
         $this->validateCsrf();
         $id = (int) ($params['id'] ?? 0);
         Service::update($id, $this->payloadFromPost());
@@ -80,7 +79,7 @@ final class ServiceAdminController extends Controller
 
     public function destroy(array $params): void
     {
-        Auth::requireLogin();
+        $this->authorize(Permission::SERVICES);
         $this->validateCsrf();
         Service::delete((int) ($params['id'] ?? 0));
         Session::flash('success', 'Service deleted.');
