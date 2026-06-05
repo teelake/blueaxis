@@ -65,6 +65,23 @@
     btn.innerHTML = SPINNER + '<span class="btn-loading-label">' + text + '</span>';
   }
 
+  /** Hidden tab/repeater fields with `required` block submit before the loading handler runs. */
+  document.addEventListener(
+    'click',
+    function (e) {
+      var btn = e.target && e.target.closest
+        ? e.target.closest('button[type="submit"], input[type="submit"]')
+        : null;
+      if (!btn || !btn.form) return;
+      btn.form.querySelectorAll('input[required], textarea[required], select[required]').forEach(function (el) {
+        if (el.offsetParent === null) {
+          el.removeAttribute('required');
+        }
+      });
+    },
+    true
+  );
+
   document.addEventListener(
     'submit',
     function (e) {

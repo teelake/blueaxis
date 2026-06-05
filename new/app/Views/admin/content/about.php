@@ -107,7 +107,7 @@ $uploadUrl = url('admin/media/upload');
             <div class="grid sm:grid-cols-2 gap-4">
               <div class="admin-field">
                 <label class="admin-label">Full name *</label>
-                <input type="text" class="admin-input" x-model="row.name" :name="'leadership_items[' + index + '][name]'" placeholder="Jane Doe" required />
+                <input type="text" class="admin-input" x-model="row.name" :name="'leadership_items[' + index + '][name]'" placeholder="Jane Doe" />
               </div>
               <div class="admin-field">
                 <label class="admin-label">Title / position</label>
