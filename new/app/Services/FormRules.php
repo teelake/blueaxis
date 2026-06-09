@@ -264,4 +264,16 @@ final class FormRules
             Service::published()
         );
     }
+
+    /** @param array{company_address?: string, company_email?: string, company_phone?: string} $data */
+    public static function footerContact(array $data): Validator
+    {
+        return (new Validator())
+            ->required('company_address', $data['company_address'] ?? null)
+            ->maxLength('company_address', $data['company_address'] ?? null, 500)
+            ->required('company_email', $data['company_email'] ?? null)
+            ->email('company_email', $data['company_email'] ?? null)
+            ->maxLength('company_email', $data['company_email'] ?? null, 255)
+            ->phone('company_phone', $data['company_phone'] ?? null);
+    }
 }

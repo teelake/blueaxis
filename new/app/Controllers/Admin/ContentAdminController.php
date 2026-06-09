@@ -8,6 +8,8 @@ use App\Core\Permission;
 use App\Core\Session;
 use App\Models\ContentBlock;
 use App\Models\HeroSlide;
+use App\Models\Setting;
+use App\Services\FormRules;
 use App\Services\HtmlSanitizer;
 use App\Services\Validator;
 
@@ -132,6 +134,87 @@ final class ContentAdminController extends AdminController
         redirect('admin/content/about');
     }
 
+    public function editFooter(): void
+    {
+        $this->authorize(Permission::CONTENT);
+        $blocks = ContentBlock::forPage('footer');
+        $contact = Setting::allByGroup('contact');
+        $this->view('admin/content/footer', [
+            'title' => 'Footer',
+            'pageDescription' => 'Edit the site footer shown on every public page.',
+            'blocks' => $blocks,
+            'contact' => $contact,
+            'navLinks' => content_json_list($blocks, 'company_nav', 'links', self::defaultFooterNavLinks()),
+            'showCredit' => ($blocks['credit']['show']['content'] ?? '1') !== '0',
+            'success' => flash('success'),
+        ], 'layouts/admin');
+    }
+
+    public function saveFooter(): void
+    {
+        $this->authorize(Permission::CONTENT);
+        $this->validateCsrf();
+
+        $contactInput = [
+            'company_address' => trim((string) ($_POST['contact']['company_address'] ?? '')),
+            'company_email' => trim((string) ($_POST['contact']['company_email'] ?? '')),
+            'company_phone' => trim((string) ($_POST['contact']['company_phone'] ?? '')),
+        ];
+        $contactErrors = FormRules::footerContact($contactInput)->errors();
+        if ($contactErrors !== []) {
+            Session::setErrors($contactErrors);
+            Session::setOld($_POST);
+            Session::flash('error', reset($contactErrors) ?: 'Please correct the contact details.');
+            redirect('admin/content/footer');
+        }
+        Session::clearErrors();
+
+        if (isset($_POST['brand']['blurb'])) {
+            ContentBlock::upsert('footer', 'brand', 'blurb', trim((string) $_POST['brand']['blurb']), 'text');
+        }
+        foreach (['title'] as $key) {
+            if (isset($_POST['company_nav'][$key])) {
+                ContentBlock::upsert('footer', 'company_nav', $key, trim((string) $_POST['company_nav'][$key]), 'text');
+            }
+        }
+        ContentBlock::upsert('footer', 'company_nav', 'links', json_encode($this->parseFooterNavLinks()), 'json');
+
+        foreach ($contactInput as $key => $value) {
+            Setting::set($key, $value, 'text', 'contact');
+        }
+        if (isset($_POST['contact_col']['title'])) {
+            ContentBlock::upsert('footer', 'contact_col', 'title', trim((string) $_POST['contact_col']['title']), 'text');
+        }
+
+        foreach (['copyright', 'tagline'] as $key) {
+            if (isset($_POST['bar'][$key])) {
+                ContentBlock::upsert('footer', 'bar', $key, trim((string) $_POST['bar'][$key]), 'text');
+            }
+        }
+        ContentBlock::upsert(
+            'footer',
+            'credit',
+            'show',
+            isset($_POST['credit']['show']) ? '1' : '0',
+            'text'
+        );
+
+        Session::flash('success', 'Footer saved successfully.');
+        redirect('admin/content/footer');
+    }
+
+    /** @return list<array{label: string, url: string}> */
+    private static function defaultFooterNavLinks(): array
+    {
+        return [
+            ['label' => 'About', 'url' => '/about'],
+            ['label' => 'Services', 'url' => '/services'],
+            ['label' => 'Blog', 'url' => '/blog'],
+            ['label' => 'Request a Quote', 'url' => '/quote'],
+            ['label' => 'Contact', 'url' => '/contact'],
+        ];
+    }
+
     /** @return list<array<string, mixed>> */
     private function parseHeroSlides(): array
     {
@@ -251,6 +334,27 @@ final class ContentAdminController extends AdminController
                 'bio' => trim((string) ($row['bio'] ?? '')),
                 'image_path' => trim((string) ($row['image_path'] ?? '')),
             ];
+        }
+        return $items;
+    }
+
+    /** @return list<array{label: string, url: string}> */
+    private function parseFooterNavLinks(): array
+    {
+        $items = [];
+        foreach ($_POST['nav_links'] ?? [] as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $label = trim((string) ($row['label'] ?? ''));
+            $linkUrl = trim((string) ($row['url'] ?? ''));
+            if ($label === '' && $linkUrl === '') {
+                continue;
+            }
+            if ($label === '') {
+                continue;
+            }
+            $items[] = ['label' => $label, 'url' => $linkUrl !== '' ? $linkUrl : '#'];
         }
         return $items;
     }
