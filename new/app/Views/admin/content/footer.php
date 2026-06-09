@@ -3,6 +3,7 @@ $b = $blocks['brand'] ?? [];
 $nav = $blocks['company_nav'] ?? [];
 $col = $blocks['contact_col'] ?? [];
 $bar = $blocks['bar'] ?? [];
+$oldContact = is_array($_SESSION['_old']['contact'] ?? null) ? $_SESSION['_old']['contact'] : [];
 $navJson = htmlspecialchars(json_encode($navLinks ?? []), ENT_QUOTES, 'UTF-8');
 ?>
 <form method="post" action="<?= url('admin/content/footer') ?>" x-data="adminTabs('brand')">
@@ -74,22 +75,27 @@ $navJson = htmlspecialchars(json_encode($navLinks ?? []), ENT_QUOTES, 'UTF-8');
         <?php \App\Core\View::partial('admin/field', [
             'label' => 'Address',
             'name' => 'contact[company_address]',
-            'value' => $contact['company_address'] ?? '',
+            'fieldKey' => 'company_address',
+            'value' => (string) ($oldContact['company_address'] ?? $contact['company_address'] ?? ''),
             'type' => 'textarea',
             'placeholder' => 'Winnipeg, Manitoba, Canada',
+            'required' => true,
         ]); ?>
         <?php \App\Core\View::partial('admin/field', [
             'label' => 'Email',
             'name' => 'contact[company_email]',
+            'fieldKey' => 'company_email',
             'type' => 'email',
-            'value' => $contact['company_email'] ?? '',
+            'value' => (string) ($oldContact['company_email'] ?? $contact['company_email'] ?? ''),
             'placeholder' => 'info@blueaxis.com',
+            'required' => true,
         ]); ?>
         <?php \App\Core\View::partial('admin/field', [
             'label' => 'Phone',
             'name' => 'contact[company_phone]',
+            'fieldKey' => 'company_phone',
             'type' => 'tel',
-            'value' => $contact['company_phone'] ?? '',
+            'value' => (string) ($oldContact['company_phone'] ?? $contact['company_phone'] ?? ''),
             'placeholder' => '+1 (204) 000-0000',
         ]); ?>
       </div>

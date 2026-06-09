@@ -409,3 +409,16 @@ function content_json_list(array $blocks, string $section, string $key, array $d
     $decoded = json_decode((string) $raw, true);
     return is_array($decoded) ? $decoded : $default;
 }
+
+/** Resolve footer nav paths (/about) or absolute URLs for href attributes. */
+function footer_nav_href(string $path): string
+{
+    $path = trim($path);
+    if ($path === '' || $path === '#') {
+        return '#';
+    }
+    if (preg_match('#^https?://#i', $path)) {
+        return $path;
+    }
+    return url(ltrim($path, '/'));
+}

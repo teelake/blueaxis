@@ -69,6 +69,8 @@ $router->get('/admin/content/home', [new ContentAdminController(), 'editHome']);
 $router->post('/admin/content/home', [new ContentAdminController(), 'saveHome']);
 $router->get('/admin/content/about', [new ContentAdminController(), 'editAbout']);
 $router->post('/admin/content/about', [new ContentAdminController(), 'saveAbout']);
+$router->get('/admin/content/footer', [new ContentAdminController(), 'editFooter']);
+$router->post('/admin/content/footer', [new ContentAdminController(), 'saveFooter']);
 
 $router->get('/admin/products', [new ProductAdminController(), 'index']);
 $router->get('/admin/products/create', [new ProductAdminController(), 'create']);

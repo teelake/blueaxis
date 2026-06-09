@@ -89,7 +89,14 @@ INSERT INTO content_blocks (page_slug, section_key, block_key, content, content_
 ('about', 'values', 'content', '[{"title":"Integrity","description":"Transparent operations and honest partner relationships."},{"title":"Reliability","description":"Consistent fulfillment you can plan your business around."},{"title":"Excellence","description":"Disciplined processes across import, storage, and distribution."},{"title":"Partnership","description":"We grow when our wholesale and retail partners grow."}]', 'json', 3),
 ('about', 'leadership', 'title', 'Leadership', 'text', 1),
 ('about', 'leadership', 'lead', 'Meet the team guiding BlueAxis Logistics & Warehousing.', 'text', 2),
-('about', 'leadership', 'members', '[]', 'json', 3);
+('about', 'leadership', 'members', '[]', 'json', 3),
+('footer', 'brand', 'blurb', 'BlueAxis Logistics & Warehousing Ltd. — importation, warehousing, and distribution of African food products for B2B partners across Canada.', 'text', 1),
+('footer', 'company_nav', 'title', 'Company', 'text', 1),
+('footer', 'company_nav', 'links', '[{"label":"About","url":"/about"},{"label":"Services","url":"/services"},{"label":"Blog","url":"/blog"},{"label":"Request a Quote","url":"/quote"},{"label":"Contact","url":"/contact"}]', 'json', 2),
+('footer', 'contact_col', 'title', 'Contact', 'text', 1),
+('footer', 'bar', 'copyright', 'BlueAxis Logistics & Warehousing Ltd. All rights reserved.', 'text', 1),
+('footer', 'bar', 'tagline', 'Manitoba · Canada-wide distribution', 'text', 2),
+('footer', 'credit', 'show', '1', 'text', 1);
 
 INSERT INTO blog_posts (category_id, author_id, title, slug, excerpt, content, status, is_featured, published_at, meta_title, meta_description) VALUES
 (1, 1, 'Building Resilient Food Supply Chains in Manitoba', 'resilient-food-supply-chains-manitoba',
