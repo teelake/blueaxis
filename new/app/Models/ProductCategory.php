@@ -4,11 +4,31 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use PDOException;
+
 final class ProductCategory extends Model
 {
+    public static function tableExists(): bool
+    {
+        static $exists = null;
+        if ($exists !== null) {
+            return $exists;
+        }
+        try {
+            self::db()->query('SELECT 1 FROM product_categories LIMIT 1');
+            $exists = true;
+        } catch (PDOException) {
+            $exists = false;
+        }
+        return $exists;
+    }
+
     /** @return array<int, array<string, mixed>> */
     public static function allOrdered(): array
     {
+        if (!self::tableExists()) {
+            return [];
+        }
         return self::db()->query(
             'SELECT * FROM product_categories ORDER BY sort_order ASC, name ASC'
         )->fetchAll();
@@ -77,6 +97,9 @@ final class ProductCategory extends Model
     /** @return array<int, array<string, mixed>> */
     public static function allWithProductCounts(): array
     {
+        if (!self::tableExists()) {
+            return [];
+        }
         $rows = self::db()->query(
             'SELECT c.*, COUNT(p.id) AS product_count
              FROM product_categories c

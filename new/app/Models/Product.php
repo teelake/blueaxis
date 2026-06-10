@@ -63,17 +63,7 @@ final class Product extends Model
 
     private static function hasCategoryTable(): bool
     {
-        static $exists = null;
-        if ($exists !== null) {
-            return $exists;
-        }
-        try {
-            self::db()->query('SELECT 1 FROM product_categories LIMIT 1');
-            $exists = true;
-        } catch (PDOException) {
-            $exists = false;
-        }
-        return $exists;
+        return ProductCategory::tableExists();
     }
 
     public static function findPublishedBySlug(string $slug): ?array
