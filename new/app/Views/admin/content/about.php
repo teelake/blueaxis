@@ -17,11 +17,40 @@ $uploadUrl = url('admin/media/upload');
     </nav>
 
     <div class="admin-panel__body">
-      <?php foreach (['overview' => 'Company overview', 'mission' => 'Mission', 'vision' => 'Vision'] as $sec => $heading): ?>
+      <div x-show="tab === 'overview'" x-cloak class="space-y-5 max-w-2xl">
+        <div>
+          <h2 class="admin-section-title">Company overview</h2>
+          <p class="admin-section-desc">Intro section at the top of the About page. Optional image appears beside the text.</p>
+        </div>
+        <?php \App\Core\View::partial('admin/field', [
+            'label' => 'Heading',
+            'name' => 'overview[title]',
+            'value' => $blocks['overview']['title']['content'] ?? '',
+        ]); ?>
+        <div class="admin-field">
+          <label class="admin-label">Body text</label>
+          <?php \App\Core\View::partial('rich-editor', [
+              'name' => 'overview[body]',
+              'id' => 'about_overview_body',
+              'value' => $blocks['overview']['body']['content'] ?? '',
+              'height' => 220,
+          ]); ?>
+        </div>
+        <?php \App\Core\View::partial('admin/image-upload', [
+            'name' => 'overview[image]',
+            'id' => 'about_overview_image',
+            'value' => $blocks['overview']['image']['content'] ?? '',
+            'label' => 'Section image',
+            'hint' => 'Optional image alongside the overview on the About page.',
+            'csrf' => $csrf,
+        ]); ?>
+      </div>
+
+      <?php foreach (['mission' => 'Mission', 'vision' => 'Vision'] as $sec => $heading): ?>
         <div x-show="tab === '<?= $sec ?>'" x-cloak class="space-y-5 max-w-2xl">
           <div>
             <h2 class="admin-section-title"><?= e($heading) ?></h2>
-            <p class="admin-section-desc">Content for the <?= strtolower($heading) ?> block on the About page.</p>
+            <p class="admin-section-desc">Shown as a <?= strtolower($heading) ?> card on the About page (no image — navy and gold card styling).</p>
           </div>
           <?php \App\Core\View::partial('admin/field', [
               'label' => 'Heading',
@@ -37,14 +66,6 @@ $uploadUrl = url('admin/media/upload');
                 'height' => 220,
             ]); ?>
           </div>
-          <?php \App\Core\View::partial('admin/image-upload', [
-              'name' => $sec . '[image]',
-              'id' => 'about_' . $sec . '_image',
-              'value' => $blocks[$sec]['image']['content'] ?? '',
-              'label' => 'Section image',
-              'hint' => 'Optional image alongside this block on the About page.',
-              'csrf' => $csrf,
-          ]); ?>
         </div>
       <?php endforeach; ?>
 

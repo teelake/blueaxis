@@ -5,11 +5,7 @@
   </div>
 </section>
 
-<?php
-$overviewImg = section($blocks['overview'] ?? [], 'image');
-$missionImg = section($blocks['mission'] ?? [], 'image');
-$visionImg = section($blocks['vision'] ?? [], 'image');
-?>
+<?php $overviewImg = section($blocks['overview'] ?? [], 'image'); ?>
 <section class="py-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
     <div class="prose prose-lg prose-slate max-w-none">
@@ -22,19 +18,18 @@ $visionImg = section($blocks['vision'] ?? [], 'image');
   </div>
 </section>
 
-<section class="py-16 lg:py-20 bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-8 md:gap-12 lg:gap-16">
-    <?php foreach (['mission' => $missionImg, 'vision' => $visionImg] as $sec => $img): ?>
-      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-        <div class="card <?= $sec === 'vision' && $img !== '' ? 'lg:order-last' : '' ?>">
-          <h2 class="text-xl font-semibold text-brand-navy mb-4"><?= e(section($blocks[$sec] ?? [], 'title', ucfirst($sec))) ?></h2>
-          <div class="prose prose-slate max-w-none"><?= section($blocks[$sec] ?? [], 'body') ?></div>
-        </div>
-        <?php if ($img !== ''): ?>
-          <?php \App\Core\View::partial('section-image', ['imagePath' => $img, 'alt' => section($blocks[$sec] ?? [], 'title'), 'align' => $sec === 'vision' ? 'left' : 'right']); ?>
-        <?php endif; ?>
-      </div>
-    <?php endforeach; ?>
+<section class="py-16 lg:py-24 bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 lg:gap-8">
+    <article class="about-pillar about-pillar--mission rounded-2xl p-8 lg:p-10 shadow-elevated" data-aos="fade-up">
+      <p class="section-eyebrow text-brand-gold-light mb-3">Our purpose</p>
+      <h2 class="text-2xl lg:text-3xl font-semibold text-white mb-5"><?= e(section($blocks['mission'] ?? [], 'title', 'Mission')) ?></h2>
+      <div class="prose prose-invert prose-sm lg:prose-base max-w-none text-slate-200"><?= section($blocks['mission'] ?? [], 'body') ?></div>
+    </article>
+    <article class="about-pillar about-pillar--vision rounded-2xl p-8 lg:p-10 shadow-elevated" data-aos="fade-up" data-aos-delay="80">
+      <p class="section-eyebrow text-brand-navy/70 mb-3">Where we're headed</p>
+      <h2 class="text-2xl lg:text-3xl font-semibold text-brand-navy mb-5"><?= e(section($blocks['vision'] ?? [], 'title', 'Vision')) ?></h2>
+      <div class="prose prose-slate max-w-none"><?= section($blocks['vision'] ?? [], 'body') ?></div>
+    </article>
   </div>
 </section>
 

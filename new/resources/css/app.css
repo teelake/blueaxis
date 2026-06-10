@@ -465,3 +465,20 @@
 .quote-cart-list__item {
   @apply text-sm;
 }
+
+/* About page — mission & vision cards */
+.about-pillar--mission {
+  @apply bg-brand-navy text-white border border-brand-navy-dark/50;
+}
+
+.about-pillar--vision {
+  @apply bg-brand-gold-muted text-brand-navy border border-brand-gold/30;
+}
+
+.about-pillar--mission .prose a {
+  @apply text-brand-gold-light underline;
+}
+
+.about-pillar--vision .prose a {
+  @apply text-brand-navy font-medium underline;
+}
