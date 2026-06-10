@@ -21,10 +21,14 @@
       </div>
       <form method="post" action="<?= url('admin/products/bulk-import') ?>" enctype="multipart/form-data" class="space-y-5">
         <?= \App\Core\Csrf::field() ?>
+        <p class="text-sm">
+          <a href="<?= url('admin/products/bulk-import/template') ?>" class="font-semibold text-brand-navy hover:text-brand-gold underline underline-offset-2">Download CSV template</a>
+          <span class="text-slate-500"> — then fill in your products and upload below.</span>
+        </p>
         <div class="admin-field">
           <label class="admin-label" for="csv">CSV file</label>
           <input type="file" id="csv" name="csv" accept=".csv,text/csv" class="admin-input" required />
-          <p class="admin-hint mt-2">Use the template below. UTF-8 encoding recommended.</p>
+          <p class="admin-hint mt-2">UTF-8 encoding recommended.</p>
         </div>
         <button type="submit" class="btn-primary" data-loading-text="Importing…">Import products</button>
       </form>
