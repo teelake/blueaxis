@@ -143,8 +143,8 @@ $defaultTab = $post ? 'content' : 'content';
     </div>
 
     <div class="admin-sticky-footer">
-      <a href="<?= url('admin/blog') ?>" class="text-sm font-medium text-slate-600 hover:text-brand-navy">← All articles</a>
-      <div class="flex gap-3">
+      <a href="<?= url('admin/blog') ?>" class="text-sm font-medium text-slate-600 hover:text-brand-navy shrink-0">← All articles</a>
+      <div class="admin-sticky-footer__actions">
         <?php if ($post): ?>
           <button formaction="<?= url('admin/blog/' . $post['id'] . '/delete') ?>" formmethod="post" type="submit" class="btn-secondary" onclick="return confirm('Delete this article permanently?')">Delete</button>
         <?php endif; ?>
