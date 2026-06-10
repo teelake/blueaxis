@@ -13,7 +13,17 @@
     <div class="admin-panel__body">
       <div x-show="tab === 'details'" x-cloak class="space-y-5 max-w-2xl">
         <?php \App\Core\View::partial('admin/field', ['label' => 'Product name', 'name' => 'title', 'value' => $product['title'] ?? '', 'required' => true, 'maxlength' => 200]); ?>
-        <?php \App\Core\View::partial('admin/field', ['label' => 'URL slug', 'name' => 'slug', 'value' => $product['slug'] ?? '', 'hint' => 'Leave blank to auto-generate from the title.', 'placeholder' => 'palm-oil-bulk']); ?>
+        <?php if ($product): ?>
+          <p class="admin-hint">
+            SKU <span class="font-mono text-slate-700"><?= e((string) ($product['sku'] ?? '—')) ?></span>
+            · URL <span class="font-mono text-slate-700">/products/<?= e((string) ($product['slug'] ?? '')) ?></span>
+            <?php if (trim((string) ($product['title'] ?? '')) !== ''): ?>
+              — slug updates automatically if you change the product name.
+            <?php endif; ?>
+          </p>
+        <?php else: ?>
+          <p class="admin-hint">SKU and URL slug are generated automatically when you save.</p>
+        <?php endif; ?>
         <?php
           $currentCategory = (string) ($product['category'] ?? '');
           $categoryNames = array_map(
@@ -38,7 +48,6 @@
             — add or edit catalog filters shown on the public products page.
           </p>
         </div>
-        <?php \App\Core\View::partial('admin/field', ['label' => 'SKU / product code', 'name' => 'sku', 'value' => $product['sku'] ?? '', 'placeholder' => 'BAX-PO-001']); ?>
         <div class="grid sm:grid-cols-2 gap-4 max-w-2xl">
           <div class="admin-field">
             <label class="admin-label" for="price">List price (optional)</label>

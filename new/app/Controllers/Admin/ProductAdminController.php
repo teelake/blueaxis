@@ -131,6 +131,9 @@ final class ProductAdminController extends AdminController
         $this->authorize(Permission::PRODUCTS);
         $this->validateCsrf();
         $payload = $this->payloadFromPost();
+        $identifiers = Product::resolveIdentifiers($payload['title']);
+        $payload['slug'] = $identifiers['slug'];
+        $payload['sku'] = $identifiers['sku'];
         $this->validateOrRedirect(FormRules::product($payload), 'admin/products/create', $_POST);
         Product::create($payload);
         Session::flash('success', 'Product created.');
@@ -157,7 +160,14 @@ final class ProductAdminController extends AdminController
         $this->authorize(Permission::PRODUCTS);
         $this->validateCsrf();
         $id = (int) ($params['id'] ?? 0);
+        $existing = Product::find($id);
+        if (!$existing) {
+            redirect('admin/products');
+        }
         $payload = $this->payloadFromPost();
+        $identifiers = Product::resolveIdentifiers($payload['title'], $existing);
+        $payload['slug'] = $identifiers['slug'];
+        $payload['sku'] = $identifiers['sku'];
         $this->validateOrRedirect(FormRules::product($payload), 'admin/products/' . $id . '/edit', $_POST);
         Product::update($id, $payload);
         Session::flash('success', 'Product updated.');
@@ -189,15 +199,9 @@ final class ProductAdminController extends AdminController
     private function payloadFromPost(): array
     {
         $title = trim((string) ($_POST['title'] ?? ''));
-        $slug = slugify((string) ($_POST['slug'] ?? $title));
-        if ($slug === '') {
-            $slug = slugify($title) ?: 'product';
-        }
         return [
             'title' => $title,
-            'slug' => $slug,
             'category' => trim((string) ($_POST['category'] ?? '')) ?: null,
-            'sku' => trim((string) ($_POST['sku'] ?? '')) ?: null,
             'price' => self::parsePrice($_POST['price'] ?? null),
             'price_unit' => trim((string) ($_POST['price_unit'] ?? '')) ?: null,
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')) ?: null,

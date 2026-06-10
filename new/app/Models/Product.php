@@ -91,6 +91,87 @@ final class Product extends Model
         return $stmt->fetch() ?: null;
     }
 
+    public static function findByTitleExact(string $title): ?array
+    {
+        $title = trim($title);
+        if ($title === '') {
+            return null;
+        }
+        $stmt = self::db()->prepare('SELECT * FROM products WHERE title = :title LIMIT 1');
+        $stmt->execute(['title' => $title]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public static function skuExists(string $sku, ?int $excludeId = null): bool
+    {
+        $sku = trim($sku);
+        if ($sku === '') {
+            return false;
+        }
+        $sql = 'SELECT id FROM products WHERE sku = :sku';
+        $params = ['sku' => $sku];
+        if ($excludeId !== null) {
+            $sql .= ' AND id != :id';
+            $params['id'] = $excludeId;
+        }
+        $sql .= ' LIMIT 1';
+        $stmt = self::db()->prepare($sql);
+        $stmt->execute($params);
+        return (bool) $stmt->fetch();
+    }
+
+    public static function generateUniqueSlug(string $title, ?int $excludeId = null): string
+    {
+        $base = slugify($title) ?: 'product';
+        $candidate = $base;
+        $suffix = 2;
+        while (self::slugExists($candidate, $excludeId)) {
+            $candidate = $base . '-' . $suffix;
+            $suffix++;
+        }
+        return $candidate;
+    }
+
+    public static function generateSku(?int $excludeId = null): string
+    {
+        $stmt = self::db()->query("SELECT sku FROM products WHERE sku IS NOT NULL AND sku != ''");
+        $max = 0;
+        foreach ($stmt->fetchAll(\PDO::FETCH_COLUMN) as $sku) {
+            if (preg_match('/(\d+)\s*$/', (string) $sku, $matches)) {
+                $max = max($max, (int) $matches[1]);
+            }
+        }
+        $num = $max + 1;
+        do {
+            $candidate = 'BAX-' . str_pad((string) $num, 5, '0', STR_PAD_LEFT);
+            $num++;
+        } while (self::skuExists($candidate, $excludeId));
+        return $candidate;
+    }
+
+    /**
+     * @param array<string, mixed>|null $existing
+     * @return array{slug: string, sku: string}
+     */
+    public static function resolveIdentifiers(string $title, ?array $existing = null): array
+    {
+        if ($existing === null) {
+            return [
+                'slug' => self::generateUniqueSlug($title),
+                'sku' => self::generateSku(),
+            ];
+        }
+
+        $id = (int) $existing['id'];
+        $titleChanged = trim($title) !== trim((string) $existing['title']);
+        $sku = trim((string) ($existing['sku'] ?? ''));
+
+        return [
+            'slug' => $titleChanged ? self::generateUniqueSlug($title, $id) : (string) $existing['slug'],
+            'sku' => $sku !== '' ? $sku : self::generateSku($id),
+        ];
+    }
+
     public static function slugExists(string $slug, ?int $excludeId = null): bool
     {
         $slug = trim($slug);
