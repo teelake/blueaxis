@@ -52,7 +52,7 @@ function heroSlider(total) {
     timer: null,
     start() {
       if (this.total < 2) return;
-      this.timer = setInterval(() => this.next(), 6000);
+      this.timer = setInterval(() => this.next(), 10000);
     },
     go(i) { this.index = i; },
     next() { this.index = (this.index + 1) % this.total; },
