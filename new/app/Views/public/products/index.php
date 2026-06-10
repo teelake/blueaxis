@@ -49,7 +49,7 @@
         <a href="<?= url('products') ?>" class="inline-flex mt-6 text-sm font-semibold text-brand-navy hover:text-brand-gold">View full catalog →</a>
       </div>
     <?php else: ?>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
         <?php foreach ($products as $p): ?>
           <?php \App\Core\View::partial('products/card', ['product' => $p]); ?>
         <?php endforeach; ?>

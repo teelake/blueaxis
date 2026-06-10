@@ -82,7 +82,7 @@
 <section class="py-20 bg-slate-50 border-t border-slate-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="section-title mb-10">Related catalog items</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
       <?php foreach ($related as $p): ?>
         <?php \App\Core\View::partial('products/card', ['product' => $p]); ?>
       <?php endforeach; ?>
