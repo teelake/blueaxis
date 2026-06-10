@@ -1,18 +1,5 @@
 <?php if (!empty($heroSlides)): ?>
   <?php \App\Core\View::partial('hero-slider', ['slides' => $heroSlides]); ?>
-  <section class="hero-section relative overflow-hidden bg-brand-navy-dark text-white border-b border-white/10">
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-      <div class="max-w-3xl" data-aos="fade-up">
-        <p class="section-eyebrow text-brand-gold-light mb-3"><?= e(section($hero, 'eyebrow')) ?></p>
-        <h1 class="font-sans font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight tracking-tight mb-4"><?= e(section($hero, 'title')) ?></h1>
-        <p class="text-base text-slate-300 leading-relaxed mb-6 max-w-2xl"><?= e(section($hero, 'lead')) ?></p>
-        <div class="flex flex-wrap gap-4">
-          <a href="<?= url(ltrim(section($hero, 'cta_primary_url', '/quote'), '/')) ?>" class="btn-accent"><?= e(section($hero, 'cta_primary_label', 'Request a Quote')) ?></a>
-          <a href="<?= url(ltrim(section($hero, 'cta_secondary_url', '/services'), '/')) ?>" class="btn-secondary-hero"><?= e(section($hero, 'cta_secondary_label', 'Our Services')) ?></a>
-        </div>
-      </div>
-    </div>
-  </section>
 <?php else: ?>
 <section class="hero-section relative overflow-hidden bg-brand-navy-dark text-white">
   <?php \App\Core\View::partial('hero-background'); ?>

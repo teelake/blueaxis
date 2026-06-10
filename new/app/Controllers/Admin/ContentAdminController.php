@@ -20,8 +20,38 @@ final class ContentAdminController extends AdminController
         $this->authorize(Permission::CONTENT);
         $blocks = ContentBlock::forPage('home');
         $slideRows = HeroSlide::allOrdered();
+        $slideRows = array_map(static function (array $row): array {
+            $image = trim((string) ($row['image_path'] ?? ''));
+            $type = (string) ($row['slide_type'] ?? '');
+            if ($type !== 'image' && $type !== 'text') {
+                $type = $image !== '' ? 'image' : 'text';
+            }
+            if ($type === 'image' && $image === '') {
+                $type = 'text';
+            }
+            $row['slide_type'] = $type;
+            if (empty($row['cta_primary_url']) && !empty($row['link_url'])) {
+                $row['cta_primary_url'] = $row['link_url'];
+            }
+            if (empty($row['cta_primary_label']) && !empty($row['link_label'])) {
+                $row['cta_primary_label'] = $row['link_label'];
+            }
+            return $row;
+        }, $slideRows);
         if ($slideRows === []) {
-            $slideRows = [['title' => '', 'subtitle' => '', 'image_path' => '', 'link_url' => '', 'link_label' => '', 'is_active' => 1]];
+            $hero = $blocks['hero'] ?? [];
+            $slideRows = [[
+                'slide_type' => 'text',
+                'eyebrow' => section($hero, 'eyebrow'),
+                'title' => section($hero, 'title'),
+                'subtitle' => section($hero, 'lead'),
+                'image_path' => '',
+                'cta_primary_label' => section($hero, 'cta_primary_label', 'Request a Quote'),
+                'cta_primary_url' => section($hero, 'cta_primary_url', '/quote'),
+                'cta_secondary_label' => section($hero, 'cta_secondary_label', 'Our Services'),
+                'cta_secondary_url' => section($hero, 'cta_secondary_url', '/services'),
+                'is_active' => 1,
+            ]];
         }
         $this->view('admin/content/home', [
             'title' => 'Home Page',
@@ -223,17 +253,33 @@ final class ContentAdminController extends AdminController
             if (!is_array($row)) {
                 continue;
             }
+            $slideType = (string) ($row['slide_type'] ?? 'text');
+            if (!in_array($slideType, ['image', 'text'], true)) {
+                $slideType = 'text';
+            }
+            $eyebrow = trim((string) ($row['eyebrow'] ?? ''));
+            $title = trim((string) ($row['title'] ?? ''));
+            $subtitle = trim((string) ($row['subtitle'] ?? ''));
             $image = trim((string) ($row['image_path'] ?? ''));
-            if ($image === '') {
+            $primaryLabel = trim((string) ($row['cta_primary_label'] ?? ''));
+            $primaryUrl = trim((string) ($row['cta_primary_url'] ?? ''));
+            $secondaryLabel = trim((string) ($row['cta_secondary_label'] ?? ''));
+            $secondaryUrl = trim((string) ($row['cta_secondary_url'] ?? ''));
+
+            if ($eyebrow === '' && $title === '' && $subtitle === '' && $image === '') {
                 continue;
             }
-            $linkUrl = trim((string) ($row['link_url'] ?? ''));
+
             $slides[] = [
-                'title' => trim((string) ($row['title'] ?? '')),
-                'subtitle' => trim((string) ($row['subtitle'] ?? '')),
-                'image_path' => $image,
-                'link_url' => $linkUrl,
-                'link_label' => trim((string) ($row['link_label'] ?? '')),
+                'slide_type' => $slideType === 'image' ? 'image' : 'text',
+                'eyebrow' => $eyebrow,
+                'title' => $title,
+                'subtitle' => $subtitle,
+                'image_path' => $slideType === 'image' ? $image : '',
+                'cta_primary_label' => $primaryLabel,
+                'cta_primary_url' => $primaryUrl,
+                'cta_secondary_label' => $secondaryLabel,
+                'cta_secondary_url' => $secondaryUrl,
                 'is_active' => !empty($row['is_active']),
             ];
         }
@@ -245,14 +291,34 @@ final class ContentAdminController extends AdminController
     {
         $errors = [];
         foreach ($slides as $i => $slide) {
-            $url = (string) ($slide['link_url'] ?? '');
-            if ($url === '') {
+            $n = $i + 1;
+            $slideType = (string) ($slide['slide_type'] ?? 'text');
+            $hasText = trim((string) ($slide['eyebrow'] ?? '')) !== ''
+                || trim((string) ($slide['title'] ?? '')) !== ''
+                || trim((string) ($slide['subtitle'] ?? '')) !== '';
+
+            if ($slideType === 'image' && trim((string) ($slide['image_path'] ?? '')) === '') {
+                $errors['hero_slide_' . $i] = 'Slide ' . $n . ': add a background image or switch to text-only.';
                 continue;
             }
-            $v = new Validator();
-            $v->url('hero_slides', $url, true, 'Slide ' . ($i + 1) . ': enter a valid link URL or leave blank.');
-            foreach ($v->errors() as $field => $message) {
-                $errors['hero_slide_' . $i] = $message;
+            if (!$hasText) {
+                $errors['hero_slide_' . $i] = 'Slide ' . $n . ': add an eyebrow, headline, or description.';
+                continue;
+            }
+
+            foreach ([
+                'cta_primary_url' => 'primary button',
+                'cta_secondary_url' => 'secondary button',
+            ] as $field => $label) {
+                $url = (string) ($slide[$field] ?? '');
+                if ($url === '') {
+                    continue;
+                }
+                $v = new Validator();
+                $v->url($field, $url, true, 'Slide ' . $n . ': enter a valid ' . $label . ' URL or leave blank.');
+                foreach ($v->errors() as $message) {
+                    $errors['hero_slide_' . $i] = $message;
+                }
             }
         }
         return $errors;

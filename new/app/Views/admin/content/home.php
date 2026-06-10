@@ -26,41 +26,63 @@ $slidesJson = htmlspecialchars(json_encode($heroSlides ?? []), ENT_QUOTES, 'UTF-
     </nav>
 
     <div class="admin-panel__body space-y-6">
-      <div x-show="tab === 'slides'" x-cloak x-data="adminRepeater(<?= $slidesJson ?>, {title:'',subtitle:'',image_path:'',link_url:'',link_label:'',is_active:1})" class="space-y-4">
+      <div x-show="tab === 'slides'" x-cloak x-data="adminRepeater(<?= $slidesJson ?>, {slide_type:'text',eyebrow:'',title:'',subtitle:'',image_path:'',cta_primary_label:'',cta_primary_url:'',cta_secondary_label:'',cta_secondary_url:'',is_active:1})" class="space-y-4">
         <div>
-          <h2 class="admin-section-title">Hero image slider</h2>
-          <p class="admin-section-desc">Full-width rotating banners. When slides exist, they appear above the hero text block. Drag images into each slide.</p>
+          <h2 class="admin-section-title">Hero slider</h2>
+          <p class="admin-section-desc">Build a rotating homepage hero. Each slide can use a <strong>background image</strong> or the <strong>text-only</strong> pattern (dark blue with logistics graphics). Add eyebrow text, headline, description, and up to two buttons per slide.</p>
         </div>
         <template x-for="(row, index) in rows" :key="index">
           <div class="admin-repeater-row space-y-4 border border-slate-200 rounded-xl p-5 bg-slate-50/50">
-            <p class="text-sm font-semibold text-slate-700" x-text="'Slide ' + (index + 1)"></p>
-            <div class="image-upload-zone" data-image-upload data-upload-url="<?= e($uploadUrl) ?>" data-csrf="<?= e($csrf) ?>" :data-initial-path="row.image_path || ''">
-              <div class="image-upload-zone__drop">
-                <img data-upload-preview alt="" class="hidden" />
-                <div data-upload-placeholder class="image-upload-zone__placeholder">
-                  <p class="text-sm font-medium text-slate-600">Drag & drop slide image</p>
-                </div>
-                <input type="file" data-upload-input accept="image/*" class="sr-only" />
-                <input type="hidden" :name="'hero_slides[' + index + '][image_path]'" data-upload-path x-model="row.image_path" />
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="text-sm font-semibold text-slate-700" x-text="'Slide ' + (index + 1)"></p>
+              <div class="flex rounded-lg border border-slate-200 overflow-hidden text-sm">
+                <button type="button" class="px-3 py-1.5 font-medium transition" :class="row.slide_type === 'text' ? 'bg-brand-navy text-white' : 'bg-white text-slate-600 hover:bg-slate-50'" @click="row.slide_type = 'text'">Text only</button>
+                <button type="button" class="px-3 py-1.5 font-medium transition border-l border-slate-200" :class="row.slide_type === 'image' ? 'bg-brand-navy text-white' : 'bg-white text-slate-600 hover:bg-slate-50'" @click="row.slide_type = 'image'">Background image</button>
               </div>
-              <button type="button" data-upload-clear class="text-xs font-medium text-slate-500 hover:text-red-600 mt-2">Remove image</button>
+            </div>
+            <input type="hidden" :name="'hero_slides[' + index + '][slide_type]'" x-model="row.slide_type" />
+            <div x-show="row.slide_type === 'image'" x-cloak>
+              <div class="image-upload-zone" data-image-upload data-upload-url="<?= e($uploadUrl) ?>" data-csrf="<?= e($csrf) ?>" :data-initial-path="row.image_path || ''">
+                <div class="image-upload-zone__drop">
+                  <img data-upload-preview alt="" class="hidden" />
+                  <div data-upload-placeholder class="image-upload-zone__placeholder">
+                    <p class="text-sm font-medium text-slate-600">Drag & drop background image</p>
+                  </div>
+                  <input type="file" data-upload-input accept="image/*" class="sr-only" />
+                  <input type="hidden" :name="'hero_slides[' + index + '][image_path]'" data-upload-path x-model="row.image_path" />
+                </div>
+                <button type="button" data-upload-clear class="text-xs font-medium text-slate-500 hover:text-red-600 mt-2">Remove image</button>
+              </div>
+            </div>
+            <p x-show="row.slide_type === 'text'" x-cloak class="text-sm text-slate-500 rounded-lg border border-dashed border-slate-200 bg-white px-4 py-3">Uses the decorative navy pattern background — same look as your current text-only hero.</p>
+            <div class="admin-field">
+              <label class="admin-label">Eyebrow</label>
+              <input type="text" class="admin-input" x-model="row.eyebrow" :name="'hero_slides[' + index + '][eyebrow]'" placeholder="Canadian Logistics Partner" />
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Headline</label>
+              <input type="text" class="admin-input" x-model="row.title" :name="'hero_slides[' + index + '][title]'" placeholder="Connecting African Food Supply to Canadian Markets" />
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Description</label>
+              <textarea class="admin-textarea" rows="3" x-model="row.subtitle" :name="'hero_slides[' + index + '][subtitle]'" placeholder="Short supporting paragraph…"></textarea>
             </div>
             <div class="grid sm:grid-cols-2 gap-4">
               <div class="admin-field">
-                <label class="admin-label">Headline (optional)</label>
-                <input type="text" class="admin-input" x-model="row.title" :name="'hero_slides[' + index + '][title]'" />
+                <label class="admin-label">Primary button label</label>
+                <input type="text" class="admin-input" x-model="row.cta_primary_label" :name="'hero_slides[' + index + '][cta_primary_label]'" placeholder="Request a Quote" />
               </div>
               <div class="admin-field">
-                <label class="admin-label">Subtitle (optional)</label>
-                <input type="text" class="admin-input" x-model="row.subtitle" :name="'hero_slides[' + index + '][subtitle]'" />
+                <label class="admin-label">Primary button link</label>
+                <input type="text" class="admin-input" x-model="row.cta_primary_url" :name="'hero_slides[' + index + '][cta_primary_url]'" placeholder="/quote" />
               </div>
               <div class="admin-field">
-                <label class="admin-label">Button link</label>
-                <input type="text" class="admin-input" x-model="row.link_url" :name="'hero_slides[' + index + '][link_url]'" placeholder="/quote" />
+                <label class="admin-label">Secondary button label</label>
+                <input type="text" class="admin-input" x-model="row.cta_secondary_label" :name="'hero_slides[' + index + '][cta_secondary_label]'" placeholder="Our Services" />
               </div>
               <div class="admin-field">
-                <label class="admin-label">Button label</label>
-                <input type="text" class="admin-input" x-model="row.link_label" :name="'hero_slides[' + index + '][link_label]'" placeholder="Request a Quote" />
+                <label class="admin-label">Secondary button link</label>
+                <input type="text" class="admin-input" x-model="row.cta_secondary_url" :name="'hero_slides[' + index + '][cta_secondary_url]'" placeholder="/services" />
               </div>
             </div>
             <label class="flex items-center gap-2 text-sm">
@@ -76,8 +98,8 @@ $slidesJson = htmlspecialchars(json_encode($heroSlides ?? []), ENT_QUOTES, 'UTF-
 
       <div x-show="tab === 'hero'" x-cloak class="space-y-5 max-w-2xl">
         <div>
-          <h2 class="admin-section-title">Hero text & buttons</h2>
-          <p class="admin-section-desc">Headline and calls-to-action shown with (or instead of) the image slider.</p>
+          <h2 class="admin-section-title">Hero fallback</h2>
+          <p class="admin-section-desc">Used only when no slides are saved in the <strong>Hero slider</strong> tab. If you have active slides, edit content there instead.</p>
         </div>
         <?php
         $heroFields = [

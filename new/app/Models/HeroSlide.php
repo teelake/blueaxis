@@ -6,7 +6,7 @@ namespace App\Models;
 
 final class HeroSlide extends Model
 {
-    /** @return array<int, array> */
+    /** @return array<int, array<string, mixed>> */
     public static function active(): array
     {
         return self::db()->query(
@@ -14,7 +14,7 @@ final class HeroSlide extends Model
         )->fetchAll();
     }
 
-    /** @return array<int, array> */
+    /** @return array<int, array<string, mixed>> */
     public static function allOrdered(): array
     {
         return self::db()->query(
@@ -28,23 +28,38 @@ final class HeroSlide extends Model
         $pdo = self::db();
         $pdo->exec('DELETE FROM hero_slides');
         $stmt = $pdo->prepare(
-            'INSERT INTO hero_slides (title, subtitle, image_path, link_url, link_label, sort_order, is_active)
-             VALUES (:title, :subtitle, :image_path, :link_url, :link_label, :sort_order, :is_active)'
+            'INSERT INTO hero_slides (
+                slide_type, title, subtitle, eyebrow, image_path,
+                cta_primary_label, cta_primary_url, cta_secondary_label, cta_secondary_url,
+                link_url, link_label, sort_order, is_active
+             ) VALUES (
+                :slide_type, :title, :subtitle, :eyebrow, :image_path,
+                :cta_primary_label, :cta_primary_url, :cta_secondary_label, :cta_secondary_url,
+                :link_url, :link_label, :sort_order, :is_active
+             )'
         );
         foreach ($slides as $i => $row) {
-            $image = trim((string) ($row['image_path'] ?? ''));
-            if ($image === '') {
-                continue;
-            }
             $stmt->execute([
-                'title' => trim((string) ($row['title'] ?? '')) ?: null,
-                'subtitle' => trim((string) ($row['subtitle'] ?? '')) ?: null,
-                'image_path' => $image,
-                'link_url' => trim((string) ($row['link_url'] ?? '')) ?: null,
-                'link_label' => trim((string) ($row['link_label'] ?? '')) ?: null,
+                'slide_type' => (string) ($row['slide_type'] ?? 'text'),
+                'title' => self::nullableTrim($row['title'] ?? null),
+                'subtitle' => self::nullableTrim($row['subtitle'] ?? null),
+                'eyebrow' => self::nullableTrim($row['eyebrow'] ?? null),
+                'image_path' => self::nullableTrim($row['image_path'] ?? null),
+                'cta_primary_label' => self::nullableTrim($row['cta_primary_label'] ?? null),
+                'cta_primary_url' => self::nullableTrim($row['cta_primary_url'] ?? null),
+                'cta_secondary_label' => self::nullableTrim($row['cta_secondary_label'] ?? null),
+                'cta_secondary_url' => self::nullableTrim($row['cta_secondary_url'] ?? null),
+                'link_url' => self::nullableTrim($row['cta_primary_url'] ?? $row['link_url'] ?? null),
+                'link_label' => self::nullableTrim($row['cta_primary_label'] ?? $row['link_label'] ?? null),
                 'sort_order' => $i,
                 'is_active' => !empty($row['is_active']) ? 1 : 0,
             ]);
         }
+    }
+
+    private static function nullableTrim(mixed $value): ?string
+    {
+        $text = trim((string) $value);
+        return $text === '' ? null : $text;
     }
 }
