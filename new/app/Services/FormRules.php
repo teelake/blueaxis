@@ -149,6 +149,8 @@ final class FormRules
             $v->min('price', $data['price'], 0)->max('price', $data['price'], 9999999.99);
         }
 
+        self::validateProductCategoryName($v, $data['category'] ?? null);
+
         return $v;
     }
 
@@ -205,7 +207,20 @@ final class FormRules
             $v->custom('slug', true, 'This URL slug is already used by another product.');
         }
 
+        self::validateProductCategoryName($v, $data['category'] ?? null);
+
         return $v;
+    }
+
+    private static function validateProductCategoryName(Validator $v, mixed $category): void
+    {
+        $name = trim((string) ($category ?? ''));
+        if ($name === '' || !ProductCategory::tableExists()) {
+            return;
+        }
+        if (ProductCategory::findByName($name) === null) {
+            $v->custom('category', true, 'Unknown category. Add it under Products → Categories first.');
+        }
     }
 
     public static function service(array $data): Validator

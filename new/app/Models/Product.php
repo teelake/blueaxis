@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use PDOException;
-
 final class Product extends Model
 {
     /** @return array<int, array<string, mixed>> */
