@@ -10,9 +10,7 @@ final class ProductBulkImportService
 {
     /** @var list<string> */
     public const COLUMNS = [
-        'sku',
         'title',
-        'slug',
         'category',
         'excerpt',
         'price',
@@ -35,9 +33,7 @@ final class ProductBulkImportService
         fprintf($out, "\xEF\xBB\xBF");
         fputcsv($out, self::COLUMNS);
         fputcsv($out, [
-            'BAX-PO-001',
             'Red Palm Oil (20L)',
-            'red-palm-oil-20l',
             'Oils & fats',
             'Cold-pressed bulk palm oil for wholesale partners.',
             '89.99',
@@ -49,10 +45,8 @@ final class ProductBulkImportService
             '10',
         ]);
         fputcsv($out, [
-            'BAX-RF-002',
             'Jasmine Rice (25kg)',
-            '',
-            'Grains & rice',
+            'Flours & staples',
             'Premium long-grain jasmine rice for food service.',
             '',
             '',
@@ -101,9 +95,7 @@ final class ProductBulkImportService
 
         $rows = [];
         $errors = [];
-        $line = 1;
         while (($data = fgetcsv($handle)) !== false) {
-            $line++;
             if ($this->isEmptyCsvLine($data)) {
                 continue;
             }
@@ -125,36 +117,36 @@ final class ProductBulkImportService
 
     /**
      * @param list<array<string, string>> $rows
-     * @return array{created: int, updated: int, errors: list<array{row: int, sku: string, message: string}>}
+     * @return array{created: int, updated: int, errors: list<array{row: int, title: string, message: string}>}
      */
     public function import(array $rows): array
     {
         $created = 0;
         $updated = 0;
         $errors = [];
-        $seenSkus = [];
+        $seenTitles = [];
 
         foreach ($rows as $i => $row) {
             $rowNum = $i + 2;
-            $sku = $row['sku'];
-            if ($sku !== '') {
-                if (isset($seenSkus[$sku])) {
-                    $errors[] = ['row' => $rowNum, 'sku' => $sku, 'message' => 'Duplicate SKU in this file.'];
-                    continue;
-                }
-                $seenSkus[$sku] = true;
-            }
-
-            $existing = $sku !== '' ? Product::findBySku($sku) : null;
-            if ($existing === null && trim($row['title']) === '') {
-                $errors[] = ['row' => $rowNum, 'sku' => $sku, 'message' => 'Title is required for new products.'];
+            $title = trim($row['title']);
+            if ($title === '') {
+                $errors[] = ['row' => $rowNum, 'title' => '—', 'message' => 'Title is required.'];
                 continue;
             }
+
+            $titleKey = mb_strtolower($title);
+            if (isset($seenTitles[$titleKey])) {
+                $errors[] = ['row' => $rowNum, 'title' => $title, 'message' => 'Duplicate product title in this file.'];
+                continue;
+            }
+            $seenTitles[$titleKey] = true;
+
+            $existing = Product::findByTitleExact($title);
 
             if ($row['price'] !== '' && !is_numeric(str_replace(',', '', $row['price']))) {
                 $errors[] = [
                     'row' => $rowNum,
-                    'sku' => $sku !== '' ? $sku : ($row['title'] ?: '—'),
+                    'title' => $title,
                     'message' => 'Price must be a number or left empty.',
                 ];
                 continue;
@@ -166,7 +158,7 @@ final class ProductBulkImportService
             if ($rowErrors !== []) {
                 $errors[] = [
                     'row' => $rowNum,
-                    'sku' => $sku !== '' ? $sku : ($row['title'] ?: '—'),
+                    'title' => $title,
                     'message' => implode(' ', array_values($rowErrors)),
                 ];
                 continue;
@@ -193,27 +185,13 @@ final class ProductBulkImportService
     private function buildPayload(array $row, ?array $existing): array
     {
         $title = trim($row['title']);
-        if ($title === '' && $existing !== null) {
-            $title = (string) $existing['title'];
-        }
-
-        $slugInput = trim($row['slug']);
-        if ($slugInput !== '') {
-            $slug = slugify($slugInput) ?: 'product';
-            if ($existing === null) {
-                $slug = $this->uniqueSlug($slug);
-            }
-        } elseif ($existing !== null) {
-            $slug = (string) $existing['slug'];
-        } else {
-            $slug = $this->uniqueSlug(slugify($title) ?: 'product');
-        }
+        $identifiers = Product::resolveIdentifiers($title, $existing);
 
         $payload = [
             'title' => $title,
-            'slug' => $slug,
+            'slug' => $identifiers['slug'],
             'category' => $this->nullable($row['category']),
-            'sku' => $this->nullable($row['sku']),
+            'sku' => $identifiers['sku'],
             'price' => $this->parsePrice($row['price']),
             'price_unit' => $this->nullable($row['price_unit']),
             'excerpt' => $this->nullable($row['excerpt']),
@@ -227,18 +205,6 @@ final class ProductBulkImportService
             $payload['id'] = (int) $existing['id'];
         }
         return $payload;
-    }
-
-    private function uniqueSlug(string $base): string
-    {
-        $base = trim($base, '-') ?: 'product';
-        $candidate = $base;
-        $suffix = 2;
-        while (Product::slugExists($candidate)) {
-            $candidate = $base . '-' . $suffix;
-            $suffix++;
-        }
-        return $candidate;
     }
 
     private function parsePrice(string $raw): ?float

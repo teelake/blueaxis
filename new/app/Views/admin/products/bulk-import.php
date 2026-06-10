@@ -17,7 +17,7 @@
     <div class="admin-panel__body space-y-6">
       <div>
         <h2 class="admin-section-title">Upload CSV</h2>
-        <p class="admin-section-desc">Rows with a matching <code class="text-xs bg-slate-100 px-1 rounded">sku</code> update existing products. New rows are published by default. Description, images, SEO, and visibility are not changed by import.</p>
+        <p class="admin-section-desc">Rows with a matching <code class="text-xs bg-slate-100 px-1 rounded">title</code> update existing products. SKU and URL slug are generated automatically. New rows are published by default. Description, images, SEO, and visibility are not changed by import.</p>
       </div>
       <form method="post" action="<?= url('admin/products/bulk-import') ?>" enctype="multipart/form-data">
         <?= \App\Core\Csrf::field() ?>
@@ -57,9 +57,8 @@
       <div class="rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600 space-y-2">
         <p class="font-semibold text-slate-700">Import rules</p>
         <ul class="list-disc list-inside space-y-1">
-          <li><strong>title</strong> required for new products</li>
-          <li><strong>sku</strong> used to match updates</li>
-          <li><strong>slug</strong> optional — auto-generated from title if blank</li>
+          <li><strong>title</strong> required — also used to match updates</li>
+          <li>SKU and slug are auto-generated (not in the CSV)</li>
           <li><strong>price</strong> optional — leave empty to hide on site</li>
           <li><strong>size</strong> and <strong>pack_format</strong> are separate fields</li>
         </ul>
@@ -77,7 +76,7 @@
           <thead>
             <tr>
               <th>Row</th>
-              <th>SKU / title</th>
+              <th>Title</th>
               <th>Error</th>
             </tr>
           </thead>
@@ -85,7 +84,7 @@
             <?php foreach ($importErrors as $err): ?>
               <tr class="border-t">
                 <td class="p-4 text-slate-500"><?= (int) ($err['row'] ?? 0) ?></td>
-                <td class="p-4 font-mono text-sm"><?= e((string) ($err['sku'] ?? '—')) ?></td>
+                <td class="p-4 text-sm"><?= e((string) ($err['title'] ?? '—')) ?></td>
                 <td class="p-4 text-red-600 text-sm"><?= e((string) ($err['message'] ?? '')) ?></td>
               </tr>
             <?php endforeach; ?>

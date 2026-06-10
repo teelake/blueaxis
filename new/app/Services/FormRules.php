@@ -131,8 +131,6 @@ final class FormRules
         $v = (new Validator())
             ->required('title', $data['title'] ?? null)
             ->maxLength('title', $data['title'] ?? null, 200)
-            ->slug('slug', $data['slug'] ?? null)
-            ->maxLength('slug', $data['slug'] ?? null, 220)
             ->maxLength('category', $data['category'] ?? null, 100)
             ->maxLength('sku', $data['sku'] ?? null, 80)
             ->maxLength('excerpt', $data['excerpt'] ?? null, 500)
@@ -185,8 +183,6 @@ final class FormRules
             $v->required('title', $data['title'] ?? null);
         }
         $v->maxLength('title', $data['title'] ?? null, 200)
-            ->slug('slug', $data['slug'] ?? null)
-            ->maxLength('slug', $data['slug'] ?? null, 220)
             ->maxLength('category', $data['category'] ?? null, 100)
             ->maxLength('sku', $data['sku'] ?? null, 80)
             ->maxLength('excerpt', $data['excerpt'] ?? null, 500)
