@@ -187,6 +187,14 @@
   @apply min-w-0 flex-1 w-auto;
 }
 
+.admin-toolbar__form--wide {
+  @apply sm:max-w-none lg:max-w-2xl;
+}
+
+.admin-toolbar__form--wide .admin-select {
+  @apply sm:max-w-[11rem] sm:flex-none;
+}
+
 .admin-toolbar__form .admin-input[type="search"],
 .admin-toolbar__form input[type="search"] {
   @apply flex-1;

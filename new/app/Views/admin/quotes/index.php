@@ -4,22 +4,30 @@ use App\Services\QuoteCartService;
 $perPage = (int) config('app.per_page_admin');
 $totalPages = max(1, (int) ceil(($total ?? 0) / $perPage));
 $page = max(1, (int) ($_GET['page'] ?? 1));
+ob_start();
 ?>
-<div class="flex flex-wrap justify-between gap-4 mb-6">
-  <form method="get" class="flex flex-wrap gap-2 items-center">
-    <input name="q" value="<?= e($search) ?>" class="admin-input max-w-xs" placeholder="Search name, email…" />
-    <select name="status" class="admin-select max-w-[180px]">
-      <option value="">All statuses</option>
-      <?php foreach (['new', 'in_review', 'contacted', 'closed'] as $s): ?>
-        <option value="<?= $s ?>" <?= $status === $s ? 'selected' : '' ?>><?= e(ucfirst(str_replace('_', ' ', $s))) ?></option>
-      <?php endforeach; ?>
-    </select>
-    <button type="submit" class="btn-secondary">Filter</button>
-  </form>
-  <?php if (($total ?? 0) > 0): ?>
-    <a href="<?= url('admin/quotes/export') ?>" class="btn-secondary">Export CSV</a>
-  <?php endif; ?>
-</div>
+<form method="get" class="admin-toolbar__form admin-toolbar__form--wide">
+  <input type="search" name="q" value="<?= e($search) ?>" class="admin-input" placeholder="Search name, email…" />
+  <select name="status" class="admin-select">
+    <option value="">All statuses</option>
+    <?php foreach (['new', 'in_review', 'contacted', 'closed'] as $s): ?>
+      <option value="<?= $s ?>" <?= $status === $s ? 'selected' : '' ?>><?= e(ucfirst(str_replace('_', ' ', $s))) ?></option>
+    <?php endforeach; ?>
+  </select>
+  <button type="submit" class="btn-secondary">Filter</button>
+</form>
+<?php
+$filterHtml = ob_get_clean();
+$actions = [];
+if (($total ?? 0) > 0) {
+    $actions[] = ['label' => 'Export CSV', 'url' => url('admin/quotes/export'), 'class' => 'btn-secondary'];
+}
+\App\Core\View::partial('admin/toolbar', [
+    'meta' => ($total ?? 0) > 0 ? (int) $total . ' request' . ((int) $total === 1 ? '' : 's') : null,
+    'filterHtml' => $filterHtml,
+    'actions' => $actions,
+]);
+?>
 
 <?php if (empty($items)): ?>
   <?php
@@ -35,7 +43,6 @@ $page = max(1, (int) ($_GET['page'] ?? 1));
   ]);
   ?>
 <?php else: ?>
-  <p class="text-sm text-slate-600 mb-4"><?= (int) $total ?> request<?= $total === 1 ? '' : 's' ?> — open View for the full quote details.</p>
   <div class="admin-table-wrap">
     <table class="admin-table">
       <thead>
