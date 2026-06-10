@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Models\BlogCategory;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Role;
 use App\Models\Service;
 
@@ -146,6 +147,29 @@ final class FormRules
 
         if (isset($data['price']) && $data['price'] !== null) {
             $v->min('price', $data['price'], 0)->max('price', $data['price'], 9999999.99);
+        }
+
+        return $v;
+    }
+
+    /** @param array<string, mixed> $data */
+    public static function productCategory(array $data, bool $isUpdate = false): Validator
+    {
+        $v = (new Validator())
+            ->required('name', $data['name'] ?? null)
+            ->maxLength('name', $data['name'] ?? null, 100)
+            ->slug('slug', $data['slug'] ?? null)
+            ->maxLength('slug', $data['slug'] ?? null, 120)
+            ->integer('sort_order', $data['sort_order'] ?? 0, 0, 9999);
+
+        $excludeId = isset($data['id']) ? (int) $data['id'] : null;
+        $name = trim((string) ($data['name'] ?? ''));
+        $slug = trim((string) ($data['slug'] ?? ''));
+        if ($name !== '' && ProductCategory::nameExists($name, $excludeId)) {
+            $v->custom('name', true, 'A category with this name already exists.');
+        }
+        if ($slug !== '' && ProductCategory::slugExists($slug, $excludeId)) {
+            $v->custom('slug', true, 'This URL slug is already used by another category.');
         }
 
         return $v;

@@ -14,26 +14,18 @@
       <div x-show="tab === 'details'" x-cloak class="space-y-5 max-w-2xl">
         <?php \App\Core\View::partial('admin/field', ['label' => 'Product name', 'name' => 'title', 'value' => $product['title'] ?? '', 'required' => true, 'maxlength' => 200]); ?>
         <?php \App\Core\View::partial('admin/field', ['label' => 'URL slug', 'name' => 'slug', 'value' => $product['slug'] ?? '', 'hint' => 'Leave blank to auto-generate from the title.', 'placeholder' => 'palm-oil-bulk']); ?>
-        <div>
-          <label for="category" class="block text-sm font-medium text-slate-700 mb-1">Category</label>
-          <input
-            id="category"
-            name="category"
-            list="product-category-suggestions"
-            class="admin-input w-full max-w-lg"
-            value="<?= e($product['category'] ?? '') ?>"
-            placeholder="Oils & fats"
-          />
-          <?php if (!empty($categories)): ?>
-            <datalist id="product-category-suggestions">
-              <?php foreach ($categories as $cat): ?>
-                <option value="<?= e($cat) ?>"></option>
-              <?php endforeach; ?>
-            </datalist>
-          <?php endif; ?>
-          <p class="mt-1 text-xs text-slate-500">
-            Type a category name for this product. Matching names group together on the public catalog filters.
-            There is no separate category list — reuse an existing name from the suggestions or enter a new one.
+        <div class="admin-field">
+          <label class="admin-label" for="category">Category</label>
+          <select id="category" name="category" class="admin-select max-w-lg">
+            <option value="">— No category —</option>
+            <?php foreach ($categories as $cat): ?>
+              <?php $catName = is_array($cat) ? ($cat['name'] ?? '') : (string) $cat; ?>
+              <option value="<?= e($catName) ?>" <?= ($product['category'] ?? '') === $catName ? 'selected' : '' ?>><?= e($catName) ?></option>
+            <?php endforeach; ?>
+          </select>
+          <p class="admin-hint mt-1">
+            <a href="<?= url('admin/products/categories') ?>" class="text-brand-navy font-medium hover:text-brand-gold">Manage categories</a>
+            — add or edit catalog filters shown on the public products page.
           </p>
         </div>
         <?php \App\Core\View::partial('admin/field', ['label' => 'SKU / product code', 'name' => 'sku', 'value' => $product['sku'] ?? '', 'placeholder' => 'BAX-PO-001']); ?>

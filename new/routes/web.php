@@ -23,6 +23,7 @@ use App\Controllers\Admin\SiteSettingsController;
 use App\Controllers\Admin\SocialSettingsController;
 use App\Controllers\Admin\MediaAdminController;
 use App\Controllers\Admin\ProductAdminController;
+use App\Controllers\Admin\ProductCategoryAdminController;
 use App\Controllers\Admin\QuoteAdminController;
 use App\Controllers\Admin\ServiceAdminController;
 use App\Controllers\Admin\UserAdminController;
@@ -73,6 +74,12 @@ $router->get('/admin/content/footer', [new ContentAdminController(), 'editFooter
 $router->post('/admin/content/footer', [new ContentAdminController(), 'saveFooter']);
 
 $router->get('/admin/products', [new ProductAdminController(), 'index']);
+$router->get('/admin/products/categories', [new ProductCategoryAdminController(), 'index']);
+$router->get('/admin/products/categories/create', [new ProductCategoryAdminController(), 'create']);
+$router->post('/admin/products/categories', [new ProductCategoryAdminController(), 'store']);
+$router->get('/admin/products/categories/{id}/edit', [new ProductCategoryAdminController(), 'edit']);
+$router->post('/admin/products/categories/{id}', [new ProductCategoryAdminController(), 'update']);
+$router->post('/admin/products/categories/{id}/delete', [new ProductCategoryAdminController(), 'destroy']);
 $router->get('/admin/products/bulk-import', [new ProductAdminController(), 'bulkImport']);
 $router->get('/admin/products/bulk-import/template', [new ProductAdminController(), 'downloadBulkTemplate']);
 $router->post('/admin/products/bulk-import', [new ProductAdminController(), 'processBulkImport']);

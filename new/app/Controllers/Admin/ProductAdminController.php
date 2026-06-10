@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Permission;
 use App\Core\Session;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Services\FormRules;
 use App\Services\HtmlSanitizer;
 use App\Services\MediaUploadHelper;
@@ -121,7 +122,7 @@ final class ProductAdminController extends AdminController
             'title' => 'New product',
             'pageDescription' => 'Add a product to your wholesale catalog.',
             'product' => null,
-            'categories' => Product::distinctCategories(),
+            'categories' => ProductCategory::allOrdered(),
         ], 'layouts/admin');
     }
 
@@ -147,7 +148,7 @@ final class ProductAdminController extends AdminController
             'title' => 'Edit product',
             'pageDescription' => 'Update catalog details and imagery.',
             'product' => $product,
-            'categories' => Product::distinctCategories(),
+            'categories' => ProductCategory::allOrdered(),
         ], 'layouts/admin');
     }
 

@@ -13,6 +13,7 @@ $filterHtml = ob_get_clean();
     'meta' => (int) $total . ' product' . ($total === 1 ? '' : 's'),
     'filterHtml' => $filterHtml,
     'actions' => [
+        ['label' => 'Categories', 'url' => url('admin/products/categories'), 'class' => 'btn-secondary'],
         ['label' => 'Download CSV template', 'url' => url('admin/products/bulk-import/template'), 'class' => 'btn-secondary'],
         ['label' => 'Bulk import', 'url' => url('admin/products/bulk-import'), 'class' => 'btn-secondary'],
         ['label' => 'Add product', 'url' => url('admin/products/create'), 'class' => 'btn-primary'],

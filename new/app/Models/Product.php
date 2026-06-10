@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use PDOException;
+
 final class Product extends Model
 {
     /** @return array<int, array<string, mixed>> */
@@ -29,12 +31,26 @@ final class Product extends Model
     /** @return list<string> */
     public static function categories(): array
     {
+        if (self::hasCategoryTable()) {
+            $rows = self::db()->query(
+                'SELECT c.name FROM product_categories c
+                 WHERE EXISTS (SELECT 1 FROM products p WHERE p.category = c.name AND p.is_published = 1)
+                 ORDER BY c.sort_order ASC, c.name ASC'
+            )->fetchAll();
+            $names = array_column($rows, 'name');
+            if ($names !== []) {
+                return $names;
+            }
+        }
         return self::distinctCategories(true);
     }
 
     /** @return list<string> */
     public static function distinctCategories(bool $publishedOnly = false): array
     {
+        if (self::hasCategoryTable()) {
+            return ProductCategory::names();
+        }
         $where = "category IS NOT NULL AND category != ''";
         if ($publishedOnly) {
             $where .= ' AND is_published = 1';
@@ -43,6 +59,21 @@ final class Product extends Model
             "SELECT DISTINCT category FROM products WHERE {$where} ORDER BY category"
         )->fetchAll();
         return array_column($rows, 'category');
+    }
+
+    private static function hasCategoryTable(): bool
+    {
+        static $exists = null;
+        if ($exists !== null) {
+            return $exists;
+        }
+        try {
+            self::db()->query('SELECT 1 FROM product_categories LIMIT 1');
+            $exists = true;
+        } catch (PDOException) {
+            $exists = false;
+        }
+        return $exists;
     }
 
     public static function findPublishedBySlug(string $slug): ?array
