@@ -6,7 +6,7 @@
 
 <?php ob_start(); ?>
 <form method="get" class="admin-toolbar__form admin-toolbar__form--wide">
-  <label class="sr-only" for="blog-status">Status</label>
+  <label class="text-sm font-medium text-slate-600 shrink-0" for="blog-status">Show</label>
   <select id="blog-status" name="status" class="admin-select">
     <option value="">All articles</option>
     <option value="published" <?= $status === 'published' ? 'selected' : '' ?>>Published</option>
@@ -26,13 +26,56 @@ $filterHtml = ob_get_clean();
 ?>
 
 <?php if (!empty($posts)): ?>
-  <?php require __DIR__ . '/_list.php'; ?>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Featured</th>
+          <th>Updated</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($posts as $p): ?>
+          <tr>
+            <td class="font-medium text-slate-900"><?= e($p['title']) ?></td>
+            <td>
+              <span class="admin-badge <?= $p['status'] === 'published' ? 'admin-badge--published' : 'admin-badge--draft' ?>"><?= e($p['status']) ?></span>
+            </td>
+            <td><?= ($p['is_featured'] ?? 0) ? 'Yes' : '—' ?></td>
+            <td class="text-slate-500"><?= e(date('M j, Y', strtotime($p['updated_at']))) ?></td>
+            <td>
+              <?php \App\Core\View::partial('admin/row-actions', [
+                  'editUrl' => url('admin/blog/' . $p['id'] . '/edit'),
+                  'viewUrl' => $p['status'] === 'published' ? url('blog/' . $p['slug']) : null,
+                  'toggleUrl' => url('admin/blog/' . $p['id'] . '/toggle-status'),
+                  'deleteUrl' => url('admin/blog/' . $p['id'] . '/delete'),
+                  'isActive' => $p['status'] === 'published',
+                  'entityLabel' => 'article',
+                  'toggleOffLabel' => 'Unpublish',
+                  'toggleOnLabel' => 'Publish',
+                  'toggleOffConfirm' => 'Move this article to draft? It will be hidden from the blog.',
+                  'toggleOnConfirm' => 'Publish this article on the blog?',
+              ]); ?>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
 <?php else: ?>
-  <?php \App\Core\View::partial('admin/empty-state', [
-      'icon' => 'article',
-      'title' => 'No articles yet',
-      'description' => 'Publish insights and company news for your B2B partners.',
-      'actionUrl' => url('admin/blog/create'),
-      'actionLabel' => 'Write first article',
-  ]); ?>
+  <?php
+  $hasFilter = ($status ?? '') !== '';
+  \App\Core\View::partial('admin/empty-state', [
+      'icon' => $hasFilter ? 'search' : 'blog',
+      'title' => $hasFilter ? 'No articles in this view' : 'No blog articles yet',
+      'description' => $hasFilter
+          ? 'Try showing all articles or choose a different status.'
+          : 'Publish logistics insights and company news for your B2B audience.',
+      'actionUrl' => $hasFilter ? url('admin/blog') : url('admin/blog/create'),
+      'actionLabel' => $hasFilter ? 'Show all articles' : 'Write first article',
+  ]);
+  ?>
 <?php endif; ?>
