@@ -7,6 +7,7 @@ $totalPages = max(1, (int) ceil($total / $perPage));
   <div class="flex flex-wrap gap-3 items-center">
     <input type="search" name="q" value="<?= e($search) ?>" placeholder="Search title, SKU, category…" class="admin-input max-w-xs" />
     <button type="submit" class="btn-secondary" data-loading-text="Searching…">Search</button>
+    <a href="<?= url('admin/products/bulk-import') ?>" class="btn-secondary">Bulk import</a>
     <a href="<?= url('admin/products/create') ?>" class="btn-primary">Add product</a>
   </div>
 </form>

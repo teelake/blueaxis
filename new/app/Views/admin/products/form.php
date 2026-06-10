@@ -96,7 +96,10 @@
 
       <div x-show="tab === 'logistics'" x-cloak class="space-y-5 max-w-2xl">
         <?php \App\Core\View::partial('admin/field', ['label' => 'Origin region', 'name' => 'origin_region', 'value' => $product['origin_region'] ?? '', 'placeholder' => 'West Africa']); ?>
-        <?php \App\Core\View::partial('admin/field', ['label' => 'Pack format', 'name' => 'pack_format', 'value' => $product['pack_format'] ?? '', 'placeholder' => '20L drum / palletized']); ?>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <?php \App\Core\View::partial('admin/field', ['label' => 'Size', 'name' => 'size', 'value' => $product['size'] ?? '', 'placeholder' => '20L']); ?>
+          <?php \App\Core\View::partial('admin/field', ['label' => 'Pack format', 'name' => 'pack_format', 'value' => $product['pack_format'] ?? '', 'placeholder' => 'drum / palletized']); ?>
+        </div>
         <?php \App\Core\View::partial('admin/field', ['label' => 'Storage & handling', 'name' => 'storage_notes', 'value' => $product['storage_notes'] ?? '', 'type' => 'textarea', 'hint' => 'Temperature, shelf life, or warehouse requirements.']); ?>
       </div>
 

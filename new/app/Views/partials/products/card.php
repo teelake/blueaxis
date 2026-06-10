@@ -24,6 +24,9 @@
         <?php if (!empty($product['origin_region'])): ?>
           <li><span>Origin</span> <?= e($product['origin_region']) ?></li>
         <?php endif; ?>
+        <?php if (!empty($product['size'])): ?>
+          <li><span>Size</span> <?= e($product['size']) ?></li>
+        <?php endif; ?>
         <?php if (!empty($product['pack_format'])): ?>
           <li><span>Format</span> <?= e($product['pack_format']) ?></li>
         <?php endif; ?>

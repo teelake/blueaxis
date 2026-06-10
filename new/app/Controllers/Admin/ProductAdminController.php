@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Services\FormRules;
 use App\Services\HtmlSanitizer;
 use App\Services\MediaUploadHelper;
+use App\Services\ProductBulkImportService;
 
 final class ProductAdminController extends AdminController
 {
@@ -28,6 +29,89 @@ final class ProductAdminController extends AdminController
             'search' => $search,
             'success' => flash('success'),
         ], 'layouts/admin');
+    }
+
+    public function bulkImport(): void
+    {
+        $this->authorize(Permission::PRODUCTS);
+        $importErrors = $_SESSION['_import_errors'] ?? [];
+        $importSummary = $_SESSION['_import_summary'] ?? null;
+        unset($_SESSION['_import_errors'], $_SESSION['_import_summary']);
+        $this->view('admin/products/bulk-import', [
+            'title' => 'Bulk import products',
+            'pageDescription' => 'Upload a CSV to create or update products in your catalog.',
+            'columns' => ProductBulkImportService::COLUMNS,
+            'success' => flash('success'),
+            'error' => flash('error'),
+            'importErrors' => $importErrors,
+            'importSummary' => $importSummary,
+        ], 'layouts/admin');
+    }
+
+    public function downloadBulkTemplate(): void
+    {
+        $this->authorize(Permission::PRODUCTS);
+        (new ProductBulkImportService())->streamTemplate();
+    }
+
+    public function processBulkImport(): void
+    {
+        $this->authorize(Permission::PRODUCTS);
+        $this->validateCsrf();
+
+        $file = $_FILES['csv'] ?? null;
+        if (!is_array($file) || ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+            Session::flash('error', 'Please choose a CSV file to upload.');
+            redirect('admin/products/bulk-import');
+        }
+
+        $tmp = (string) ($file['tmp_name'] ?? '');
+        $name = (string) ($file['name'] ?? '');
+        if ($tmp === '' || !is_uploaded_file($tmp)) {
+            Session::flash('error', 'Upload failed. Try again.');
+            redirect('admin/products/bulk-import');
+        }
+
+        $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+        if ($ext !== 'csv') {
+            Session::flash('error', 'Only .csv files are accepted.');
+            redirect('admin/products/bulk-import');
+        }
+
+        $service = new ProductBulkImportService();
+        $parsed = $service->parseFile($tmp);
+        if ($parsed['errors'] !== []) {
+            Session::flash('error', $parsed['errors'][0]);
+            redirect('admin/products/bulk-import');
+        }
+
+        $result = $service->import($parsed['rows']);
+        $_SESSION['_import_summary'] = [
+            'created' => $result['created'],
+            'updated' => $result['updated'],
+        ];
+        if ($result['errors'] !== []) {
+            $_SESSION['_import_errors'] = $result['errors'];
+        }
+
+        $parts = [];
+        if ($result['created'] > 0) {
+            $parts[] = $result['created'] . ' created';
+        }
+        if ($result['updated'] > 0) {
+            $parts[] = $result['updated'] . ' updated';
+        }
+        if ($parts === [] && $result['errors'] !== []) {
+            Session::flash('error', 'Import finished with no changes. Review the errors below.');
+        } else {
+            $message = 'Import complete: ' . implode(', ', $parts) . '.';
+            if ($result['errors'] !== []) {
+                $message .= ' Some rows could not be imported.';
+            }
+            Session::flash('success', $message);
+        }
+
+        redirect('admin/products/bulk-import');
     }
 
     public function create(): void
@@ -120,6 +204,7 @@ final class ProductAdminController extends AdminController
             'image_path' => MediaUploadHelper::resolve('image_path'),
             'origin_region' => trim((string) ($_POST['origin_region'] ?? '')) ?: null,
             'pack_format' => trim((string) ($_POST['pack_format'] ?? '')) ?: null,
+            'size' => trim((string) ($_POST['size'] ?? '')) ?: null,
             'storage_notes' => trim((string) ($_POST['storage_notes'] ?? '')) ?: null,
             'is_featured' => isset($_POST['is_featured']) ? 1 : 0,
             'is_published' => isset($_POST['is_published']) ? 1 : 0,

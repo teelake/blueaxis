@@ -1,0 +1,2 @@
+ALTER TABLE products
+    ADD COLUMN size VARCHAR(120) NULL DEFAULT NULL AFTER pack_format;

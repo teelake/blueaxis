@@ -6,7 +6,7 @@ namespace App\Models;
 
 final class Product extends Model
 {
-    /** @return array<int, array> */
+    /** @return array<int, array<string, mixed>> */
     public static function published(?string $category = null, ?string $search = null): array
     {
         $where = ['is_published = 1'];
@@ -54,7 +54,43 @@ final class Product extends Model
         return $stmt->fetch() ?: null;
     }
 
-    /** @return array{items: array<int, array>, total: int} */
+    public static function find(int $id): ?array
+    {
+        $stmt = self::db()->prepare('SELECT * FROM products WHERE id = :id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public static function findBySku(string $sku): ?array
+    {
+        $sku = trim($sku);
+        if ($sku === '') {
+            return null;
+        }
+        $stmt = self::db()->prepare('SELECT * FROM products WHERE sku = :sku LIMIT 1');
+        $stmt->execute(['sku' => $sku]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public static function slugExists(string $slug, ?int $excludeId = null): bool
+    {
+        $slug = trim($slug);
+        if ($slug === '') {
+            return false;
+        }
+        $sql = 'SELECT id FROM products WHERE slug = :slug';
+        $params = ['slug' => $slug];
+        if ($excludeId !== null) {
+            $sql .= ' AND id != :id';
+            $params['id'] = $excludeId;
+        }
+        $sql .= ' LIMIT 1';
+        $stmt = self::db()->prepare($sql);
+        $stmt->execute($params);
+        return (bool) $stmt->fetch();
+    }
+
+    /** @return array{items: array<int, array<string, mixed>>, total: int} */
     public static function allAdmin(int $page, int $perPage, string $search = ''): array
     {
         $where = '1=1';
@@ -74,38 +110,64 @@ final class Product extends Model
         return ['items' => $stmt->fetchAll(), 'total' => $total];
     }
 
-    public static function find(int $id): ?array
-    {
-        $stmt = self::db()->prepare('SELECT * FROM products WHERE id = :id LIMIT 1');
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch() ?: null;
-    }
-
+    /** @param array<string, mixed> $data */
     public static function create(array $data): int
     {
         $stmt = self::db()->prepare(
             'INSERT INTO products (title, slug, category, sku, price, price_unit, excerpt, description, image_path,
-             origin_region, pack_format, storage_notes, is_featured, is_published, sort_order,
+             origin_region, pack_format, size, storage_notes, is_featured, is_published, sort_order,
              meta_title, meta_description)
              VALUES (:title, :slug, :category, :sku, :price, :price_unit, :excerpt, :description, :image_path,
-             :origin_region, :pack_format, :storage_notes, :is_featured, :is_published, :sort_order,
+             :origin_region, :pack_format, :size, :storage_notes, :is_featured, :is_published, :sort_order,
              :meta_title, :meta_description)'
         );
         $stmt->execute($data);
         return (int) self::db()->lastInsertId();
     }
 
+    /** @param array<string, mixed> $data */
     public static function update(int $id, array $data): void
     {
         $data['id'] = $id;
         $stmt = self::db()->prepare(
             'UPDATE products SET title = :title, slug = :slug, category = :category, sku = :sku,
              price = :price, price_unit = :price_unit, excerpt = :excerpt, description = :description, image_path = :image_path,
-             origin_region = :origin_region, pack_format = :pack_format, storage_notes = :storage_notes,
+             origin_region = :origin_region, pack_format = :pack_format, size = :size, storage_notes = :storage_notes,
              is_featured = :is_featured, is_published = :is_published, sort_order = :sort_order,
              meta_title = :meta_title, meta_description = :meta_description WHERE id = :id'
         );
         $stmt->execute($data);
+    }
+
+    /**
+     * Update only fields supplied by CSV bulk import (preserves description, media, SEO, visibility).
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function updateBulkFields(int $id, array $data): void
+    {
+        $data['id'] = $id;
+        $stmt = self::db()->prepare(
+            'UPDATE products SET title = :title, slug = :slug, category = :category, sku = :sku,
+             price = :price, price_unit = :price_unit, excerpt = :excerpt,
+             origin_region = :origin_region, pack_format = :pack_format, size = :size,
+             storage_notes = :storage_notes, sort_order = :sort_order WHERE id = :id'
+        );
+        $stmt->execute($data);
+    }
+
+    /** @param array<string, mixed> $data */
+    public static function createFromBulk(array $data): int
+    {
+        $stmt = self::db()->prepare(
+            'INSERT INTO products (title, slug, category, sku, price, price_unit, excerpt, description, image_path,
+             origin_region, pack_format, size, storage_notes, is_featured, is_published, sort_order,
+             meta_title, meta_description)
+             VALUES (:title, :slug, :category, :sku, :price, :price_unit, :excerpt, NULL, NULL,
+             :origin_region, :pack_format, :size, :storage_notes, 0, 1, :sort_order, NULL, NULL)'
+        );
+        $stmt->execute($data);
+        return (int) self::db()->lastInsertId();
     }
 
     public static function delete(int $id): void

@@ -73,6 +73,9 @@ $router->get('/admin/content/footer', [new ContentAdminController(), 'editFooter
 $router->post('/admin/content/footer', [new ContentAdminController(), 'saveFooter']);
 
 $router->get('/admin/products', [new ProductAdminController(), 'index']);
+$router->get('/admin/products/bulk-import', [new ProductAdminController(), 'bulkImport']);
+$router->get('/admin/products/bulk-import/template', [new ProductAdminController(), 'downloadBulkTemplate']);
+$router->post('/admin/products/bulk-import', [new ProductAdminController(), 'processBulkImport']);
 $router->get('/admin/products/create', [new ProductAdminController(), 'create']);
 $router->post('/admin/products', [new ProductAdminController(), 'store']);
 $router->get('/admin/products/{id}/edit', [new ProductAdminController(), 'edit']);

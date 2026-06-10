@@ -138,6 +138,7 @@ final class FormRules
             ->maxLength('price_unit', $data['price_unit'] ?? null, 60)
             ->maxLength('origin_region', $data['origin_region'] ?? null, 120)
             ->maxLength('pack_format', $data['pack_format'] ?? null, 120)
+            ->maxLength('size', $data['size'] ?? null, 120)
             ->maxLength('storage_notes', $data['storage_notes'] ?? null, 255)
             ->maxLength('meta_title', $data['meta_title'] ?? null, 70)
             ->maxLength('meta_description', $data['meta_description'] ?? null, 320)
@@ -145,6 +146,39 @@ final class FormRules
 
         if (isset($data['price']) && $data['price'] !== null) {
             $v->min('price', $data['price'], 0)->max('price', $data['price'], 9999999.99);
+        }
+
+        return $v;
+    }
+
+    /** @param array<string, mixed> $data */
+    public static function productBulkRow(array $data, bool $isUpdate): Validator
+    {
+        $v = (new Validator());
+        if (!$isUpdate) {
+            $v->required('title', $data['title'] ?? null);
+        }
+        $v->maxLength('title', $data['title'] ?? null, 200)
+            ->slug('slug', $data['slug'] ?? null)
+            ->maxLength('slug', $data['slug'] ?? null, 220)
+            ->maxLength('category', $data['category'] ?? null, 100)
+            ->maxLength('sku', $data['sku'] ?? null, 80)
+            ->maxLength('excerpt', $data['excerpt'] ?? null, 500)
+            ->maxLength('price_unit', $data['price_unit'] ?? null, 60)
+            ->maxLength('origin_region', $data['origin_region'] ?? null, 120)
+            ->maxLength('size', $data['size'] ?? null, 120)
+            ->maxLength('pack_format', $data['pack_format'] ?? null, 120)
+            ->maxLength('storage_notes', $data['storage_notes'] ?? null, 255)
+            ->integer('sort_order', $data['sort_order'] ?? 0, 0, 9999);
+
+        if (isset($data['price']) && $data['price'] !== null) {
+            $v->min('price', $data['price'], 0)->max('price', $data['price'], 9999999.99);
+        }
+
+        $slug = trim((string) ($data['slug'] ?? ''));
+        $excludeId = isset($data['id']) ? (int) $data['id'] : null;
+        if ($slug !== '' && Product::slugExists($slug, $excludeId)) {
+            $v->custom('slug', true, 'This URL slug is already used by another product.');
         }
 
         return $v;

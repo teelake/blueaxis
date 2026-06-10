@@ -37,6 +37,12 @@
               <dd class="mt-1 font-medium text-brand-navy"><?= e($product['origin_region']) ?></dd>
             </div>
           <?php endif; ?>
+          <?php if (!empty($product['size'])): ?>
+            <div class="rounded-xl border border-slate-100 p-4 bg-white">
+              <dt class="text-xs font-semibold uppercase text-slate-400">Size</dt>
+              <dd class="mt-1 font-medium text-brand-navy"><?= e($product['size']) ?></dd>
+            </div>
+          <?php endif; ?>
           <?php if (!empty($product['pack_format'])): ?>
             <div class="rounded-xl border border-slate-100 p-4 bg-white">
               <dt class="text-xs font-semibold uppercase text-slate-400">Pack format</dt>

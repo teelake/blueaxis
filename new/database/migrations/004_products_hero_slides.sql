@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS products (
     image_path VARCHAR(500) NULL,
     origin_region VARCHAR(120) NULL,
     pack_format VARCHAR(120) NULL,
+    size VARCHAR(120) NULL,
     storage_notes VARCHAR(255) NULL,
     is_featured TINYINT(1) NOT NULL DEFAULT 0,
     is_published TINYINT(1) NOT NULL DEFAULT 1,
