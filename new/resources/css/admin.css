@@ -165,6 +165,60 @@
   @apply text-sm text-slate-500 mt-1 max-w-2xl;
 }
 
+/* List page toolbar: search/filters + CTAs on one horizontal row */
+.admin-toolbar {
+  @apply flex flex-col gap-3 mb-6 lg:flex-row lg:items-center lg:justify-between lg:gap-6;
+}
+
+.admin-toolbar__meta {
+  @apply text-sm text-slate-600 shrink-0;
+}
+
+.admin-toolbar__cluster {
+  @apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end sm:gap-3 min-w-0 w-full lg:w-auto lg:flex-1;
+}
+
+.admin-toolbar__form {
+  @apply flex items-stretch sm:items-center gap-2 min-w-0 w-full sm:flex-1 sm:max-w-md lg:max-w-lg;
+}
+
+.admin-toolbar__form .admin-input,
+.admin-toolbar__form .admin-select {
+  @apply min-w-0 flex-1 w-auto;
+}
+
+.admin-toolbar__form .admin-input[type="search"],
+.admin-toolbar__form input[type="search"] {
+  @apply flex-1;
+}
+
+.admin-toolbar__form .btn-secondary,
+.admin-toolbar__form .btn-primary {
+  @apply shrink-0 whitespace-nowrap;
+}
+
+.admin-toolbar__actions {
+  @apply flex items-stretch sm:items-center gap-2 shrink-0 flex-wrap sm:flex-nowrap;
+}
+
+.admin-toolbar__actions .btn-primary,
+.admin-toolbar__actions .btn-secondary {
+  @apply whitespace-nowrap justify-center;
+}
+
+.admin-inline-form {
+  @apply flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4;
+}
+
+.admin-inline-form .admin-field {
+  @apply flex-1 min-w-[200px] sm:max-w-md;
+}
+
+.admin-inline-form .btn-primary,
+.admin-inline-form .btn-secondary {
+  @apply shrink-0 whitespace-nowrap w-full sm:w-auto;
+}
+
 .admin-panel {
   @apply bg-white rounded-xl border border-slate-200/80 shadow-sm;
 }
@@ -239,7 +293,12 @@
 }
 
 .admin-sticky-footer {
-  @apply sticky bottom-0 z-30 mt-8 -mx-6 lg:-mx-8 px-6 lg:px-8 py-4 bg-white/95 backdrop-blur border-t border-slate-200 flex flex-wrap items-center justify-between gap-4;
+  @apply sticky bottom-0 z-30 mt-8 -mx-6 lg:-mx-8 px-6 lg:px-8 py-4 bg-white/95 backdrop-blur border-t border-slate-200
+    flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4;
+}
+
+.admin-sticky-footer__actions {
+  @apply flex items-center gap-2 shrink-0 flex-wrap sm:flex-nowrap sm:justify-end;
 }
 
 .admin-alert {

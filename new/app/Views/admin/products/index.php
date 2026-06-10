@@ -1,17 +1,24 @@
 <?php
 $perPage = (int) config('app.per_page_admin');
 $totalPages = max(1, (int) ceil($total / $perPage));
+ob_start();
 ?>
-<form method="get" class="flex flex-wrap gap-3 items-center justify-between mb-6">
-  <p class="text-sm text-slate-600"><?= (int) $total ?> products</p>
-  <div class="flex flex-wrap gap-3 items-center">
-    <input type="search" name="q" value="<?= e($search) ?>" placeholder="Search title, SKU, category…" class="admin-input max-w-xs" />
-    <button type="submit" class="btn-secondary" data-loading-text="Searching…">Search</button>
-    <a href="<?= url('admin/products/bulk-import/template') ?>" class="btn-secondary">Download CSV template</a>
-    <a href="<?= url('admin/products/bulk-import') ?>" class="btn-secondary">Bulk import</a>
-    <a href="<?= url('admin/products/create') ?>" class="btn-primary">Add product</a>
-  </div>
+<form method="get" class="admin-toolbar__form">
+  <input type="search" name="q" value="<?= e($search) ?>" placeholder="Search title, SKU, category…" class="admin-input" />
+  <button type="submit" class="btn-secondary" data-loading-text="Searching…">Search</button>
 </form>
+<?php
+$filterHtml = ob_get_clean();
+\App\Core\View::partial('admin/toolbar', [
+    'meta' => (int) $total . ' product' . ($total === 1 ? '' : 's'),
+    'filterHtml' => $filterHtml,
+    'actions' => [
+        ['label' => 'Download CSV template', 'url' => url('admin/products/bulk-import/template'), 'class' => 'btn-secondary'],
+        ['label' => 'Bulk import', 'url' => url('admin/products/bulk-import'), 'class' => 'btn-secondary'],
+        ['label' => 'Add product', 'url' => url('admin/products/create'), 'class' => 'btn-primary'],
+    ],
+]);
+?>
 <?php if ($products === []): ?>
   <?php \App\Core\View::partial('admin/empty-state', [
       'icon' => ($search ?? '') !== '' ? 'search' : 'catalog',
