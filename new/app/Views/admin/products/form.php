@@ -110,8 +110,8 @@
     </div>
 
     <div class="admin-sticky-footer">
-      <a href="<?= url('admin/products') ?>" class="text-sm font-medium text-slate-600 hover:text-brand-navy">← Back to products</a>
-      <div class="flex gap-3">
+      <a href="<?= url('admin/products') ?>" class="text-sm font-medium text-slate-600 hover:text-brand-navy shrink-0">← Back to products</a>
+      <div class="admin-sticky-footer__actions">
         <?php if ($product): ?>
           <button formaction="<?= url('admin/products/' . $product['id'] . '/delete') ?>" formmethod="post" type="submit" class="btn-secondary" onclick="return confirm('Delete this product permanently?')">Delete</button>
         <?php endif; ?>

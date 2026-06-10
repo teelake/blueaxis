@@ -64,8 +64,8 @@ $benefitsJson = htmlspecialchars(json_encode($benefitItems ?? [['text' => '']]),
     </div>
 
     <div class="admin-sticky-footer">
-      <a href="<?= url('admin/services') ?>" class="text-sm font-medium text-slate-600 hover:text-brand-navy">← Back to services</a>
-      <div class="flex gap-3">
+      <a href="<?= url('admin/services') ?>" class="text-sm font-medium text-slate-600 hover:text-brand-navy shrink-0">← Back to services</a>
+      <div class="admin-sticky-footer__actions">
         <?php if ($service): ?>
           <button formaction="<?= url('admin/services/' . $service['id'] . '/delete') ?>" formmethod="post" type="submit" class="btn-secondary" onclick="return confirm('Delete this service permanently?')">Delete</button>
         <?php endif; ?>

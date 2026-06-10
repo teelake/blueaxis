@@ -19,29 +19,31 @@
         <h2 class="admin-section-title">Upload CSV</h2>
         <p class="admin-section-desc">Rows with a matching <code class="text-xs bg-slate-100 px-1 rounded">sku</code> update existing products. New rows are published by default. Description, images, SEO, and visibility are not changed by import.</p>
       </div>
-      <form method="post" action="<?= url('admin/products/bulk-import') ?>" enctype="multipart/form-data" class="space-y-5">
+      <form method="post" action="<?= url('admin/products/bulk-import') ?>" enctype="multipart/form-data">
         <?= \App\Core\Csrf::field() ?>
-        <p class="text-sm">
-          <a href="<?= url('admin/products/bulk-import/template') ?>" class="font-semibold text-brand-navy hover:text-brand-gold underline underline-offset-2">Download CSV template</a>
-          <span class="text-slate-500"> — then fill in your products and upload below.</span>
-        </p>
-        <div class="admin-field">
-          <label class="admin-label" for="csv">CSV file</label>
-          <input type="file" id="csv" name="csv" accept=".csv,text/csv" class="admin-input" required />
-          <p class="admin-hint mt-2">UTF-8 encoding recommended.</p>
+        <div class="admin-inline-form">
+          <div class="admin-field flex-1 min-w-0">
+            <label class="admin-label" for="csv">CSV file</label>
+            <input type="file" id="csv" name="csv" accept=".csv,text/csv" class="admin-input" required />
+            <p class="admin-hint mt-2">UTF-8 encoding recommended.</p>
+          </div>
+          <button type="submit" class="btn-primary self-end" data-loading-text="Importing…">Import products</button>
         </div>
-        <button type="submit" class="btn-primary" data-loading-text="Importing…">Import products</button>
       </form>
     </div>
   </div>
 
   <div class="admin-panel">
     <div class="admin-panel__body space-y-6">
-      <div>
-        <h2 class="admin-section-title">CSV template</h2>
-        <p class="admin-section-desc">Download a starter file with the correct headers and two example rows.</p>
+      <div class="admin-toolbar lg:flex-col lg:items-stretch lg:gap-4 mb-0">
+        <div>
+          <h2 class="admin-section-title">CSV template</h2>
+          <p class="admin-section-desc">Download a starter file with the correct headers and two example rows.</p>
+        </div>
+        <div class="admin-toolbar__actions lg:justify-start">
+          <a href="<?= url('admin/products/bulk-import/template') ?>" class="btn-secondary">Download template (.csv)</a>
+        </div>
       </div>
-      <a href="<?= url('admin/products/bulk-import/template') ?>" class="btn-secondary inline-flex">Download template (.csv)</a>
 
       <div class="rounded-xl border border-slate-200 overflow-hidden">
         <p class="px-4 py-3 text-sm font-semibold text-slate-700 bg-slate-50 border-b border-slate-200">Columns</p>

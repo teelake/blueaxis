@@ -1,7 +1,7 @@
 <div class="admin-panel admin-panel__body mb-8">
   <h2 class="admin-section-title">Upload images</h2>
   <p class="admin-section-desc">Photos you upload here can be used in blog posts, services, and page content.</p>
-  <form method="post" action="<?= url('admin/media/upload') ?>" enctype="multipart/form-data" class="flex flex-wrap gap-4 items-end mt-6">
+  <form method="post" action="<?= url('admin/media/upload') ?>" enctype="multipart/form-data" class="admin-inline-form mt-6">
     <?= \App\Core\Csrf::field() ?>
     <div class="admin-field flex-1 min-w-[200px]">
       <label class="admin-label">Choose file</label>

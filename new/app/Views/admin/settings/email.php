@@ -117,7 +117,7 @@ $checked = static fn (string $key): string => ($s[$key] ?? '0') === '1' ? 'check
 <div class="admin-panel admin-panel__body max-w-2xl mt-8">
   <h2 class="admin-section-title">Send a test email</h2>
   <p class="admin-section-desc">Confirm your settings work before going live.</p>
-  <form method="post" action="<?= url('admin/settings/email/test') ?>" class="flex flex-wrap gap-4 items-end mt-6">
+  <form method="post" action="<?= url('admin/settings/email/test') ?>" class="admin-inline-form mt-6">
     <?= \App\Core\Csrf::field() ?>
     <?php \App\Core\View::partial('admin/field', [
         'label' => 'Send test to',

@@ -1,7 +1,10 @@
-<div class="flex justify-between items-center mb-6">
-  <p class="text-sm text-slate-600"><?= count($services) ?> service<?= count($services) === 1 ? '' : 's' ?></p>
-  <a href="<?= url('admin/services/create') ?>" class="btn-primary">Add service</a>
-</div>
+<?php \App\Core\View::partial('admin/toolbar', [
+    'meta' => count($services) . ' service' . (count($services) === 1 ? '' : 's'),
+    'filterHtml' => null,
+    'actions' => [
+        ['label' => 'Add service', 'url' => url('admin/services/create'), 'class' => 'btn-primary'],
+    ],
+]); ?>
 
 <?php if ($services === []): ?>
   <?php \App\Core\View::partial('admin/empty-state', [
