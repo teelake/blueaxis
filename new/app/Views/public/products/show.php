@@ -4,10 +4,10 @@
   </div>
 </section>
 
-<section class="py-16 lg:py-24">
+<section class="py-10 sm:py-16 lg:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-      <div class="rounded-2xl overflow-hidden shadow-elevated bg-white aspect-square max-h-[520px]">
+    <div class="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-start">
+      <div class="rounded-2xl overflow-hidden shadow-elevated bg-white aspect-[4/3] sm:aspect-square lg:max-h-[520px]">
         <?php if (!empty($product['image_path'])): ?>
           <img src="<?= e(media_url($product['image_path'])) ?>" alt="<?= e($product['title']) ?>" class="w-full h-full object-cover" />
         <?php else: ?>
@@ -18,7 +18,7 @@
         <?php if (!empty($product['category'])): ?>
           <p class="section-eyebrow mb-2"><?= e($product['category']) ?></p>
         <?php endif; ?>
-        <h1 class="text-3xl md:text-4xl font-semibold text-brand-navy tracking-tight"><?= e($product['title']) ?></h1>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold text-brand-navy tracking-tight"><?= e($product['title']) ?></h1>
         <?php if (!empty($product['sku'])): ?>
           <p class="mt-2 text-sm font-mono text-slate-500">SKU: <?= e($product['sku']) ?></p>
         <?php endif; ?>
@@ -56,16 +56,16 @@
             </div>
           <?php endif; ?>
         </dl>
-        <div class="mt-10 flex flex-wrap gap-4 items-center">
+        <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-stretch sm:items-center">
           <?php \App\Core\View::partial('product-add-to-quote', [
               'product' => $product,
               'redirect' => 'quote',
               'qty' => true,
               'label' => 'Add to quote list',
-              'btnClass' => 'btn-primary',
+              'btnClass' => 'btn-primary w-full sm:w-auto justify-center',
           ]); ?>
-          <a href="<?= url('quote') ?>" class="btn-secondary">View quote form</a>
-          <a href="<?= url('contact') ?>" class="text-sm font-semibold text-brand-navy hover:text-brand-gold">Contact us</a>
+          <a href="<?= url('quote') ?>" class="btn-secondary w-full sm:w-auto justify-center">View quote form</a>
+          <a href="<?= url('contact') ?>" class="text-sm font-semibold text-brand-navy hover:text-brand-gold text-center sm:text-left py-2">Contact us</a>
         </div>
       </div>
     </div>
@@ -79,10 +79,10 @@
 </section>
 
 <?php if (!empty($related)): ?>
-<section class="py-20 bg-slate-50 border-t border-slate-100">
+<section class="py-12 sm:py-20 bg-slate-50 border-t border-slate-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="section-title mb-10">Related catalog items</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+    <h2 class="section-title text-2xl sm:text-3xl md:text-4xl mb-6 sm:mb-10">Related catalog items</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
       <?php foreach ($related as $p): ?>
         <?php \App\Core\View::partial('products/card', ['product' => $p]); ?>
       <?php endforeach; ?>

@@ -8,12 +8,12 @@
         <div class="product-card__placeholder"></div>
       <?php endif; ?>
     </div>
-    <div class="product-card__body flex flex-col justify-center p-8 md:p-10">
+    <div class="product-card__body product-card__body--featured flex flex-col justify-center">
       <p class="text-xs font-semibold uppercase tracking-wider text-brand-gold mb-2">Featured program</p>
       <?php if (!empty($product['sku'])): ?>
         <p class="product-card__sku"><?= e($product['sku']) ?></p>
       <?php endif; ?>
-      <h3 class="text-2xl font-semibold text-brand-navy mb-3"><?= e($product['title']) ?></h3>
+      <h3 class="text-xl sm:text-2xl font-semibold text-brand-navy mb-3"><?= e($product['title']) ?></h3>
       <?php \App\Core\View::partial('products/price', ['product' => $product, 'priceClass' => 'product-card__price text-lg mb-3']); ?>
       <p class="text-slate-600 mb-6"><?= e($product['excerpt'] ?? '') ?></p>
       <span class="text-sm font-semibold text-brand-navy group-hover:text-brand-gold transition">Explore specifications →</span>

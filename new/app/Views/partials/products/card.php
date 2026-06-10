@@ -34,7 +34,7 @@
       <span class="product-card__link">View product →</span>
     </div>
   </a>
-  <div class="product-card__actions px-6 pb-6 pt-0 border-t border-slate-100">
+  <div class="product-card__actions">
     <?php \App\Core\View::partial('product-add-to-quote', [
         'product' => $product,
         'redirect' => 'quote',
